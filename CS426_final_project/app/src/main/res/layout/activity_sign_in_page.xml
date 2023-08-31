@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".SignInPage">
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id = "@+id/view_pager_in_sign_in_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="This is pages of sign in page">
 
-    </androidx.viewpager.widget.ViewPager>
+    </androidx.viewpager2.widget.ViewPager2>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

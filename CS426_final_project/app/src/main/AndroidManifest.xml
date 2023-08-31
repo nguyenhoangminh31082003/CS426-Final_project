@@ -10,8 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CS426_final_project"
+        android:theme="@style/Theme.AppCompat.Light"
         tools:targetApi="31">
+        <!--android:theme="@style/Theme.CS426_final_project"-->
         <activity
             android:name=".SignInPage"
             android:exported="false" />

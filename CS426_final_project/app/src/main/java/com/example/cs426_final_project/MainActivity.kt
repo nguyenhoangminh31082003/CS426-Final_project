@@ -16,6 +16,16 @@ import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            CS426_final_projectTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                }
+            }
+        }
         val intent = Intent(this, SignInPage::class.java)
         startActivity(intent)
     }
