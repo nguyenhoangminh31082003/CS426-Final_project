@@ -44,9 +44,18 @@
         </receiver>
 
         <activity
-            android:name=".activities.MyFriendsActivity"
-            android:theme="@style/Theme.CS426_final_project_AppCompat"
+            android:name=".activities.ResultActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FeedsActiviity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MyFriendsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CS426_final_project_AppCompat" />
         <activity
             android:name=".activities.FoodScanActivity"
             android:exported="false"

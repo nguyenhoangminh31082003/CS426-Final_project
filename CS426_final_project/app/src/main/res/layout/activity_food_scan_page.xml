@@ -81,6 +81,7 @@
             </TextView>
 
             <ImageView
+                android:id = "@+id/start_view_feeds"
                 android:contentDescription="Swipe down to see feed"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"

@@ -33,6 +33,20 @@ public class FoodScanActivity extends AppCompatActivity  {
                 .commit();
 
         this.enableViewFriends();
+
+        this.enableStartViewFeedsIcon();
+    }
+
+    private void enableStartViewFeedsIcon() {
+        ImageView button = this.findViewById(R.id.start_view_feeds);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FoodScanActivity.this, FeedsActiviity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void enableViewFriends() {

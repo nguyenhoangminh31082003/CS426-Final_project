@@ -34,6 +34,7 @@
     </ImageView>
 
     <LinearLayout
+        android:background = "@drawable/my_friends_section_customization"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -48,6 +49,13 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:gravity="center"></TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 
