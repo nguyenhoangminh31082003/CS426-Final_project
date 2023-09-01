@@ -12,14 +12,12 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
-
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-
-    <uses-permission android:name="android.permission.BIND_APPWIDGET"
+    <uses-permission
+        android:name="android.permission.BIND_APPWIDGET"
         tools:ignore="ProtectedPermissions" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -31,6 +29,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.ReviewActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".AppWidgetProvider"
             android:exported="false">
