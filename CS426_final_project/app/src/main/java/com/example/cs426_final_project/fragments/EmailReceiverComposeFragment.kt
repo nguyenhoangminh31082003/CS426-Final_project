@@ -1,6 +1,5 @@
 package com.example.cs426_final_project.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,15 +39,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
-import com.example.cs426_final_project.activities.FoodScanActivity
-import com.example.cs426_final_project.activities.MyFriendsActivity
 import com.example.cs426_final_project.contracts.SignInContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
 import com.example.cs426_final_project.ui.theme.Yellow
-import com.google.android.material.internal.ContextUtils.getActivity
 
 class EmailReceiverComposeFragment : Fragment() {
 
@@ -152,14 +147,13 @@ fun EmailReceiverLayout(
                         },
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = when {
-                            isValidEmail(currentEmail) -> Yellow
-                            else -> Color.White
-                        },
+                        containerColor =
+                            if(EmailUtilityClass().isValidEmail(currentEmail)) Yellow
+                            else DarkGrey40,
                         contentColor = Color.Black
                     ),
                     // disable button when email is not valid
-                    enabled = isValidEmail(currentEmail),
+                    enabled = EmailUtilityClass().isValidEmail(currentEmail)
                     // if is enable then change color to yellow
 
                 ){
@@ -223,10 +217,6 @@ fun EmailInput(
     }
 }
 
-fun isValidEmail(email: String): Boolean {
-    val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
-    return email.matches(emailRegex)
-}
 
 
 fun newInstance(): Fragment {
