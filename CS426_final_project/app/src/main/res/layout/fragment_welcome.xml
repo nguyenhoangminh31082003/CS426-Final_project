@@ -8,7 +8,7 @@
     android:background="#252525"
     android:orientation="vertical"
     app:layoutDescription="@xml/fragment_welcome_scene"
-    tools:context=".WelcomeFragment">
+    tools:context=".fragments.WelcomeFragment">
 
     <ImageView
         android:id="@+id/leftImage"
