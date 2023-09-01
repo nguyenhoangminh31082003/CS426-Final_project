@@ -44,9 +44,10 @@ import com.example.cs426_final_project.contracts.SignInContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
 import com.example.cs426_final_project.ui.theme.Yellow
-import com.example.cs426_final_project.utilities.EmailUtilityClass
 
 class EmailReceiverComposeFragment : Fragment() {
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,22 +61,29 @@ class EmailReceiverComposeFragment : Fragment() {
             throw ClassCastException("$context must implement SignInContract")
         }
 
-
         return ComposeView(requireContext()).apply {
             setContent {
-                EmailReceiverLayout(onBackPressed = {
-                    signInContract.returnToWelcome()
-                }
-                ) {
-                    signInContract.confirmEmail()
-                }
+                EmailReceiverLayout(
+                    onBackPressed = {
+                        signInContract.returnToWelcome()
+                    },
+                    onContinueButtonClicked = {
+
+                        val intent = Intent(activity, FoodScanActivity::class.java)
+                        startActivity(intent)
+
+                    }
+                )
             }
         }
     }
 }
 @Preview(showBackground = true)
 @Composable
-fun EmailReceiverLayout(onBackPressed: () -> Unit = {}, onConfirm: () -> Unit = {}) {
+fun EmailReceiverLayout(
+    onBackPressed: () -> Unit = {},
+    onContinueButtonClicked: () -> Unit = {}
+) {
     var currentEmail by remember { mutableStateOf("") }
     CS426_final_projectTheme(
         darkTheme = true,
@@ -127,9 +135,7 @@ fun EmailReceiverLayout(onBackPressed: () -> Unit = {}, onConfirm: () -> Unit = 
                 )
 
                 Button(
-                    onClick = {
-                        onConfirm()
-                    },
+                    onClick = onContinueButtonClicked,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)

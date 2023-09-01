@@ -3,8 +3,12 @@ package com.example.cs426_final_project.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -27,6 +31,20 @@ public class FoodScanActivity extends AppCompatActivity  {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.camera_control_part, CameraFragment.newInstance())
                 .commit();
+
+        this.enableViewFriends();
+    }
+
+    private void enableViewFriends() {
+        ImageView button = this.findViewById(R.id.food_scan_page_friend_icon_image);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FoodScanActivity.this, MyFriendsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private boolean checkCameraHardware(Context context) {
