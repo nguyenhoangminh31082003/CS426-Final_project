@@ -26,7 +26,8 @@ class MainActivity : ComponentActivity() {
 //                }
             }
         }
-        val intent = Intent(this, SignInActivity::class.java)
+        //val intent = Intent(this, SignInActivity::class.java)
+        val intent = Intent(this, FoodScanPage::class.java)
         startActivity(intent)
     }
 }

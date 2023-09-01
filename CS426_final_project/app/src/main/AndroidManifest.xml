@@ -12,9 +12,12 @@
         android:supportsRtl="true"
         tools:targetApi="31">
         <activity
-            android:name=".SignInActivity"
-            android:theme="@style/Theme.CS426_final_project_AppCompat"
+            android:name=".FoodScanPage"
             android:exported="false" />
+        <activity
+            android:name=".SignInActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CS426_final_project_AppCompat" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
