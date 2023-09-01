@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInPage">
+    tools:context=".SignInActivity">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id = "@+id/view_pager_in_sign_in_page"
+        android:id = "@+id/vpSignIn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="This is pages of sign in page">

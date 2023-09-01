@@ -1,72 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:background="#252525"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".WelcomeFragment">
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#252525"
+    android:orientation="vertical"
+    app:layoutDescription="@xml/fragment_welcome_scene"
+    tools:context=".WelcomeFragment">
 
     <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:src="@drawable/sign_in_page_left_image"
-            android:id="@+id/imageView4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/imageView3">
-    </ImageView>
+        android:id="@+id/leftImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:src="@drawable/sign_in_page_left_image"
+        app:layout_constraintEnd_toStartOf="@+id/middleImage"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/middleImage" />
 
     <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:src="@drawable/sign_in_page_middle_image"
-            android:id="@+id/imageView3"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/imageView5"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:layout_marginBottom="16dp">
-    </ImageView>
+        android:id="@+id/middleImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:src="@drawable/sign_in_page_middle_image"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toStartOf="@+id/rightImage"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/leftImage"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:src="@drawable/sign_in_page_right_image"
-            android:id="@+id/imageView5"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView3">
-    </ImageView>
+        android:id="@+id/rightImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:src="@drawable/sign_in_page_right_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/middleImage"
+        app:layout_constraintTop_toTopOf="@+id/middleImage" />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="40sp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:text="Oh, Food ... ❤️"
-            android:id="@+id/textView2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp">
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Oh, Food ... ❤️"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/mbSignIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/middleImage">
 
 
     </TextView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Sign in"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:cornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.811"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
 

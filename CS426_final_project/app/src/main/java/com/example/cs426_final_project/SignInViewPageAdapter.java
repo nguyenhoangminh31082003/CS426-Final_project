@@ -8,24 +8,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.cs426_final_project.contracts.SignInViewPagerContract;
+
 import java.util.ArrayList;
 
 public class SignInViewPageAdapter extends FragmentStateAdapter {
 
     final String[] titles = {"Welcome", "EmailReceiver"};
 
-    public SignInViewPageAdapter(@NonNull FragmentActivity fragmentActivity) {
+    SignInViewPagerContract contract;
+
+    public SignInViewPageAdapter(@NonNull FragmentActivity fragmentActivity, SignInViewPagerContract contract) {
         super(fragmentActivity);
+        this.contract = contract;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0)
-            return new WelcomeFragment();
-        if (position == 1)
-            return new EmailReceiverFragment();
-        return null;
+        return this.contract.createFragment(position);
     }
 
     @Override

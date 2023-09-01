@@ -2,35 +2,48 @@ package com.example.cs426_final_project;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WelcomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.cs426_final_project.contracts.SignInContract;
+import com.google.android.material.button.MaterialButton;
+
 public class WelcomeFragment extends Fragment {
 
     public WelcomeFragment() {
-        // Required empty public constructor
     }
 
-    public static WelcomeFragment newInstance() {
-        WelcomeFragment fragment = new WelcomeFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SignInContract contract;
+
+        try {
+            contract = (SignInContract) getActivity();
+            if(contract == null)
+                throw new ClassCastException();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement SignInContract");
+        }
+
+        MaterialButton mbSignIn = view.findViewById(R.id.mbSignIn);
+
+        mbSignIn.setOnClickListener(v -> {
+            contract.signIn();
+        });
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+
+
     }
 
     @Override
