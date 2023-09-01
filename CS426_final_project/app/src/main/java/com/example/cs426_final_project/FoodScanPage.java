@@ -43,6 +43,9 @@ public class FoodScanPage extends AppCompatActivity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         ViewGroup.LayoutParams layoutParams = preview.getLayoutParams();
 
+        System.err.println("WIDTH: " + preview.getLayoutParams().width);
+        System.err.println("HEIGHT: " + preview.getLayoutParams().height);
+
         layoutParams.height = layoutParams.width;
 
         preview.setLayoutParams(layoutParams);
