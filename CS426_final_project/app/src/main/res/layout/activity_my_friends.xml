@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@color/background_color"
+    android:background="@color/medium_grey"
     tools:context=".activities.MyFriendsActivity">
 
     <LinearLayout

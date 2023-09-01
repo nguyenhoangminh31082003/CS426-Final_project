@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
 
     @Override
     public void confirmEmail() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, FoodScanActivity.class);
         startActivity(intent);
     }
 
