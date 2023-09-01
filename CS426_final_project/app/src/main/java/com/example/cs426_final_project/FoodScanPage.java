@@ -13,13 +13,10 @@ import android.os.Bundle;
 import android.Manifest;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 public class FoodScanPage extends AppCompatActivity {
-
-    private Camera camera;
-    private CameraPreview cameraPreview;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,21 +29,12 @@ public class FoodScanPage extends AppCompatActivity {
 
         this.checkCameraPermissions(this);
 
-        this.camera = getCameraInstance();
-
-        this.cameraPreview = new CameraPreview(this, camera);
-
-        this.setPreview();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.camera_control_part, CameraFragment.newInstance())
+                .commit();
     }
 
-    private void setPreview() {
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        ViewGroup.LayoutParams layoutParams = preview.getLayoutParams();
 
-        preview.setLayoutParams(layoutParams);
-
-        preview.addView(this.cameraPreview);
-    }
 
     private static void checkCameraPermissions(Context context){
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -70,15 +58,5 @@ public class FoodScanPage extends AppCompatActivity {
         }
     }
 
-    private static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            System.err.println("WHERE ARE YOU????? CAMERA!!!!!!!!!!!!!!!");
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
+
 }
