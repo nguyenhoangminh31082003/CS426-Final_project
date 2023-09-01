@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.cs426_final_project.fragments.EmailReceiverComposeFragmentKt;
@@ -42,7 +43,8 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
 
     @Override
     public void confirmEmail() {
-        this.finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
