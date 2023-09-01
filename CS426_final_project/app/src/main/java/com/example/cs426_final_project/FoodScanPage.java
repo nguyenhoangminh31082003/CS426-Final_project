@@ -39,23 +39,31 @@ public class FoodScanPage extends AppCompatActivity {
         this.setPreview();
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        ViewGroup.LayoutParams layoutParams = preview.getLayoutParams();
+
+        super.onWindowFocusChanged(hasFocus);
+
+        System.err.println("WIDTH: " + preview.getLayoutParams().width);
+        System.err.println("HEIGHT: " + preview.getLayoutParams().height);
+
+        layoutParams.height = layoutParams.width;
+
+        preview.setBackground(this.getDrawable(R.drawable.camera_preview_customization));
+
+        System.err.println("WIDTH: " + preview.getLayoutParams().width);
+        System.err.println("HEIGHT: " + preview.getLayoutParams().height);
+    }
+
     private void setPreview() {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         ViewGroup.LayoutParams layoutParams = preview.getLayoutParams();
 
-        System.err.println("WIDTH: " + preview.getWidth());
-        System.err.println("HEIGHT: " + preview.getHeight());
-
-        layoutParams.height = preview.getWidth();
-
         preview.setLayoutParams(layoutParams);
 
         preview.addView(this.cameraPreview);
-
-        preview.setBackground(this.getDrawable(R.drawable.camera_preview_customization));
-
-        System.err.println("WIDTH: " + preview.getWidth());
-        System.err.println("HEIGHT: " + preview.getHeight());
     }
 
     private static void checkCameraPermissions(Context context){
