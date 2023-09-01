@@ -1,22 +1,19 @@
-package com.example.cs426_final_project;
+package com.example.cs426_final_project.activities;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-//import android.graphics.Camera;
-import android.hardware.Camera;
-import android.os.Bundle;
-import android.Manifest;
-import android.util.Log;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
+import com.example.cs426_final_project.CameraFragment;
+import com.example.cs426_final_project.R;
 
-public class FoodScanPage extends AppCompatActivity {
+public class FoodScanActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +54,4 @@ public class FoodScanPage extends AppCompatActivity {
             return false;
         }
     }
-
-
 }
