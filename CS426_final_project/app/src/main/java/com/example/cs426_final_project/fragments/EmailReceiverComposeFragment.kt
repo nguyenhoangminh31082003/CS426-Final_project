@@ -1,5 +1,6 @@
 package com.example.cs426_final_project.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,10 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.example.cs426_final_project.activities.FoodScanActivity
 import com.example.cs426_final_project.contracts.SignInContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
 import com.example.cs426_final_project.ui.theme.Yellow
+import com.example.cs426_final_project.utilities.EmailUtilityClass
 
 class EmailReceiverComposeFragment : Fragment() {
 
@@ -68,10 +71,7 @@ class EmailReceiverComposeFragment : Fragment() {
                         signInContract.returnToWelcome()
                     },
                     onContinueButtonClicked = {
-
-                        val intent = Intent(activity, FoodScanActivity::class.java)
-                        startActivity(intent)
-
+                        signInContract.confirmEmail()
                     }
                 )
             }
