@@ -43,10 +43,10 @@ public class FoodScanPage extends AppCompatActivity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         ViewGroup.LayoutParams layoutParams = preview.getLayoutParams();
 
-        System.err.println("WIDTH: " + preview.getLayoutParams().width);
-        System.err.println("HEIGHT: " + preview.getLayoutParams().height);
+        System.err.println("WIDTH: " + preview.getWidth());
+        System.err.println("HEIGHT: " + preview.getHeight());
 
-        layoutParams.height = layoutParams.width;
+        layoutParams.height = preview.getWidth();
 
         preview.setLayoutParams(layoutParams);
 
@@ -54,8 +54,8 @@ public class FoodScanPage extends AppCompatActivity {
 
         preview.setBackground(this.getDrawable(R.drawable.camera_preview_customization));
 
-        System.err.println("WIDTH: " + preview.getLayoutParams().width);
-        System.err.println("HEIGHT: " + preview.getLayoutParams().height);
+        System.err.println("WIDTH: " + preview.getWidth());
+        System.err.println("HEIGHT: " + preview.getHeight());
     }
 
     private static void checkCameraPermissions(Context context){
