@@ -954,6 +954,10 @@ public class CameraFragment extends Fragment
             switchCamera();
             return;
         }
+        if (id == R.id.change_flash_mode_icon) {
+            changeFlashMode();
+            return;
+        }
     }
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
@@ -963,6 +967,9 @@ public class CameraFragment extends Fragment
         }
     }
 
+    private void changeFlashMode() {
+        
+    }
 
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.

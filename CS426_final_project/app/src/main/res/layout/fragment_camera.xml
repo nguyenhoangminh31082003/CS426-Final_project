@@ -52,6 +52,16 @@
             android:src = "@drawable/food_scan_page_take_photo_icon">
         </ImageButton>
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/change_flash_mode_icon"
+            android:contentDescription="Change flash mode"
+            style="@android:style/Widget.Material.Light.Button.Borderless"
+            android:layout_gravity="center_vertical|right"
+            android:src = "@drawable/food_scan_page_flash_off_icon">
+        </ImageButton>
+
     </FrameLayout>
 
 
