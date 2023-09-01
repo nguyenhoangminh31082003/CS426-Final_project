@@ -1,4 +1,4 @@
-package com.example.cs426_final_project;
+package com.example.cs426_final_project.fragments;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.contracts.SignInContract;
 import com.google.android.material.button.MaterialButton;
 
@@ -43,8 +44,6 @@ public class WelcomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override

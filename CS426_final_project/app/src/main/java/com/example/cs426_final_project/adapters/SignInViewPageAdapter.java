@@ -1,4 +1,4 @@
-package com.example.cs426_final_project;
+package com.example.cs426_final_project.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

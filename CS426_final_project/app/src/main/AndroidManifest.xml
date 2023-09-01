@@ -20,11 +20,11 @@
             android:theme="@style/Theme.CS426_final_project_AppCompat"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".activities.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.CS426_final_project_AppCompat" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.CS426_final_project">
             <intent-filter>

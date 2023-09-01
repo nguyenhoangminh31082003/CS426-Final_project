@@ -1,4 +1,4 @@
-package com.example.cs426_final_project
+package com.example.cs426_final_project.activities
 
 import android.content.Intent
 import android.os.Bundle
