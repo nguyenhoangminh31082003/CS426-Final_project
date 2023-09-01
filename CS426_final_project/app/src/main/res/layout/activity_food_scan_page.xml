@@ -64,9 +64,29 @@
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "Food view"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize = "24sp">
+
+            </TextView>
+
+            <ImageView
+                android:contentDescription="Swipe down to see feed"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:src = "@drawable/food_scan_page_down_arrow"
+                >
+            </ImageView>
 
         </LinearLayout>
 

@@ -24,25 +24,9 @@ public class FoodScanActivity extends AppCompatActivity  {
         else
             System.err.println("NOT OK!!!, CAMERA HARDWARE!!!");
 
-        this.checkCameraPermissions(this);
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.camera_control_part, CameraFragment.newInstance())
                 .commit();
-    }
-
-
-
-    private static void checkCameraPermissions(Context context){
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            System.err.println("NOT GRANTED!!!!!");
-            ActivityCompat.requestPermissions((Activity) context,
-                    new String[] { Manifest.permission.CAMERA },
-                    100);
-        } else
-            System.err.println("GRANTED!!!!");
     }
 
     private boolean checkCameraHardware(Context context) {

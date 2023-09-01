@@ -13,12 +13,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
     <FrameLayout
+        android:background = "@drawable/camera_preview_customization"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/top_frame"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintDimensionRatio="1:1"/>
+        app:layout_constraintDimensionRatio="1:1">
+    </FrameLayout>
     <FrameLayout
         android:id="@+id/control"
         android:layout_width="match_parent"
@@ -30,22 +32,26 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true">
 
-        <Button
-            android:id="@+id/picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/picture" />
-
         <ImageButton
-            android:id="@+id/info"
+            android:id="@+id/switch_camera_icon"
             android:contentDescription="@string/description_info"
             style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
+            android:layout_gravity="center_vertical|left"
             android:src="@drawable/food_scan_page_switch_camera_icon"
-            android:padding="20dp" />
+            android:padding="20dp">
+        </ImageButton>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/take_photo_icon"
+            android:contentDescription="Take photo icon"
+            style="@android:style/Widget.Material.Light.Button.Borderless"
+            android:layout_gravity="center"
+            android:src = "@drawable/food_scan_page_take_photo_icon">
+        </ImageButton>
 
     </FrameLayout>
 

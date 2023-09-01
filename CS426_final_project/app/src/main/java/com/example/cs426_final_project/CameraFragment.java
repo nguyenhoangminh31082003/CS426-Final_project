@@ -429,8 +429,8 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
-        view.findViewById(R.id.info).setOnClickListener(this);
+        view.findViewById(R.id.take_photo_icon).setOnClickListener(this);
+        view.findViewById(R.id.switch_camera_icon).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         checkCameraAvailability();
 
@@ -517,7 +517,7 @@ public class CameraFragment extends Fragment
      * @param height The height of available size for camera preview
      */
     @SuppressWarnings("SuspiciousNameCombination")
-    private void setUpCameraOutputs(int width, int height) {
+    private void setUpCameraOutputs(final int width, final int height) {
         Activity activity = getActivity();
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
@@ -637,7 +637,7 @@ public class CameraFragment extends Fragment
     }
 
 
-    private void openCamera(int width, int height) {
+    private void openCamera(final int width, final int height) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             requestCameraPermission();
@@ -946,11 +946,11 @@ public class CameraFragment extends Fragment
     @Override
     public void onClick(View view) {
         final int id = view.getId();
-        if (id == R.id.picture) {
+        if (id == R.id.take_photo_icon) {
             takePicture();
             return;
         }
-        if (id == R.id.info) {
+        if (id == R.id.switch_camera_icon) {
             switchCamera();
             return;
         }
