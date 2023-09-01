@@ -7,7 +7,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 
 import com.example.cs426_final_project.fragments.EmailReceiverComposeFragmentKt;
-import com.example.cs426_final_project.fragments.EmailReceiverFragment;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.adapters.SignInViewPageAdapter;
 import com.example.cs426_final_project.fragments.WelcomeFragment;
