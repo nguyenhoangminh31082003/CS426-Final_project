@@ -17,6 +17,7 @@
         android:padding="8dp">
 
         <ImageView
+            android:id = "@+id/x_button"
             android:src = "@drawable/my_friends_page_x"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
