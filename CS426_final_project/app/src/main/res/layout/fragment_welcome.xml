@@ -74,6 +74,8 @@
         android:gravity="center"
         android:padding="16dp"
         android:textSize="40sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
         android:textColor="@color/white"
         android:background="@drawable/sign_in_button_customization"
         app:layout_constraintBottom_toBottomOf="parent"

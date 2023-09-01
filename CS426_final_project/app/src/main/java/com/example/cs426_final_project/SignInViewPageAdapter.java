@@ -1,5 +1,7 @@
 package com.example.cs426_final_project;
 
+import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,7 +22,7 @@ public class SignInViewPageAdapter extends FragmentStateAdapter {
 
     @NonNull
     @Override
-    public Fragment createFragment(int position) {
+    public Fragment createFragment(final int position) {
         if (position == 0)
             return new WelcomeFragment();
         if (position == 1)
