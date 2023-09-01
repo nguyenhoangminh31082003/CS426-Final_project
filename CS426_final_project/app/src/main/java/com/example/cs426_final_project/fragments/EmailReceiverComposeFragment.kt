@@ -44,10 +44,9 @@ import com.example.cs426_final_project.contracts.SignInContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
 import com.example.cs426_final_project.ui.theme.Yellow
+import com.example.cs426_final_project.utilities.EmailUtilityClass
 
 class EmailReceiverComposeFragment : Fragment() {
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,14 +65,17 @@ class EmailReceiverComposeFragment : Fragment() {
             setContent {
                 EmailReceiverLayout(onBackPressed = {
                     signInContract.returnToWelcome()
-                })
+                }
+                ) {
+                    signInContract.confirmEmail()
+                }
             }
         }
     }
 }
 @Preview(showBackground = true)
 @Composable
-fun EmailReceiverLayout(onBackPressed: () -> Unit = {}) {
+fun EmailReceiverLayout(onBackPressed: () -> Unit = {}, onConfirm: () -> Unit = {}) {
     var currentEmail by remember { mutableStateOf("") }
     CS426_final_projectTheme(
         darkTheme = true,
@@ -126,7 +128,7 @@ fun EmailReceiverLayout(onBackPressed: () -> Unit = {}) {
 
                 Button(
                     onClick = {
-
+                        onConfirm()
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -139,14 +141,13 @@ fun EmailReceiverLayout(onBackPressed: () -> Unit = {}) {
                         },
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = when {
-                            isValidEmail(currentEmail) -> Yellow
-                            else -> Color.White
-                        },
+                        containerColor =
+                            if(EmailUtilityClass().isValidEmail(currentEmail)) Yellow
+                            else DarkGrey40,
                         contentColor = Color.Black
                     ),
                     // disable button when email is not valid
-                    enabled = isValidEmail(currentEmail),
+                    enabled = EmailUtilityClass().isValidEmail(currentEmail)
                     // if is enable then change color to yellow
 
                 ){
@@ -210,10 +211,6 @@ fun EmailInput(
     }
 }
 
-fun isValidEmail(email: String): Boolean {
-    val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
-    return email.matches(emailRegex)
-}
 
 
 fun newInstance(): Fragment {

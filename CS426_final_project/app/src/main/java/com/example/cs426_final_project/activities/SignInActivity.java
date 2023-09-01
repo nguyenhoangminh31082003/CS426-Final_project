@@ -41,12 +41,16 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
     }
 
     @Override
+    public void confirmEmail() {
+        this.finish();
+    }
+
+    @Override
     public Fragment createFragment(int position) {
         Fragment fragment = null;
         if (position == 0)
             fragment = new WelcomeFragment();
         if (position == 1){
-            // get EmailReceiverComposeFragment
             fragment = EmailReceiverComposeFragmentKt.newInstance();
         }
         return fragment;
