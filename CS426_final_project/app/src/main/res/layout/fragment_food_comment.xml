@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.main.FoodCommentFragment">
+
+    <ScrollView
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:padding = "16dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_gravity="left"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:src="@drawable/food_scan_page_friend_icon_image"
+                        android:id = "@+id/food_scan_page_friend_icon_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    </ImageView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:src="@drawable/food_scan_page_profile_icon_image"
+                        android:id = "@+id/food_scan_page_profile_icon_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                    </ImageView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width = "match_parent"
+                    android:layout_height="wrap_content"
+                    android:src = "@drawable/food_comment_page_demo_food_image"
+                    android:id = "@+id/displayed_captured_image">
+                </ImageView>
+
+            </LinearLayout>
+
+            <TextView
+                android:id = "@+id/food_comment_food_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "Banh uot co Ba"
+                android:textStyle="bold"
+                android:textColor = "@color/white"
+                android:gravity="left"
+                android:textSize="24sp"
+                android:padding="12dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "Ratings"
+                android:textStyle="bold"
+                android:textColor = "@color/white"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:padding="12dp">
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+            </LinearLayout>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor = "@color/white"
+                android:textColorHint="@color/white"
+                android:hint = "Share your comment here ..."
+                android:textSize="16sp"
+                android:padding = "12dp">
+
+            </EditText>
+            
+            <Button
+                android:background = "@drawable/food_commnet_page_done_button_customization"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:margin = "12dp"
+                android:text = "Done"
+                android:textStyle = "bold"
+                android:textSize = "20sp"
+                android:textColor = "#4D4D4D">
+            </Button>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
