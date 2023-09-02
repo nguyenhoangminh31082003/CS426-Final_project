@@ -40,6 +40,14 @@ public class AutoFitTextureView extends TextureView {
         requestLayout();
     }
 
+
+
+    // create function set border radius
+    public void setBorderRadius(int radius) {
+        this.setOutlineProvider(new RoundOutlineProvider(radius));
+        this.setClipToOutline(true);
+    }
+
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, widthMeasureSpec);
@@ -55,6 +63,8 @@ public class AutoFitTextureView extends TextureView {
             }
         }
     }
+
+
 
     public int getAppliedMargin() {
         return appliedMargin;
