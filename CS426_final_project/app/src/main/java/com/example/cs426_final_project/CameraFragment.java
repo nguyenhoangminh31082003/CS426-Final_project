@@ -1,5 +1,7 @@
 package com.example.cs426_final_project;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,6 +46,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -954,15 +957,36 @@ public class CameraFragment extends Fragment
             switchCamera();
             return;
         }
+        if (id == R.id.change_flash_mode_icon) {
+            changeFlashMode();
+            return;
+        }
     }
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
         if (mFlashSupported) {
-            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
-                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+            requestBuilder.set(
+                    CaptureRequest.CONTROL_AE_MODE,
+                    CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH
+            );
         }
     }
 
+    private void changeFlashMode() {
+        if (mFlashSupported) {
+            Activity activity = getActivity();
+            ImageView flashModeIconImage = activity.findViewById(R.id.change_flash_mode_icon);
+            CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+            try {
+                CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraId);
+                CaptureRequest.Builder requestBuilder = mCaptureSession.getDevice().createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+
+                mCaptureSession.setRepeatingRequest(requestBuilder.build(), null, null);
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
