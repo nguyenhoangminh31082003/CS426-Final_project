@@ -9,14 +9,14 @@ import android.os.Bundle;
 
 import com.example.cs426_final_project.fragments.EmailReceiverComposeFragmentKt;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.adapters.SignInViewPageAdapter;
+import com.example.cs426_final_project.adapters.ViewPagerAdapter;
 import com.example.cs426_final_project.fragments.WelcomeFragment;
 import com.example.cs426_final_project.contracts.SignInContract;
-import com.example.cs426_final_project.contracts.SignInViewPagerContract;
+import com.example.cs426_final_project.contracts.ViewPagerContract;
 
-public class SignInActivity extends AppCompatActivity implements SignInContract, SignInViewPagerContract {
+public class SignInActivity extends AppCompatActivity implements SignInContract, ViewPagerContract {
 
-    SignInViewPageAdapter adapter;
+    ViewPagerAdapter adapter;
     ViewPager2 vpSignIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
 
     private void setViewPager() {
         this.vpSignIn = this.findViewById(R.id.vpSignIn);
-        this.adapter = new SignInViewPageAdapter(this, this);
+        this.adapter = new ViewPagerAdapter(this, this);
         this.vpSignIn.setAdapter(this.adapter);
     }
 
@@ -43,8 +43,7 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
 
     @Override
     public void confirmEmail() {
-        Intent intent = new Intent(this, FoodScanActivity.class);
-        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -56,5 +55,10 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
             fragment = EmailReceiverComposeFragmentKt.newInstance();
         }
         return fragment;
+    }
+
+    @Override
+    public int getItemCount() {
+        return 2;
     }
 }

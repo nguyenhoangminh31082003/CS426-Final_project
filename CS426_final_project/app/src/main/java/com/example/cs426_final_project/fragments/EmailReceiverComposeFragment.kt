@@ -1,6 +1,5 @@
 package com.example.cs426_final_project.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.example.cs426_final_project.activities.FoodScanActivity
 import com.example.cs426_final_project.contracts.SignInContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
@@ -152,9 +151,7 @@ fun EmailReceiverLayout(
                             else DarkGrey40,
                         contentColor = Color.Black
                     ),
-                    // disable button when email is not valid
                     enabled = EmailUtilityClass().isValidEmail(currentEmail)
-                    // if is enable then change color to yellow
 
                 ){
                     Text(
@@ -186,7 +183,10 @@ fun EmailInput(
         Text(
             text ="Enter your email",
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(16.dp, 0.dp, 16.dp, 0.dp)
+            ,
+
             color = Color.White,
             fontWeight = FontWeight.Bold
 

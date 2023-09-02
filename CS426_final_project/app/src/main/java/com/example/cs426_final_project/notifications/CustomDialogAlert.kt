@@ -63,121 +63,111 @@ fun CustomDialog(value: String = "", setShowDialog: (Boolean) -> Unit = {}, setV
     Dialog(
         onDismissRequest = { setShowDialog(false) },
     ) {
-        CS426_final_projectTheme(
-            dynamicColor = false,
-            darkTheme = true,
-        ) {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
+        Surface(
+            shape = RoundedCornerShape(16.dp),
 
             ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(modifier = Modifier.padding(20.dp)) {
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "Change your email",
-                                // set style
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Change your email",
+                            // set style
 
-                                style = androidx.compose.ui.text.TextStyle(
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                            style = androidx.compose.ui.text.TextStyle(
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
                             )
-                            Icon(
-                                imageVector = Icons.Filled.Clear,
-                                contentDescription = "",
-                                tint = colorResource(android.R.color.darker_gray),
-                                modifier = Modifier
-                                    .width(30.dp)
-                                    .height(30.dp)
-                                    .clickable { setShowDialog(false) }
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        TextField(
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = "",
+                            tint = colorResource(android.R.color.darker_gray),
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .border(
-                                    BorderStroke(
-                                        width = 2.dp,
-                                        color =
-                                        if (txtFieldError.value.isEmpty()) Yellow
-                                        else LightGrey
-                                    ),
-                                    shape = RoundedCornerShape(50)
+                                .width(30.dp)
+                                .height(30.dp)
+                                .clickable { setShowDialog(false) }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                BorderStroke(
+                                    width = 2.dp,
+                                    color =
+                                    if (EmailUtilityClass().isValidEmail(txtField.value)) Yellow
+                                    else DarkGrey40
                                 ),
-                            shape = RoundedCornerShape(50),
-                            colors = TextFieldDefaults.textFieldColors(
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent,
+                                shape = RoundedCornerShape(50)
                             ),
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Filled.Email,
-                                    contentDescription = "",
-                                    modifier = Modifier
-                                        .width(20.dp)
-                                        .height(20.dp)
-                                )
-                            },
-                            placeholder = { Text(text = "Enter your email") },
-                            value = txtField.value,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            onValueChange = {
-                                txtField.value = it.take(10)
-                            })
-
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .padding(40.dp, 0.dp, 40.dp, 0.dp)
-                                .background(
-                                    // transparent
-                                    color = Color.Transparent
-                                ),
-
-                            ) {
-                            Button(
-                                onClick = {
-                                    if (txtField.value.isEmpty()) {
-                                        txtFieldError.value = "Field can not be empty"
-                                        return@Button
-                                    }
-                                    setValue(txtField.value)
-                                    setShowDialog(false)
-                                },
-                                shape = CircleShape,
+                        shape = RoundedCornerShape(50),
+                        colors = TextFieldDefaults.textFieldColors(
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Email,
+                                contentDescription = "",
                                 modifier = Modifier
-                                    .padding(40.dp, 0.dp, 40.dp, 0.dp)
-                                    .fillMaxWidth()
-                                    .height(50.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor =
-                                    if(EmailUtilityClass().isValidEmail(txtField.value)) Yellow
-                                    else DarkGrey40,
-                                    contentColor = Color.Black),
+                                    .width(20.dp)
+                                    .height(20.dp)
+                            )
+                        },
+                        placeholder = { Text(text = "Enter your email") },
+                        value = txtField.value,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        onValueChange = {
+                            txtField.value = it
+                        })
 
-                                enabled = EmailUtilityClass().isValidEmail(txtField.value)
-                            ) {
-                                Text(
-                                    text = "Done"
-                                )
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Button(
+                        onClick = {
+                            if (txtField.value.isEmpty()) {
+                                txtFieldError.value = "Field can not be empty"
+                                return@Button
                             }
-                        }
+                            setValue(txtField.value)
+                            setShowDialog(false)
+                        },
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .padding(40.dp, 0.dp, 40.dp, 0.dp)
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(
+                                if (EmailUtilityClass().isValidEmail(txtField.value)) Yellow
+                                else Color.LightGray,
+                                shape = CircleShape
+                            ),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor =
+                            if(EmailUtilityClass().isValidEmail(txtField.value)) Yellow
+                            else Color.LightGray,
+                            contentColor = Color.Black
+                        ),
+
+                        enabled = EmailUtilityClass().isValidEmail(txtField.value)
+                    ) {
+                        Text(
+                            text = "Done"
+                        )
                     }
                 }
             }
         }
-
     }
 }

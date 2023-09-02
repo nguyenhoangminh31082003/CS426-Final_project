@@ -1,4 +1,4 @@
-package com.example.cs426_final_project.fragments
+package com.example.cs426_final_project.fragments.main
 
 import android.Manifest
 import android.app.Activity
@@ -32,21 +32,21 @@ class ProfileFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
-    // add register activity result variable
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         var composeView = view.findViewById<ComposeView>(R.id.composeView)
 
+        // no inherit theme compose view
+
+
         composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                var openDialog by remember { mutableStateOf(true) }
+                var openDialog by remember { mutableStateOf(false) }
 
-                CS426_final_projectTheme {
-                    if(openDialog){
+                if(openDialog){
+                    CS426_final_projectTheme {
                         CustomDialog(
                             setShowDialog = {
                                 openDialog = it
@@ -54,25 +54,25 @@ class ProfileFragment : Fragment() {
                             setValue = {
                                 storeEmail(it)
                             },
-                        )
+                            )
                     }
                 }
             }
         }
 
-        var btnChangeEmail = view.findViewById<Button>(R.id.btnChangeEmail)
+        val btnChangeEmail = view.findViewById<Button>(R.id.btnChangeEmail)
 
         btnChangeEmail.setOnClickListener {
 
         }
 
-        var ibClose = view.findViewById<ImageButton>(R.id.ibClose)
+        val ibClose = view.findViewById<ImageButton>(R.id.ibClose)
 
         ibClose.setOnClickListener {
             WidgetUtilityClass().createWidget(requireContext())
         }
 
-        var ibAvatar = view.findViewById<ImageButton>(R.id.ibAvatar)
+        val ibAvatar = view.findViewById<ImageButton>(R.id.ibAvatar)
 
         loadImage(ibAvatar)
 
@@ -80,7 +80,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun storeEmail(email: String) {
-        TODO("Not yet implemented")
+
     }
 
     private fun pickImage(ibAvatar: ImageButton) {
@@ -103,7 +103,6 @@ class ProfileFragment : Fragment() {
                     intent.type = "image/*"
                     startPickImageResult.launch(intent)
                 } else {
-                    TODO("Permission denied")
                 }
             }
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -111,12 +110,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(ibAvatar: ImageButton?) {
-        TODO("Not yet implemented")
+
     }
 
 
     private fun storeImage(avatar: String) {
-        TODO("Not yet implemented")
+
     }
 
 

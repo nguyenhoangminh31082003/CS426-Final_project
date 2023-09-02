@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="@color/medium_grey"
-    tools:context=".activities.MyFriendsActivity">
+    tools:context=".fragments.main.MyFriendsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
