@@ -59,7 +59,7 @@
             android:contentDescription="Change flash mode"
             style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_gravity="center_vertical|right"
-            android:src = "@drawable/food_scan_page_flash_off_icon">
+            android:src = "@drawable/food_scan_page_flash_automatic_icon_image">
         </ImageButton>
 
     </FrameLayout>
