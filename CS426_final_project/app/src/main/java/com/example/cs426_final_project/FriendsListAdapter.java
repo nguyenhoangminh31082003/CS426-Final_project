@@ -12,6 +12,10 @@ public class FriendsListAdapter extends BaseAdapter {
     private Activity activity;
     private ListOfFriendRows listOfFriendRows;
 
+    public FriendsListAdapter(Activity activity) {
+        this.activity = activity;
+    }
+
     @Override
     public int getCount() {
         return this.listOfFriendRows.getNumberOfRows();

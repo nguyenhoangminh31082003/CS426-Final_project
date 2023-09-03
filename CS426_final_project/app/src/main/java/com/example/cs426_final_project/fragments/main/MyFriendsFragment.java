@@ -29,6 +29,7 @@ public class MyFriendsFragment extends MainPageFragment {
 
     private void setUpFriendsList() {
         this.friendsListView = getView().findViewById(R.id.friends_list);
+        this.friendsListAdapter = new FriendsListAdapter(getActivity());
     }
 
     @Nullable

@@ -1,4 +1,4 @@
-package com.example.cs426_final_project.utilities;
+package com.example.cs426_final_project;
 
 import org.json.JSONException;
 import org.json.JSONObject;
