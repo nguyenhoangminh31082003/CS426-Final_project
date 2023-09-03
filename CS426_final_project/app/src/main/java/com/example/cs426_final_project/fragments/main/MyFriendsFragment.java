@@ -7,11 +7,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
+import com.example.cs426_final_project.FriendsListAdapter;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.contracts.MainPageContract;
 
 public class MyFriendsFragment extends MainPageFragment {
+
+    private FriendsListAdapter friendsListAdapter;
+    private SuggestionsListAdapter suggestionsListAdapter;
+    private ListView friendsListView, suggestionsListView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -36,16 +44,5 @@ public class MyFriendsFragment extends MainPageFragment {
             mainPageContract.setToMainPage();
         });
     }
-
-
-    public static void updateFragmentTransform(View view, float position, float direction, float relDisplacement) {
-        View rootViewFriends = view.findViewById(R.id.rootViewFriends);
-        if(rootViewFriends == null){
-            return;
-        }
-        // print out the position, direction, and relative displacement
-        System.out.println("Friends: position: " + position + ", direction: " + direction + ", relDisplacement: " + relDisplacement);
-    }
-
 
 }

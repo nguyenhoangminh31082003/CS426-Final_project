@@ -34,30 +34,69 @@
 
     </ImageView>
 
-    <LinearLayout
+    <ScrollView
         android:background = "@drawable/my_friends_section_customization"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8">
 
-        <TextView
+        <LinearLayout
+            android:padding = "12dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text = "My Friends"
-            android:textSize = "24sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:gravity="center"></TextView>
+            android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="7">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "My Friends"
+                android:textSize = "24sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center">
+            </TextView>
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <ListView
+                android:id = "@+id/friends_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </ListView>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding = "12dp">
+
+                <ImageView
+                    android:src = "@drawable/my_friends_page_light_bulb"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                </ImageView>
+
+                <TextView
+                    android:padding="8dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="9"
+                    android:layout_height="wrap_content"
+                    android:text = "Suggestion"
+                    android:textSize = "18sp"
+                    android:textColor="@color/white"
+                    android:gravity="left">
+                </TextView>
+
+            </LinearLayout>
+
+            <ListView
+                android:id = "@+id/suggestions_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </ListView>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
