@@ -1,6 +1,4 @@
-package com.example.cs426_final_project;
-
-import static androidx.core.content.ContextCompat.getSystemService;
+package com.example.cs426_final_project.camera;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,7 +28,6 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -49,6 +46,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.cs426_final_project.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -639,6 +639,7 @@ public class CameraFragment extends Fragment
                     .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         }
     }
+
 
 
     private void openCamera(final int width, final int height) {

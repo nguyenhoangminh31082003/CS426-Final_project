@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract {
     }
 
     private fun needSignIn(): Boolean {
-        return true
+        return false
     }
 
     override fun createFragment(position: Int): Fragment {

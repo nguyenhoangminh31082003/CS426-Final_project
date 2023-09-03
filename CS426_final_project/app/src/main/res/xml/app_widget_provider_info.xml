@@ -5,10 +5,11 @@
     android:initialLayout="@layout/app_widget_provider"
     android:minWidth="40dp"
     android:minHeight="40dp"
+
     android:previewImage="@drawable/example_appwidget_preview"
     android:previewLayout="@layout/app_widget_provider"
     android:resizeMode="horizontal|vertical"
-    android:targetCellWidth="1"
-    android:targetCellHeight="1"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
     android:updatePeriodMillis="86400000"
     android:widgetCategory="home_screen" />

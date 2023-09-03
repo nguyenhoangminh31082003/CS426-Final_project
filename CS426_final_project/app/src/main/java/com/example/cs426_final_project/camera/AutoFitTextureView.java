@@ -1,4 +1,4 @@
-package com.example.cs426_final_project;
+package com.example.cs426_final_project.camera;
 
 import android.content.Context;
 import android.util.AttributeSet;

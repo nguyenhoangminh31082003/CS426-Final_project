@@ -83,7 +83,7 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnWidgetSetup"
+                    android:id="@+id/btnAddWidget"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -97,7 +97,8 @@
                     android:text="Add the Widget"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:cornerRadius="16dp" />
+                    app:cornerRadius="16dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tvGeneral"

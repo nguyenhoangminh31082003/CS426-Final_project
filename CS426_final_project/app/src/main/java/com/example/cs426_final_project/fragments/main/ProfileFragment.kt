@@ -11,16 +11,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.example.cs426_final_project.R
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
-import com.example.cs426_final_project.utilities.WidgetUtilityClass
+import com.example.cs426_final_project.utilities.widgets.WidgetUtilityClass
 
 
 class ProfileFragment : Fragment() {
@@ -31,39 +27,27 @@ class ProfileFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
+    private var composeView: ComposeView? = null
+    private var showDialog = mutableStateOf(false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var composeView = view.findViewById<ComposeView>(R.id.composeView)
 
-        // no inherit theme compose view
+        composeView = view.findViewById(R.id.composeView)
 
+        initComposeView(composeView)
 
-        composeView.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                var openDialog by remember { mutableStateOf(false) }
+        val btnAddWidget = view.findViewById<Button>(R.id.btnAddWidget)
 
-                if(openDialog){
-                    CS426_final_projectTheme {
-                        CustomDialog(
-                            setShowDialog = {
-                                openDialog = it
-                            },
-                            setValue = {
-                                storeEmail(it)
-                            },
-                            )
-                    }
-                }
-            }
+        btnAddWidget.setOnClickListener {
+            WidgetUtilityClass().createWidget(requireContext())
         }
 
         val btnChangeEmail = view.findViewById<Button>(R.id.btnChangeEmail)
 
         btnChangeEmail.setOnClickListener {
-
+            showDialog.value = true
         }
 
         val ibClose = view.findViewById<ImageButton>(R.id.ibClose)
@@ -77,6 +61,27 @@ class ProfileFragment : Fragment() {
         loadImage(ibAvatar)
 
         pickImage(ibAvatar)
+    }
+
+
+    private fun initComposeView(composeView: ComposeView?) {
+        composeView?.apply {
+            setContent {
+                if(showDialog.value) {
+                    CS426_final_projectTheme {
+                        CustomDialog(
+                            setShowDialog = {
+                                showDialog.value = it
+                            },
+                            setValue = {
+                                storeEmail(it)
+                            },
+                        )
+                    }
+                }
+
+            }
+        }
     }
 
     private fun storeEmail(email: String) {

@@ -112,12 +112,12 @@
                 android:background = "@drawable/food_commnet_page_done_button_customization"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:margin = "12dp"
+                android:layout_marginTop="12dp"
                 android:text = "Done"
                 android:textStyle = "bold"
                 android:textSize = "20sp"
-                android:textColor = "#4D4D4D">
-            </Button>
+                android:textColor = "#4D4D4D"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 

@@ -34,7 +34,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".AppWidgetProvider"
+            android:name=".utilities.widgets.AppWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

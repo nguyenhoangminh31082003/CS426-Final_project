@@ -10,11 +10,9 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
-import com.example.cs426_final_project.CameraFragment;
+import com.example.cs426_final_project.camera.CameraFragment;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.contracts.MainPageContract;
 
 public class FoodScanFragment extends MainPageFragment {
 
@@ -43,6 +41,7 @@ public class FoodScanFragment extends MainPageFragment {
 
         this.enableStartViewFeedsIcon(view);
     }
+
 
     private void enableViewProfile(View view) {
         ImageView button = view.findViewById(R.id.food_scan_page_profile_icon_image);
