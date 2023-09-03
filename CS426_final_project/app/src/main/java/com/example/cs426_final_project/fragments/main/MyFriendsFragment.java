@@ -9,16 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 
+import com.example.cs426_final_project.FriendsListAdapter;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.contracts.MainPageContract;
 
 public class MyFriendsFragment extends MainPageFragment {
 
+    private FriendsListAdapter friendsListAdapter;
+    private ListView friendsListView;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.enableX(view);
+        this.setUpFriendsList();
+    }
+
+    private void setUpFriendsList() {
+        this.friendsListView = getView().findViewById(R.id.friends_list);
     }
 
     @Nullable
