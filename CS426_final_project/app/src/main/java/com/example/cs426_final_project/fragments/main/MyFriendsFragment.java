@@ -18,7 +18,7 @@ import com.example.cs426_final_project.contracts.MainPageContract;
 public class MyFriendsFragment extends MainPageFragment {
 
     private FriendsListAdapter friendsListAdapter;
-    private SuggestionsListAdapter suggestionsListAdapter;
+//    private SuggestionsListAdapter suggestionsListAdapter;
     private ListView friendsListView, suggestionsListView;
 
     @Override

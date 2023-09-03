@@ -124,6 +124,6 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
 //        pagerUtils.debugSwiping(swipingState, vpMain.currentItem)
 
         ProfileFragment.updateFragmentTransform(view, position, direction,relDisplacement)
-        MyFriendsFragment.updateFragmentTransform(view, position, direction,relDisplacement)
+//        MyFriendsFragment.updateFragmentTransform(view, position, direction,relDisplacement)
     }
 }
