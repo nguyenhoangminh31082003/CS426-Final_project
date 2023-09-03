@@ -13,10 +13,13 @@ import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
+import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.cs426_final_project.R
+import com.example.cs426_final_project.contracts.MainPageContract
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.widgets.WidgetUtilityClass
+import kotlin.math.abs
 
 
 class ProfileFragment : Fragment() {
@@ -29,6 +32,7 @@ class ProfileFragment : Fragment() {
     }
     private var composeView: ComposeView? = null
     private var showDialog = mutableStateOf(false)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +57,13 @@ class ProfileFragment : Fragment() {
         val ibClose = view.findViewById<ImageButton>(R.id.ibClose)
 
         ibClose.setOnClickListener {
-            WidgetUtilityClass().createWidget(requireContext())
+            val mainPageContract = activity as MainPageContract
+            try {
+                mainPageContract.setToMainPage()
+            } catch (e: ClassCastException) {
+                throw ClassCastException(activity.toString() + " must implement MainPageContract")
+            }
+
         }
 
         val ibAvatar = view.findViewById<ImageButton>(R.id.ibAvatar)
@@ -121,6 +131,20 @@ class ProfileFragment : Fragment() {
 
     private fun storeImage(avatar: String) {
 
+    }
+
+    companion object {
+        @JvmStatic
+        fun updateFragmentTransform(view: View, position: Float, direction: Float, relDisplacement: Float) {
+            // get motion layout of
+            val profileMotionLayout =
+                view.findViewById<MotionLayout>(R.id.rootViewProfile) ?: return
+
+            val progress = 1 - abs(relDisplacement)
+            print("Profile: position: $position, direction: $direction, relDisplacement: $relDisplacement, progress: $progress\n")
+//            print("direction from profile: $direction\n")
+            profileMotionLayout.progress = progress
+        }
     }
 
 

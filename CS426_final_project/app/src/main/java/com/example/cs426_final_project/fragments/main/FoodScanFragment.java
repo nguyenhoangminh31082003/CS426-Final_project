@@ -19,7 +19,7 @@ public class FoodScanFragment extends MainPageFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_food_scan_page, container, false);
+        return inflater.inflate(R.layout.fragment_food_scan, container, false);
     }
 
     @Override
