@@ -21,7 +21,7 @@ public class MyFriendsFragment extends MainPageFragment {
 
     private FriendsListAdapter friendsListAdapter;
     private SuggestionsListAdapter suggestionsListAdapter;
-    private ExpandableListView friendsListView, suggestionsListView;
+    private ListView friendsListView, suggestionsListView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
