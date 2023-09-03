@@ -1,10 +1,15 @@
 package com.example.cs426_final_project;
 
+import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public class FriendsListAdapter extends BaseAdapter {
+
+    private Activity activity;
+
     @Override
     public int getCount() {
         return 0;
@@ -16,12 +21,22 @@ public class FriendsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
+    public long getItemId(final int i) {
+        return i;
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+    public View getView(
+            final int i,
+            View view,
+            ViewGroup viewGroup
+    ) {
+        LayoutInflater inflater = activity.getLayoutInflater();
+
+        if (view == null) {
+            view = inflater.inflate(R.layout.layout_of_friend_row, null);
+        }
+
+        return view;
     }
 }
