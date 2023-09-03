@@ -8,17 +8,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.cs426_final_project.FriendsListAdapter;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.SuggestionsListAdapter;
 import com.example.cs426_final_project.contracts.MainPageContract;
 
 public class MyFriendsFragment extends MainPageFragment {
 
     private FriendsListAdapter friendsListAdapter;
-    private ListView friendsListView;
+    private SuggestionsListAdapter suggestionsListAdapter;
+    private ExpandableListView friendsListView, suggestionsListView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class MyFriendsFragment extends MainPageFragment {
     private void setUpFriendsList() {
         this.friendsListView = getView().findViewById(R.id.friends_list);
         this.friendsListAdapter = new FriendsListAdapter(getActivity());
+        this.friendsListView.setAdapter(this.friendsListAdapter);
     }
 
     @Nullable

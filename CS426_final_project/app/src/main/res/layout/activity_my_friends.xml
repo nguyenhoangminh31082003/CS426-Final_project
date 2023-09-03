@@ -55,11 +55,11 @@
                 android:gravity="center">
             </TextView>
 
-            <ListView
+            <ExpandableListView
                 android:id = "@+id/friends_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            </ListView>
+            </ExpandableListView>
 
             <LinearLayout
                 android:layout_width="match_parent"

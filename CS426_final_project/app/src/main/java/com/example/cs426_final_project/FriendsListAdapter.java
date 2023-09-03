@@ -10,10 +10,11 @@ import android.widget.TextView;
 public class FriendsListAdapter extends BaseAdapter {
 
     private Activity activity;
-    private ListOfFriendRows listOfFriendRows;
+    private ListOfAccountRows listOfFriendRows;
 
     public FriendsListAdapter(Activity activity) {
         this.activity = activity;
+        this.listOfFriendRows = new ListOfAccountRows();
     }
 
     @Override

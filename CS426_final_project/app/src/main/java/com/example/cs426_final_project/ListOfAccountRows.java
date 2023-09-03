@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ListOfFriendRows {
+public class ListOfAccountRows {
 
     private JSONObject records;
     private ArrayList<String> friendsEmails;
@@ -21,9 +21,9 @@ public class ListOfFriendRows {
         return result;
     }
     private void testByAddingSomeFriends() {
-        FriendRow[] rows = {
-                new FriendRow("viserys.targaryen.63@gmail.com", "Viserys Targaryen"),
-                new FriendRow("daemon.targaryen.81@gmail.com", "Daemon Targaryen")
+        AccountRow[] rows = {
+                new AccountRow("viserys.targaryen.63@gmail.com", "Viserys Targaryen"),
+                new AccountRow("daemon.targaryen.81@gmail.com", "Daemon Targaryen")
         };
         for (int i = 0; i < rows.length; ++i) {
             try {
@@ -35,7 +35,7 @@ public class ListOfFriendRows {
         this.friendsEmails = this.findAllEmails();
     }
 
-    public ListOfFriendRows() {
+    public ListOfAccountRows() {
         this.records = new JSONObject();
         this.friendsEmails = new ArrayList<String>();
 
@@ -46,9 +46,9 @@ public class ListOfFriendRows {
         return this.friendsEmails.size();
     }
 
-    public FriendRow getFriendRow(final int position) {
+    public AccountRow getFriendRow(final int position) {
         try {
-            return new FriendRow(this.records.getJSONObject(this.friendsEmails.get(position)));
+            return new AccountRow(this.records.getJSONObject(this.friendsEmails.get(position)));
         } catch (JSONException e) {
             return null;
         }

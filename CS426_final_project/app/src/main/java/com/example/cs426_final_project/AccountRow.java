@@ -3,12 +3,12 @@ package com.example.cs426_final_project;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FriendRow {
+public class AccountRow {
 
     private String email;
     private String name;
 
-    public FriendRow(final JSONObject record) {
+    public AccountRow(final JSONObject record) {
         try {
             this.email = record.getString("email");
         } catch (JSONException e) {
@@ -20,7 +20,7 @@ public class FriendRow {
             e.printStackTrace();
         }
     }
-    public FriendRow(final String email, final String name) {
+    public AccountRow(final String email, final String name) {
         this.email = email;
         this.name = name;
     }

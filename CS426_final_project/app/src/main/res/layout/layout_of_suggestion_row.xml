@@ -26,8 +26,8 @@
     </TextView>
 
     <ImageView
-        android:id = "@+id/unfriend_icon"
-        android:src = "@drawable/my_friends_page_unfriend_icon"
+        android:id = "@+id/add_friend_icon"
+        android:src = "@drawable/my_friends_page_add_icon_image"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent">
