@@ -14,6 +14,6 @@ open class MainPageFragment(
         } catch (e: ClassCastException) {
             throw ClassCastException(activity.toString() + " must implement MainPageContract")
         }
-
     }
+
 }

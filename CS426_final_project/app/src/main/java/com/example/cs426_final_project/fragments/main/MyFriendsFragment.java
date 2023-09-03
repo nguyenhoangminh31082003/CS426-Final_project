@@ -2,7 +2,6 @@ package com.example.cs426_final_project.fragments.main;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.contracts.MainPageContract;
 
 public class MyFriendsFragment extends MainPageFragment {
 
@@ -25,7 +23,7 @@ public class MyFriendsFragment extends MainPageFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(
-                R.layout.activity_my_friends,
+                R.layout.fragment_my_friends,
                 container,
                 false);
     }
@@ -38,5 +36,16 @@ public class MyFriendsFragment extends MainPageFragment {
             mainPageContract.setToMainPage();
         });
     }
+
+
+    public static void updateFragmentTransform(View view, float position, float direction, float relDisplacement) {
+        View rootViewFriends = view.findViewById(R.id.rootViewFriends);
+        if(rootViewFriends == null){
+            return;
+        }
+        // print out the position, direction, and relative displacement
+        System.out.println("Friends: position: " + position + ", direction: " + direction + ", relDisplacement: " + relDisplacement);
+    }
+
 
 }
