@@ -52,8 +52,6 @@ public class MyFriendsFragment extends MainPageFragment {
         if(rootViewFriends == null) return;
         float progress = 1 - abs(relDisplacement);
         rootViewFriends.setProgress(progress);
-
-
     }
 
 }

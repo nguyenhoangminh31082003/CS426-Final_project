@@ -12,6 +12,7 @@
     tools:context=".fragments.main.MyFriendsFragment">
 
     <ImageButton
+        android:contentDescription="Button"
         android:id="@+id/btnFriendsClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,12 +41,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-        <androidx.core.widget.NestedScrollView
-
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,7 +100,7 @@
 
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
