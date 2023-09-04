@@ -5,48 +5,64 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-public class AccountsListAdapter extends BaseAdapter {
+public class AccountsListAdapter extends BaseExpandableListAdapter {
 
     private Activity activity;
-    private ListOfAccountRows listOfSuggestionRows, listOfFriendRows;
 
     public AccountsListAdapter(Activity activity) {
         this.activity = activity;
-        this.listOfSuggestionRows = new ListOfAccountRows();
-        this.listOfFriendRows = new ListOfAccountRows();
     }
 
     @Override
-    public int getCount() {
-        return this.listOfSuggestionRows.getNumberOfRows() + this.listOfFriendRows.getNumberOfRows();
+    public int getGroupCount() {
+        return 0;
     }
 
     @Override
-    public Object getItem(final int i) {
-        return this.listOfFriendRows.getFriendRow(i);
+    public int getChildrenCount(int i) {
+        return 0;
     }
 
     @Override
-    public long getItemId(final int i) {
-        return i;
+    public Object getGroup(int i) {
+        return null;
     }
 
     @Override
-    public View getView(
-            final int i,
-            View view,
-            ViewGroup viewGroup
-    ) {
-        LayoutInflater inflater = activity.getLayoutInflater();
+    public Object getChild(int i, int i1) {
+        return null;
+    }
 
-        if (view == null) {
-            view = inflater.inflate(R.layout.layout_of_friend_row, null);
-            TextView friendName = view.findViewById(R.id.friend_name);
-            friendName.setText(this.listOfFriendRows.getFriendRow(i).getName());
-        }
+    @Override
+    public long getGroupId(int i) {
+        return 0;
+    }
 
-        return view;
+    @Override
+    public long getChildId(int i, int i1) {
+        return 0;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
+    public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
+    public boolean isChildSelectable(int i, int i1) {
+        return false;
     }
 }
