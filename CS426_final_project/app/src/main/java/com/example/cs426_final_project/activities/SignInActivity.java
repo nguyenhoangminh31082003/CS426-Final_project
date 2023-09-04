@@ -14,7 +14,7 @@ import com.example.cs426_final_project.fragments.WelcomeFragment;
 import com.example.cs426_final_project.contracts.SignInContract;
 import com.example.cs426_final_project.contracts.ViewPagerContract;
 
-public class SignInActivity extends AppCompatActivity implements SignInContract, ViewPagerContract {
+public class SignInActivity extends AppCompatActivity implements SignInContract {
 
     ViewPagerAdapter adapter;
     ViewPager2 vpSignIn;
@@ -27,7 +27,23 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
 
     private void setViewPager() {
         this.vpSignIn = this.findViewById(R.id.vpSignIn);
-        this.adapter = new ViewPagerAdapter(this, this);
+        this.adapter = new ViewPagerAdapter(this, new ViewPagerContract() {
+            @Override
+            public Fragment createFragment(int position) {
+                Fragment fragment = null;
+                if (position == 0)
+                    fragment = new WelcomeFragment();
+                if (position == 1){
+                    fragment = EmailReceiverComposeFragmentKt.newInstance();
+                }
+                return fragment;
+            }
+
+            @Override
+            public int getItemCount() {
+                return 2;
+            }
+        });
         this.vpSignIn.setAdapter(this.adapter);
     }
 
@@ -46,19 +62,4 @@ public class SignInActivity extends AppCompatActivity implements SignInContract,
         finish();
     }
 
-    @Override
-    public Fragment createFragment(int position) {
-        Fragment fragment = null;
-        if (position == 0)
-            fragment = new WelcomeFragment();
-        if (position == 1){
-            fragment = EmailReceiverComposeFragmentKt.newInstance();
-        }
-        return fragment;
-    }
-
-    @Override
-    public int getItemCount() {
-        return 2;
-    }
 }

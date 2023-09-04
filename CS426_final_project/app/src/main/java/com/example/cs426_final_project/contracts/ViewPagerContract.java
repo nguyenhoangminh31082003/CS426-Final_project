@@ -5,4 +5,5 @@ import androidx.fragment.app.Fragment;
 public interface ViewPagerContract {
     Fragment createFragment(int position);
     int getItemCount();
+
 }

@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.cs426_final_project.camera.CameraFragment;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.contracts.CameraContract;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,8 +55,9 @@ public class FoodScanFragment extends MainPageFragment {
 
         CameraFragment cameraFragment = CameraFragment.newInstance();
 
+
+
         cameraFragment.setCameraContract(bitmapData -> {
-//            testFailStoreGallery(bitmapData);
             Uri images;
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
@@ -82,7 +84,6 @@ public class FoodScanFragment extends MainPageFragment {
 
             } catch (Exception e) {
                 e.printStackTrace();
-
                 Toast.makeText(requireContext(), "Failed to save to gallery", Toast.LENGTH_SHORT).show();
             }
 
