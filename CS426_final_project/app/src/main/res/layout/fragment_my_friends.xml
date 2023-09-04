@@ -1,102 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootViewFriends"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/medium_grey"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="@color/medium_grey"
+    app:layoutDescription="@xml/fragment_my_friends_scene"
     tools:context=".fragments.main.MyFriendsFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:padding="8dp">
-
-        <ImageView
-            android:id = "@+id/x_button"
-            android:src = "@drawable/my_friends_page_x"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </ImageView>
-
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/btnFriendsClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackgroundBorderless"
+        android:outlineProvider="bounds"
+        android:src="@drawable/my_friends_page_x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/my_friends_page_background_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnFriendsClose"></ImageView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        android:src = "@drawable/my_friends_page_background_image">
+        android:layout_marginBottom="-32dp"
+        android:background="@drawable/my_friends_section_customization"
+        android:backgroundTint="@color/dark_grey"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-    </ImageView>
+        <androidx.core.widget.NestedScrollView
 
-    <androidx.core.widget.NestedScrollView
-        android:background = "@drawable/my_friends_section_customization"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8">
-
-        <LinearLayout
-            android:padding = "12dp"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text = "My Friends"
-                android:textSize = "24sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:gravity="center">
-            </TextView>
-
-            <ListView
-                android:id = "@+id/friends_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </ListView>
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding = "12dp">
-
-                <ImageView
-                    android:src = "@drawable/my_friends_page_light_bulb"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-                </ImageView>
+                android:orientation="vertical"
+                android:padding="12dp">
 
                 <TextView
-                    android:padding="8dp"
-                    android:layout_width="0dp"
-                    android:layout_weight="9"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text = "Suggestion"
-                    android:textSize = "18sp"
+                    android:gravity="center"
+                    android:text="My Friends"
                     android:textColor="@color/white"
-                    android:gravity="left">
-                </TextView>
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <ListView
+                    android:id="@+id/friends_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:src="@drawable/my_friends_page_light_bulb" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9"
+                        android:gravity="left"
+                        android:padding="8dp"
+                        android:text="Suggestions"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/suggestions_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-            <ListView
-                android:id = "@+id/suggestions_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </ListView>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</LinearLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

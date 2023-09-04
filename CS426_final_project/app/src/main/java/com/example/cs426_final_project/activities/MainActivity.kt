@@ -21,6 +21,7 @@ import com.example.cs426_final_project.utilities.PagerUtilityClass
 class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, PageTransformerContract {
 
     private lateinit var vpMain: ViewPager2
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
     private lateinit var pagerUtils: PagerUtilityClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +29,12 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
 
 
         vpMain = findViewById(R.id.vpMain)
-        val adapter = ViewPagerAdapter(this, this)
-        vpMain.adapter = adapter
+        vpMain.setOffscreenPageLimit(1)
+        viewPagerAdapter = ViewPagerAdapter(this, this)
+        vpMain.adapter = viewPagerAdapter
         setToMainPage()
 
-        var pageIds = arrayOf(R.id.rootViewFriends, R.id.rootViewFoodScan, R.id.rootViewProfile)
+        val pageIds = arrayOf(R.id.rootViewFriends, R.id.rootViewFoodScan, R.id.rootViewProfile)
         pagerUtils = PagerUtilityClass(pageIds.toList())
 
         // set page transformer
@@ -52,7 +54,7 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
 
-                val progress = (position + positionOffset) / (adapter.itemCount - 1).toFloat()
+                val progress = (position + positionOffset) / (viewPagerAdapter.itemCount - 1).toFloat()
 //                print("progress: $progress, position: $position, positionOffset: $positionOffset\n")
 //                val direction = (progress - 0.5) / 0.5f
             }
@@ -104,15 +106,17 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
     }
 
     override fun setToMainPage() {
-        vpMain.currentItem = 1
+        vpMain.setCurrentItem(1, true)
+
+
     }
 
     override fun foodScanToProfilePage() {
-        vpMain.currentItem = 2
+        vpMain.setCurrentItem(2, true)
     }
 
     override fun foodScanToMyFriendsPage() {
-        vpMain.currentItem = 0
+        vpMain.setCurrentItem(0, true)
     }
 
     override fun onPageTransform(view: View, position: Float) {
@@ -124,6 +128,6 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
 //        pagerUtils.debugSwiping(swipingState, vpMain.currentItem)
 
         ProfileFragment.updateFragmentTransform(view, position, direction,relDisplacement)
-//        MyFriendsFragment.updateFragmentTransform(view, position, direction,relDisplacement)
+        MyFriendsFragment.updateFragmentTransform(view, position, direction,relDisplacement)
     }
 }

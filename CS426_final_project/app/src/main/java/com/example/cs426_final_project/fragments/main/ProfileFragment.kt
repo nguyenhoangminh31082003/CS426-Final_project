@@ -22,7 +22,7 @@ import com.example.cs426_final_project.utilities.widgets.WidgetUtilityClass
 import kotlin.math.abs
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : MainPageFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,12 +57,9 @@ class ProfileFragment : Fragment() {
         val ibClose = view.findViewById<ImageButton>(R.id.ibClose)
 
         ibClose.setOnClickListener {
-            val mainPageContract = activity as MainPageContract
-            try {
-                mainPageContract.setToMainPage()
-            } catch (e: ClassCastException) {
-                throw ClassCastException(activity.toString() + " must implement MainPageContract")
-            }
+
+
+            mainPageContract.setToMainPage()
 
         }
 
@@ -141,7 +138,7 @@ class ProfileFragment : Fragment() {
                 view.findViewById<MotionLayout>(R.id.rootViewProfile) ?: return
 
             val progress = 1 - abs(relDisplacement)
-            print("Profile: position: $position, direction: $direction, relDisplacement: $relDisplacement, progress: $progress\n")
+//            print("Profile: position: $position, direction: $direction, relDisplacement: $relDisplacement, progress: $progress\n")
 //            print("direction from profile: $direction\n")
             profileMotionLayout.progress = progress
         }

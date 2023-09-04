@@ -137,14 +137,15 @@
         android:layout_marginEnd="16dp"
         android:tint="@color/white"
         android:background="?selectableItemBackgroundBorderless"
+        android:outlineProvider="bounds"
         android:clipChildren="false"
         android:contentDescription="close button"
-        android:outlineProvider="bounds"
-        android:src="@drawable/baseline_close_24"
+
+        android:src="@drawable/my_friends_page_x"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UseAppTint" />
+        tools:ignore="HardcodedText,UseAppTint" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/glBottom"

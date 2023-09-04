@@ -1,19 +1,21 @@
 package com.example.cs426_final_project.fragments.main;
 
+import static java.lang.Math.abs;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.cs426_final_project.FriendsListAdapter;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.contracts.MainPageContract;
 
 public class MyFriendsFragment extends MainPageFragment {
 
@@ -38,11 +40,20 @@ public class MyFriendsFragment extends MainPageFragment {
 
 
     private void enableX(View view) {
-        ImageView button = view.findViewById(R.id.x_button);
+        ImageButton button = view.findViewById(R.id.btnFriendsClose);
 
         button.setOnClickListener(v -> {
             mainPageContract.setToMainPage();
         });
+    }
+
+    public static void updateFragmentTransform(View view, float position, float direction, float relDisplacement) {
+        MotionLayout rootViewFriends = view.findViewById(R.id.rootViewFriends);
+        if(rootViewFriends == null) return;
+        float progress = 1 - abs(relDisplacement);
+        rootViewFriends.setProgress(progress);
+
+
     }
 
 }
