@@ -65,9 +65,10 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:gravity="center"
-            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:id="@+id/llToFeed"
             android:layout_weight="1">
 
             <TextView
@@ -76,18 +77,20 @@
                 android:text = "Food view"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:textSize = "24sp">
+                android:textSize = "24sp"
+                tools:ignore="HardcodedText">
 
             </TextView>
 
-            <ImageView
-                android:id = "@+id/start_view_feeds"
+            <ImageButton
+                android:id = "@+id/ibViewFeeds"
                 android:contentDescription="Swipe down to see feed"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:src = "@drawable/food_scan_page_down_arrow"
-                >
-            </ImageView>
+                android:background="@null"
+                tools:ignore="HardcodedText"
+                />
 
         </LinearLayout>
 

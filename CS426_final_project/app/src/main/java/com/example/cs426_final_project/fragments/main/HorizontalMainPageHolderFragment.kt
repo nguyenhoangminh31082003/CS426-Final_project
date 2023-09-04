@@ -24,6 +24,9 @@ class HorizontalMainPageHolderFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_horizontal_main_page_holder, container, false)
     }
 
+    var changeLockState = { _: Boolean -> }
+    var onRequestToFeed = { _: Unit -> }
+
     private val mainPageContract: MainPageContract = object : MainPageContract {
         override fun setToMainPage() =
             vpHorizontalMain.setCurrentItem(1, true)
@@ -45,19 +48,29 @@ class HorizontalMainPageHolderFragment : Fragment() {
         vpHorizontalMain = view.findViewById(R.id.vpHorizontalMain)
         setUpAdapter()
         addTransformation()
+
+        vpHorizontalMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                changeLockState(position == 1)
+            }
+        })
     }
 
     private fun setUpAdapter() {
         vpHorizontalMain.adapter = ViewPagerAdapter(requireActivity(), object : ViewPagerContract {
             override fun createFragment(position: Int): Fragment {
-                val fragment: MainPageFragment = when (position) {
+                return when (position) {
                     0 -> MyFriendsFragment()
-                    1 -> FoodScanFragment()
+                    1 -> FoodScanFragment().also {
+                        it.listener = FoodScanFragment.OnFoodScanFragmentListener {
+                            onRequestToFeed(Unit)
+                        }
+                    }
                     2 -> ProfileFragment()
                     else -> FoodScanFragment()
+                }.also {
+                    it.mainPageContract = mainPageContract
                 }
-                fragment.mainPageContract = mainPageContract
-                return fragment
             }
 
             override fun getItemCount(): Int = 3

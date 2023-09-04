@@ -68,19 +68,21 @@
                 android:textColor="@color/white"
                 android:textCursorDrawable="@null"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
 
             <TextView
                 android:id="@+id/tvWidgetSetup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:paddingBottom="5dp"
                 android:text="Widget Setup"
                 android:textColor="@color/light_grey"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddWidget"
@@ -104,12 +106,13 @@
                 android:id="@+id/tvGeneral"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginStart="50dp"
                 android:layout_marginTop="50dp"
                 android:text="General"
                 android:textColor="@color/light_grey"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChangeEmail"
@@ -125,7 +128,8 @@
                 android:text="Change Email Address"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:cornerRadius="16dp" />
+                app:cornerRadius="16dp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

@@ -1,7 +1,9 @@
 package com.example.cs426_final_project.activities
 
 // import view pager adapter
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -24,9 +26,14 @@ class MainActivity : AppCompatActivity(), MainPageContract {
     private lateinit var pagerUtils: PagerUtilityClass
 
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // fix vertical orientation
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
 
         initHorizontalViewPager()
 
@@ -52,11 +59,20 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         vpVerticalMain.adapter = ViewPagerAdapter(this, object : ViewPagerContract {
             override fun createFragment(position: Int): Fragment {
                 return if(position == 0) {
-                    HorizontalMainPageHolderFragment()
-                } else {
-                    FeedsFragment()
+                    HorizontalMainPageHolderFragment().also {
+                        it.changeLockState = { unlock: Boolean ->
+                            vpVerticalMain.isUserInputEnabled = unlock
+                        }
+                        it.onRequestToFeed = {
+                            vpVerticalMain.setCurrentItem(1, true)
+                        }
+                    }
+
+                } else FeedsFragment().also {
+                    it.listener = FeedsFragment.OnFeedsFragmentListener { vpVerticalMain.setCurrentItem(0, true) }
                 }
             }
+
 
             override fun getItemCount(): Int = 2
         })

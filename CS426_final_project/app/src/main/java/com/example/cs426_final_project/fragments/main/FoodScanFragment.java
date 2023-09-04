@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.cs426_final_project.camera.CameraFragment;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.contracts.CameraContract;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,6 +40,12 @@ public class FoodScanFragment extends MainPageFragment {
         return inflater.inflate(R.layout.fragment_food_scan, container, false);
     }
 
+    public interface OnFoodScanFragmentListener {
+        void onRequestToViewFeed();
+    }
+
+    public OnFoodScanFragmentListener listener;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -54,8 +60,6 @@ public class FoodScanFragment extends MainPageFragment {
 
 
         CameraFragment cameraFragment = CameraFragment.newInstance();
-
-
 
         cameraFragment.setCameraContract(bitmapData -> {
             Uri images;
@@ -156,11 +160,18 @@ public class FoodScanFragment extends MainPageFragment {
     }
 
     private void enableStartViewFeedsIcon(View view) {
-        ImageView button = view.findViewById(R.id.start_view_feeds);
+        LinearLayout llToFeed = view.findViewById(R.id.llToFeed);
 
-//        button.setOnClickListener(v -> {
-//            mainPageContract.setToViewFeeds();
-//        });
+        llToFeed.setOnClickListener(v -> {
+            try {
+                if(getMainPageContract() == null) {
+                    throw new Exception("MainPageContract is null");
+                }
+                listener.onRequestToViewFeed();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void enableViewFriends(View view) {

@@ -13,6 +13,14 @@ import com.example.cs426_final_project.R;
 
 public class FeedsFragment extends Fragment {
 
+    public interface OnFeedsFragmentListener {
+        /**
+         * Use later
+         */
+        void onRequestToScanFood();
+    }
+
+    public OnFeedsFragmentListener listener;
 
     @Nullable
     @Override

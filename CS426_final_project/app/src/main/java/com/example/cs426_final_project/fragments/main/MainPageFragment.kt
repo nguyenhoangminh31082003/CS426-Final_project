@@ -8,10 +8,4 @@ open class MainPageFragment(
 ) : Fragment() {
     var mainPageContract: MainPageContract? = null
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
 }
