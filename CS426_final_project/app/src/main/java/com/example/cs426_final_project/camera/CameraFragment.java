@@ -36,6 +36,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
+
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -48,6 +50,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.contracts.CameraContract;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,6 +62,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -71,6 +75,8 @@ public class CameraFragment extends Fragment
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+
+    private CameraContract cameraContract;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -237,7 +243,11 @@ public class CameraFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            // get parent fragment
+
+            mBackgroundHandler.post(
+                    new ImageSaver(reader.acquireNextImage(), mFile, cameraContract)
+            );
         }
 
 
@@ -643,7 +653,7 @@ public class CameraFragment extends Fragment
 
 
     private void openCamera(final int width, final int height) {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             requestCameraPermission();
             return;
@@ -651,6 +661,7 @@ public class CameraFragment extends Fragment
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
         Activity activity = getActivity();
+        assert activity != null;
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try {
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
@@ -823,7 +834,6 @@ public class CameraFragment extends Fragment
      * Initiate a still image capture.
      */
     private void takePicture() {
-
         if (mAutoFocusSupported) {
             lockFocus();
         } else {
@@ -901,8 +911,8 @@ public class CameraFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
+//                    showToast("Capture Completed");
+//                    Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
             };
@@ -992,6 +1002,10 @@ public class CameraFragment extends Fragment
         }
     }
 
+    public void setCameraContract(CameraContract cameraContract) {
+        this.cameraContract = cameraContract;
+    }
+
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
@@ -1006,9 +1020,12 @@ public class CameraFragment extends Fragment
          */
         private final File mFile;
 
-        ImageSaver(Image image, File file) {
+        private final CameraContract cameraContract;
+
+        ImageSaver(Image image, File file, CameraContract cameraContract) {
             mImage = image;
             mFile = file;
+            this.cameraContract = cameraContract;
         }
 
         @Override
@@ -1020,20 +1037,27 @@ public class CameraFragment extends Fragment
 
             Bitmap thisbitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             int width = thisbitmap.getWidth();
-            Bitmap resizedbitmap1=Bitmap.createBitmap(thisbitmap, 0,0 ,width, width);
+            int height = thisbitmap.getHeight();
+            Bitmap resizedbitmap1=Bitmap.createBitmap(thisbitmap, 0,0 ,width, height);
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             resizedbitmap1.compress(Bitmap.CompressFormat.JPEG, 100,bos);//*ignored for PNG*//*, bos);
 
-            byte[] bitmapdata = bos.toByteArray();
+            byte[] bitmapData = bos.toByteArray();
 
             FileOutputStream output = null;
             try {
-                output = new FileOutputStream(mFile);
-                output.write(bitmapdata);
-            } catch (IOException e) {
+//                output = new FileOutputStream(mFile);
+//                output.write(bitmapData);
+                if(cameraContract==null){
+                    throw new NullPointerException("CameraContract is null");
+                }
+
+                cameraContract.onImageCaptured(bitmapData);
+            } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
+            }
+            finally {
                 mImage.close();
                 if (null != output) {
                     try {

@@ -15,59 +15,44 @@ import com.example.cs426_final_project.contracts.ViewPagerContract
 import com.example.cs426_final_project.fragments.main.FoodScanFragment
 import com.example.cs426_final_project.fragments.main.MyFriendsFragment
 import com.example.cs426_final_project.fragments.main.ProfileFragment
-import com.example.cs426_final_project.transformation.PageTransformer
+import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
 import com.example.cs426_final_project.utilities.PagerUtilityClass
 
 class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, PageTransformerContract {
 
-    private lateinit var vpMain: ViewPager2
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private lateinit var vpHorizontalMain: ViewPager2
     private lateinit var pagerUtils: PagerUtilityClass
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        vpMain = findViewById(R.id.vpMain)
-        vpMain.setOffscreenPageLimit(1)
-        viewPagerAdapter = ViewPagerAdapter(this, this)
-        vpMain.adapter = viewPagerAdapter
-        setToMainPage()
-
-        val pageIds = arrayOf(R.id.rootViewFriends, R.id.rootViewFoodScan, R.id.rootViewProfile)
-        pagerUtils = PagerUtilityClass(pageIds.toList())
-
-        // set page transformer
-        vpMain.setPageTransformer(PageTransformer(this))
-
-        // register vpMain to listen to page change
-        vpMain.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-
-                val progress = (position + positionOffset) / (viewPagerAdapter.itemCount - 1).toFloat()
-//                print("progress: $progress, position: $position, positionOffset: $positionOffset\n")
-//                val direction = (progress - 0.5) / 0.5f
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
-            }
-        })
+        initHorizontalViewPager()
 
         if(needSignIn()) {
             signIn()
         }
 
+    }
+
+
+    private fun initHorizontalViewPager() {
+        vpHorizontalMain = findViewById(R.id.vpHorzMain)
+
+        val viewPagerAdapter = ViewPagerAdapter(this, this)
+        val pageIds = arrayOf(R.id.rootViewFriends, R.id.rootViewFoodScan, R.id.rootViewProfile)
+
+        vpHorizontalMain.adapter = viewPagerAdapter
+        vpHorizontalMain.offscreenPageLimit = 1
+
+
+        pagerUtils = PagerUtilityClass(pageIds.toList())
+
+        vpHorizontalMain.setPageTransformer(ZoomFadePageTransformer(this))
+
+        setToMainPage()
     }
 
     private fun signIn() {
@@ -80,7 +65,7 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
     }
 
     override fun createFragment(position: Int): Fragment {
-        var fragment: Fragment
+        val fragment: Fragment
         when(position) {
             0 -> {
                 fragment =
@@ -106,21 +91,21 @@ class MainActivity : AppCompatActivity(), ViewPagerContract, MainPageContract, P
     }
 
     override fun setToMainPage() {
-        vpMain.setCurrentItem(1, true)
+        vpHorizontalMain.setCurrentItem(1, true)
 
 
     }
 
     override fun foodScanToProfilePage() {
-        vpMain.setCurrentItem(2, true)
+        vpHorizontalMain.setCurrentItem(2, true)
     }
 
     override fun foodScanToMyFriendsPage() {
-        vpMain.setCurrentItem(0, true)
+        vpHorizontalMain.setCurrentItem(0, true)
     }
 
     override fun onPageTransform(view: View, position: Float) {
-        val directionInfo = pagerUtils.getDirectionOnSwiping(view, position, vpMain.currentItem)
+        val directionInfo = pagerUtils.getDirectionOnSwiping(view, position, vpHorizontalMain.currentItem)
         val relDisplacement = position
         val direction = directionInfo.direction
 //        val swipingState = directionInfo.swipingState

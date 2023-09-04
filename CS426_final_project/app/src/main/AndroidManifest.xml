@@ -52,7 +52,7 @@
             android:name=".activities.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.FeedsActiviity"
+            android:name=".activities.FeedsFragment"
             android:exported="false" />
         <activity
             android:name=".fragments.main.MyFriendsFragment"
