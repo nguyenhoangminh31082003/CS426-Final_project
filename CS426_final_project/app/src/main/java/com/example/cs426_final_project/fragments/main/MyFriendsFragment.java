@@ -34,9 +34,30 @@ public class MyFriendsFragment extends MainPageFragment {
 
     void setUpListView() {
         Activity activity = getActivity();
-        this.listView = activity.findViewById(R.id.account_list_view);
+        this.listView = getView().findViewById(R.id.account_list_view);
         this.adapter = new AccountsListAdapter(activity);
         this.listView.setAdapter(this.adapter);
+
+        for (int i = 0; i < this.adapter.getGroupCount(); ++i)
+            this.listView.expandGroup(i);
+
+        this.listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int i) {
+                System.out.println("EXPAND!!!");
+            }
+        });
+
+        this.listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent,
+                                        View v,
+                                        final int groupPosition,
+                                        final long id) {
+                System.err.println("Is expanded???" + parent.isGroupExpanded(groupPosition));
+                return true;
+            }
+        });
     }
 
     @Nullable

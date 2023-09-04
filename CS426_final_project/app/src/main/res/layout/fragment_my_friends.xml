@@ -43,13 +43,43 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <ExpandableListView
-                android:id="@+id/account_list_view"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content">
-            </ExpandableListView>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="My Friends"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText">
+                </TextView>
+
+                <ExpandableListView
+                    android:groupIndicator="@null"
+                    android:id="@+id/account_list_view"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
+                </ExpandableListView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="DEBUG!!!"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText">
+                </TextView>
+
+            </LinearLayout>
 
         </ScrollView>
     </androidx.cardview.widget.CardView>
