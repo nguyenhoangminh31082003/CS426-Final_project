@@ -72,6 +72,8 @@ public class CameraFragment extends Fragment
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
+
+    private static final String FILE_LOCATION = "taken_photo.png";
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
@@ -228,6 +230,43 @@ public class CameraFragment extends Fragment
      * An {@link ImageReader} that handles still image capture.
      */
     private ImageReader mImageReader;
+    /*
+    private ImageReader.OnImageAvailableListener imageAvailableListener = new ImageReader.OnImageAvailableListener() {
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            Image image = reader.acquireLatestImage();
+            if (image != null) {
+                // Save or process the captured image here.
+                saveImageToFile(image);
+                // Don't forget to close the image after you're done.
+                image.close();
+            }
+        }
+    };
+
+    private void saveImageToFile(Image image) {
+        FileOutputStream fileOutputStream = null;
+        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+        Activity activity = getActivity();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+
+        try {
+            fileOutputStream = activity.openFileOutput(CameraFragment.FILE_LOCATION, activity.MODE_PRIVATE);
+            fileOutputStream.write(bytes);
+            System.out.println(CameraFragment.FILE_LOCATION + " is written!!!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }*/
 
     /**
      * This is the output file for our picture.
