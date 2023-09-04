@@ -11,15 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.cs426_final_project.FriendsListAdapter;
+import com.example.cs426_final_project.AccountsListAdapter;
 import com.example.cs426_final_project.R;
 
 public class MyFriendsFragment extends MainPageFragment {
 
-    private FriendsListAdapter friendsListAdapter;
+    private AccountsListAdapter friendsListAdapter;
 //    private SuggestionsListAdapter suggestionsListAdapter;
     private ListView friendsListView, suggestionsListView;
 

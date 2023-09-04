@@ -61,11 +61,6 @@
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
-                <ListView
-                    android:id="@+id/friends_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -95,6 +90,12 @@
 
                 <ListView
                     android:id="@+id/suggestions_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </ListView>
+
+                <ListView
+                    android:id="@+id/friends_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

@@ -5,22 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ExpandableListAdapter;
 import android.widget.TextView;
 
-public class FriendsListAdapter extends BaseAdapter {
+public class AccountsListAdapter extends BaseAdapter {
 
     private Activity activity;
-    private ListOfAccountRows listOfFriendRows;
+    private ListOfAccountRows listOfSuggestionRows, listOfFriendRows;
 
-    public FriendsListAdapter(Activity activity) {
+    public AccountsListAdapter(Activity activity) {
         this.activity = activity;
+        this.listOfSuggestionRows = new ListOfAccountRows();
         this.listOfFriendRows = new ListOfAccountRows();
     }
 
     @Override
     public int getCount() {
-        return this.listOfFriendRows.getNumberOfRows();
+        return this.listOfSuggestionRows.getNumberOfRows() + this.listOfFriendRows.getNumberOfRows();
     }
 
     @Override
