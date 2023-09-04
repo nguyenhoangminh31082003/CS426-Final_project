@@ -10,13 +10,13 @@
         android:layout_width = "0dp"
         android:layout_weight="2"
         android:layout_height="match_parent"
-        android:id = "@+id/icon">
+        android:id = "@+id/icon_of_section_of_accounts">
     </ImageView>
 
     <TextView
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:id = "@+id/title_of_section_accounts"
+        android:id = "@+id/title_of_section_of_accounts"
         android:layout_width="0dp"
         android:layout_weight="8"
         android:layout_height="match_parent">

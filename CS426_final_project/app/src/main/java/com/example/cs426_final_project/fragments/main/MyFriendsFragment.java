@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -20,14 +22,21 @@ import java.util.Objects;
 
 public class MyFriendsFragment extends MainPageFragment {
 
-    private AccountsListAdapter friendsListAdapter;
-//    private SuggestionsListAdapter suggestionsListAdapter;
-    private ListView friendsListView, suggestionsListView;
+    private AccountsListAdapter adapter;
+    private ExpandableListView listView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.enableX(view);
+        this.setUpListView();
+    }
+
+    void setUpListView() {
+        Activity activity = getActivity();
+        this.listView = activity.findViewById(R.id.account_list_view);
+        this.adapter = new AccountsListAdapter(activity);
+        this.listView.setAdapter(this.adapter);
     }
 
     @Nullable
