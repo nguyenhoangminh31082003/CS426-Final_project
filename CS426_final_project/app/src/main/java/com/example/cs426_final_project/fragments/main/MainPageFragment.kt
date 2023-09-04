@@ -6,14 +6,12 @@ import com.example.cs426_final_project.contracts.MainPageContract
 
 open class MainPageFragment(
 ) : Fragment() {
-    protected lateinit var mainPageContract: MainPageContract
+    var mainPageContract: MainPageContract? = null
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            mainPageContract = activity as MainPageContract
-        } catch (e: ClassCastException) {
-            throw ClassCastException(activity.toString() + " must implement MainPageContract")
-        }
     }
 
 }

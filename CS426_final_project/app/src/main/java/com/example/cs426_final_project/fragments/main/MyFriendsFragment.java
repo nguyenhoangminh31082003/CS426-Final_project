@@ -16,6 +16,8 @@ import android.widget.ListView;
 import com.example.cs426_final_project.AccountsListAdapter;
 import com.example.cs426_final_project.R;
 
+import java.util.Objects;
+
 public class MyFriendsFragment extends MainPageFragment {
 
     private AccountsListAdapter friendsListAdapter;
@@ -42,7 +44,14 @@ public class MyFriendsFragment extends MainPageFragment {
         ImageButton button = view.findViewById(R.id.btnFriendsClose);
 
         button.setOnClickListener(v -> {
-            mainPageContract.setToMainPage();
+            try {
+                if(getMainPageContract() == null) {
+                    throw new Exception("MainPageContract is null");
+                }
+                getMainPageContract().setToMainPage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

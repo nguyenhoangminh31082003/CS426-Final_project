@@ -59,7 +59,14 @@ class ProfileFragment : MainPageFragment() {
         ibClose.setOnClickListener {
 
 
-            mainPageContract.setToMainPage()
+            try {
+                if (mainPageContract == null) {
+                    throw Exception("mainPageContract is null")
+                }
+                mainPageContract!!.setToMainPage()
+            } catch (e: Exception) {
+                print("mainPageContract is null")
+            }
 
         }
 

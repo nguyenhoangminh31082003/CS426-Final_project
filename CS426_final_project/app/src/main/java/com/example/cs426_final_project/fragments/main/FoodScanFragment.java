@@ -144,7 +144,14 @@ public class FoodScanFragment extends MainPageFragment {
     private void enableViewProfile(View view) {
         ImageView button = view.findViewById(R.id.food_scan_page_profile_icon_image);
         button.setOnClickListener(v -> {
-            mainPageContract.foodScanToProfilePage();
+            try {
+                if(getMainPageContract() == null) {
+                    throw new Exception("MainPageContract is null");
+                }
+                getMainPageContract().setToMainPage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -160,7 +167,14 @@ public class FoodScanFragment extends MainPageFragment {
         ImageView button = view.findViewById(R.id.food_scan_page_friend_icon_image);
 
         button.setOnClickListener(v -> {
-            mainPageContract.foodScanToMyFriendsPage();
+            try {
+                if(getMainPageContract() == null) {
+                    throw new Exception("MainPageContract is null");
+                }
+                getMainPageContract().foodScanToMyFriendsPage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

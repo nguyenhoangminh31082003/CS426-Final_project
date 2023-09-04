@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpHorzMain"
+        android:id="@+id/vpVerticalMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
