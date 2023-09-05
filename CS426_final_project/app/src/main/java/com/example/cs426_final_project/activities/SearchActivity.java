@@ -1,8 +1,10 @@
 package com.example.cs426_final_project.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,7 +36,8 @@ public class SearchActivity extends AppCompatActivity {
             Button button = new Button(this);
 
             button.setText(this.typeOptionsStatus.getTypeOption(i));
-            //button.setTextColor();
+            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            button.setTextColor(ContextCompat.getColor(this, R.color.white));
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
