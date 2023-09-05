@@ -6,10 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -20,14 +22,43 @@ import java.util.Objects;
 
 public class MyFriendsFragment extends MainPageFragment {
 
-    private AccountsListAdapter friendsListAdapter;
-//    private SuggestionsListAdapter suggestionsListAdapter;
-    private ListView friendsListView, suggestionsListView;
+    private AccountsListAdapter adapter;
+    private ExpandableListView listView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.enableX(view);
+        this.setUpListView();
+    }
+
+    void setUpListView() {
+        Activity activity = getActivity();
+        this.listView = getView().findViewById(R.id.account_list_view);
+        this.adapter = new AccountsListAdapter(activity);
+        this.listView.setAdapter(this.adapter);
+
+        for (int i = 0; i < this.adapter.getGroupCount(); ++i)
+            this.listView.expandGroup(i);
+
+        this.listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int i) {
+                System.out.println("EXPAND!!!");
+            }
+        });
+
+        this.listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent,
+                                        View v,
+                                        final int groupPosition,
+                                        final long id) {
+                System.err.println("Is expanded???" + parent.isGroupExpanded(groupPosition));
+                listView.expandGroup(groupPosition);
+                return true;
+            }
+        });
     }
 
     @Nullable

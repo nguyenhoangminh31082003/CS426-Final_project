@@ -1,52 +1,140 @@
 package com.example.cs426_final_project;
 
 import android.app.Activity;
+import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class AccountsListAdapter extends BaseAdapter {
+import java.util.HashMap;
 
+public class AccountsListAdapter extends BaseExpandableListAdapter {
+
+    final private static int LIMIT_NUMBER_OF_SUGGESTIONS = 5;
+    final private static int LIMIT_NUMBER_OF_FRIENDS = 30;
+
+    final private static String SUGGESTIONS_HEADER = "Suggestion";
+    final private static String FRIENDS_HEADER = "Friends";
+    final private static String[] headers = {SUGGESTIONS_HEADER, FRIENDS_HEADER};
     private Activity activity;
-    private ListOfAccountRows listOfSuggestionRows, listOfFriendRows;
+    private HashMap<String, ListOfAccountRows> accounts;
+
+    private static ListOfAccountRows getListOfSuggestions() {
+        return new ListOfAccountRows();
+    }
+
+    private static ListOfAccountRows getListOfFriends() {
+        return new ListOfAccountRows();
+    }
+
+    private static HashMap<String, ListOfAccountRows> getListOfAccounts() {
+        HashMap<String, ListOfAccountRows> accounts = new HashMap<String, ListOfAccountRows>();
+        accounts.put(SUGGESTIONS_HEADER, getListOfSuggestions());
+        accounts.put(FRIENDS_HEADER, getListOfFriends());
+        return accounts;
+    }
+
 
     public AccountsListAdapter(Activity activity) {
         this.activity = activity;
-        this.listOfSuggestionRows = new ListOfAccountRows();
-        this.listOfFriendRows = new ListOfAccountRows();
+        this.accounts = getListOfAccounts();
     }
 
     @Override
-    public int getCount() {
-        return this.listOfSuggestionRows.getNumberOfRows() + this.listOfFriendRows.getNumberOfRows();
+    public int getGroupCount() {
+        System.out.println("The number of groups is " + headers.length);
+        return headers.length;
     }
 
     @Override
-    public Object getItem(final int i) {
-        return this.listOfFriendRows.getFriendRow(i);
+    public int getChildrenCount(final int i) {
+        System.out.println("The number of children of the " + i + "-th group is " + this.accounts.get(headers[i]).getNumberOfRows());
+        return this.accounts.get(headers[i]).getNumberOfRows();
     }
 
     @Override
-    public long getItemId(final int i) {
+    public Object getGroup(final int i) {
+        return headers[i];
+    }
+
+    @Override
+    public Object getChild(final int x, final int y) {
+        return this.accounts.get(headers[x]).getAccountRow(y);
+    }
+
+    @Override
+    public long getGroupId(final int i) {
         return i;
     }
 
     @Override
-    public View getView(
-            final int i,
-            View view,
-            ViewGroup viewGroup
-    ) {
-        LayoutInflater inflater = activity.getLayoutInflater();
+    public long getChildId(final int x, final int y) {
+        return y;
+    }
 
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(final int i,
+                             final boolean isExpanded,
+                             View view,
+                             ViewGroup viewGroup) {
+        System.out.println("Get group view " + i);
         if (view == null) {
-            view = inflater.inflate(R.layout.layout_of_friend_row, null);
-            TextView friendName = view.findViewById(R.id.friend_name);
-            friendName.setText(this.listOfFriendRows.getFriendRow(i).getName());
+            Context context = viewGroup.getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.layout_of_header_of_section_of_accounts, null);;
         }
+        TextView title = view.findViewById(R.id.title_of_section_of_accounts);
+        ImageView icon = view.findViewById(R.id.icon_of_section_of_accounts);
+
+        title.setText(headers[i]);
+
+        if (headers[i].equals(SUGGESTIONS_HEADER))
+            icon.setImageResource(R.drawable.my_friends_page_light_bulb);
+        else
+            icon.setImageResource(R.drawable.my_friends_page_light_bulb);//temporarily
 
         return view;
+    }
+
+    @Override
+    public View getChildView(final int x,
+                             final int y,
+                             final boolean isExpanded,
+                             View view,
+                             ViewGroup viewGroup) {
+        if (view == null) {
+            Context context = viewGroup.getContext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.layout_of_account_row, null);
+        }
+        final AccountRow accountRow = this.accounts.get(headers[x]).getAccountRow(y);
+        TextView accountName = view.findViewById(R.id.account_name);
+        TextView relationship = view.findViewById(R.id.relationship_with_account);
+        ImageView accountProfilePicture = view.findViewById(R.id.account_profile_picture);
+        ImageView updateIcon = view.findViewById(R.id.update_icon);
+        accountName.setText(accountRow.getName());
+        if (headers[x].equals(SUGGESTIONS_HEADER)) {
+            updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
+            relationship.setText("Suggestion");
+        } else {
+            updateIcon.setImageResource(R.drawable.my_friends_page_unfriend_icon);
+            relationship.setText("Friend");
+        }
+        return view;
+    }
+
+    @Override
+    public boolean isChildSelectable(final int x, final int y) {
+        return false;
     }
 }

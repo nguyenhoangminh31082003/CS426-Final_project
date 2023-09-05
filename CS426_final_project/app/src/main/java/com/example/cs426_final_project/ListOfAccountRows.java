@@ -46,7 +46,7 @@ public class ListOfAccountRows {
         return this.friendsEmails.size();
     }
 
-    public AccountRow getFriendRow(final int position) {
+    public AccountRow getAccountRow(final int position) {
         try {
             return new AccountRow(this.records.getJSONObject(this.friendsEmails.get(position)));
         } catch (JSONException e) {

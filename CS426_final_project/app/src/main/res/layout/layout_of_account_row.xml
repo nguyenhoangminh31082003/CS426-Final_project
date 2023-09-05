@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:padding="12dp">
+
+    <ImageView
+        android:id = "@+id/account_profile_picture"
+        android:src = "@drawable/my_friends_page_default_friend_profile_picture"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="match_parent">
+    </ImageView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="8"
+        android:gravity="left"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id = "@+id/account_name"
+            android:textSize="16sp"
+            android:textColor = "#FFB800"
+            android:text = "Mr Anderson"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:gravity="left">
+        </TextView>
+
+        <TextView
+            android:id = "@+id/relationship_with_account"
+            android:textSize="12sp"
+            android:textColor = "#628093"
+            android:text = "Friend"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="left">
+        </TextView>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id = "@+id/update_icon"
+        android:src = "@drawable/my_friends_page_unfriend_icon"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+    </ImageView>
+
+</LinearLayout>
