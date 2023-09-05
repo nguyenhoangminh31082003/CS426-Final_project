@@ -26,6 +26,10 @@ public class TypeOptionsStatus {
         return true;
     }
 
+    public boolean checkChosen(final int position) {
+        return this.chosen.get(position);
+    }
+
     public String getTypeOption(final int position) {
         if ((position < 0) || (position >= this.values.size()))
             return null;
