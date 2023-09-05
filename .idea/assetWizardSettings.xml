@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/close/baseline_close_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/keyboard_arrow_up/baseline_keyboard_arrow_up_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -29,8 +29,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="clipping_image_mask" />
-                            <entry key="sourceFile" value="C:\Users\DELL\Downloads\clipping_image_mask.svg" />
+                            <entry key="outputName" value="back_button_square" />
+                            <entry key="sourceFile" value="C:\Users\DELL\Downloads\back_button_square.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -1027,7 +1027,7 @@ public class CameraFragment extends Fragment
 
     private void changeFlashMode() {
         if (mFlashSupported) {
-            Activity activity = getActivity();
+            Activity activity = requireActivity();
             ImageView flashModeIconImage = activity.findViewById(R.id.change_flash_mode_icon);
             CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
             try {

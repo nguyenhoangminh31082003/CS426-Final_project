@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -35,14 +36,17 @@
         android:layout_alignParentStart="true">
 
         <ImageButton
+            android:layout_marginStart="20dp"
             android:id="@+id/switch_camera_icon"
             android:contentDescription="@string/description_info"
             style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|left"
+            android:layout_gravity="center_vertical|start"
             android:src="@drawable/food_scan_page_switch_camera_icon"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:background="?selectableItemBackgroundBorderless"
+            >
         </ImageButton>
 
         <ImageButton
@@ -52,17 +56,24 @@
             android:contentDescription="Take photo icon"
             style="@android:style/Widget.Material.Light.Button.Borderless"
             android:layout_gravity="center"
-            android:src = "@drawable/food_scan_page_take_photo_icon">
+            android:src = "@drawable/food_scan_page_take_photo_icon"
+            android:background="?selectableItemBackgroundBorderless"
+            tools:ignore="HardcodedText"
+            >
         </ImageButton>
 
         <ImageButton
+            android:layout_marginEnd="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/change_flash_mode_icon"
             android:contentDescription="Change flash mode"
             style="@android:style/Widget.Material.Light.Button.Borderless"
-            android:layout_gravity="center_vertical|right"
-            android:src = "@drawable/food_scan_page_flash_automatic_icon_image">
+            android:layout_gravity="center_vertical|end"
+            android:src = "@drawable/food_scan_page_flash_automatic_icon_image"
+            tools:ignore="HardcodedText"
+            android:background="?selectableItemBackgroundBorderless"
+            >
         </ImageButton>
 
     </FrameLayout>

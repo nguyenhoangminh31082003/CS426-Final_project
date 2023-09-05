@@ -53,7 +53,7 @@
             android:name=".activities.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.FeedsFragment"
+            android:name=".fragments.main.FeedsFragment"
             android:exported="false" />
         <activity
             android:name=".fragments.main.MyFriendsFragment"
@@ -61,6 +61,10 @@
             android:theme="@style/Theme.CS426_final_project_AppCompat" />
         <activity
             android:name=".fragments.main.FoodScanFragment"
+            android:exported="false"
+            android:theme="@style/Theme.CS426_final_project_AppCompat" />
+        <activity
+            android:name=".activities.FoodCommentActivity"
             android:exported="false"
             android:theme="@style/Theme.CS426_final_project_AppCompat" />
         <activity

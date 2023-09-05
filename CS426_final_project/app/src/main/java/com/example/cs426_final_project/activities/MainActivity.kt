@@ -14,11 +14,10 @@ import com.example.cs426_final_project.adapters.ViewPagerAdapter
 import com.example.cs426_final_project.contracts.MainPageContract
 import com.example.cs426_final_project.contracts.PageTransformerContract
 import com.example.cs426_final_project.contracts.ViewPagerContract
+import com.example.cs426_final_project.fragments.main.FeedsFragment
 import com.example.cs426_final_project.fragments.main.HorizontalMainPageHolderFragment
-import com.example.cs426_final_project.transformation.PageTransformer
 import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
 import com.example.cs426_final_project.utilities.PagerUtilityClass
-import java.lang.Math.abs
 
 class MainActivity : AppCompatActivity(), MainPageContract {
 
@@ -68,7 +67,8 @@ class MainActivity : AppCompatActivity(), MainPageContract {
                         }
                     }
 
-                } else FeedsFragment().also {
+                } else FeedsFragment()
+                    .also {
                     it.listener = FeedsFragment.OnFeedsFragmentListener { vpVerticalMain.setCurrentItem(0, true) }
                 }
             }

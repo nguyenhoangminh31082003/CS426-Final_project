@@ -11,42 +11,35 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:layout_height="0dp"
             android:padding = "16dp"
             android:layout_weight="1">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_gravity="left"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <ImageView
-                    android:src="@drawable/food_scan_page_friend_icon_image"
-                    android:id = "@+id/food_scan_page_friend_icon_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </ImageView>
-            </LinearLayout>
+            <ImageButton
+                android:id = "@+id/ibFriend"
+                android:contentDescription="Friend icon"
+                android:src="@drawable/group_light_square"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                tools:ignore="HardcodedText" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_weight="1">
-                <ImageView
-                    android:src="@drawable/food_scan_page_profile_icon_image"
-                    android:id = "@+id/food_scan_page_profile_icon_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                </ImageView>
-            </LinearLayout>
+            <ImageView
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/user_cicrle_square"
+                android:background="?selectableItemBackgroundBorderless"
+                android:id = "@+id/food_scan_page_profile_icon_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ImageView>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:orientation="vertical"
@@ -74,6 +67,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/txtToFeed"
                 android:text = "Food view"
                 android:gravity="center"
                 android:textStyle="bold"
