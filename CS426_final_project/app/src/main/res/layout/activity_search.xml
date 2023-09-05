@@ -8,81 +8,57 @@
     android:background="#252525"
     tools:context=".activities.SearchActivity">
 
-    <LinearLayout
-        android:id = "@+id/back_icon_and_search_bar"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <ImageView
+        tools:ignore="HardcodedText"
+        android:contentDescription="This is a back icon"
+        android:id = "@+id/acivSearchBack"
+        android:src = "@drawable/back_button_square"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
-
-        <ImageView
-            tools:ignore="HardcodedText"
-            android:contentDescription="This is a back icon"
-            android:id = "@+id/back_icon_in_search_page"
-            android:src = "@drawable/search_page_back_icon_image"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content">
-        </ImageView>
-
-        <androidx.appcompat.widget.SearchView
-            android:id = "@+id/search_view_in_search_page"
-            android:layout_width="0dp"
-            android:layout_weight="9"
-            android:textColor = "@color/white"
-            android:background="@drawable/search_view_customization_in_search_page"
-            android:theme="@style/SearchViewCustomizationInSearchPage"
-            android:layout_height="wrap_content">
-        </androidx.appcompat.widget.SearchView>
-
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <androidx.appcompat.widget.SearchView
+        android:id = "@+id/sevSearch"
+        android:layout_width="0dp"
+        android:textColor = "@color/white"
+        android:background="@drawable/search_view_customization_in_search_page"
+        android:theme="@style/SearchViewCustomizationInSearchPage"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:iconifiedByDefault="false"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/acivSearchBack"
+        />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text = "Types"
-        android:gravity="left"
+        android:text = "Trending"
         tools:ignore="HardcodedText"
         android:textColor = "@color/white"
         android:textSize = "20sp"
         android:padding = "8dp"
-        android:id = "@+id/header_of_type_section_in_search_page"
+        android:layout_marginTop="8dp"
+        android:id = "@+id/fllSearchHeader"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_icon_and_search_bar">
+        app:layout_constraintTop_toBottomOf="@id/sevSearch">
     </TextView>
 
     <com.nex3z.flowlayout.FlowLayout
-        android:id = "@+id/flow_list_of_type_options"
+        android:id = "@+id/fllSearchOption"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:flChildSpacing="auto"
         app:flChildSpacingForLastRow="align"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/header_of_type_section_in_search_page"
+        app:layout_constraintTop_toBottomOf="@id/fllSearchHeader"
         app:flRowSpacing="8dp">
     </com.nex3z.flowlayout.FlowLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id = "@+id/finding_result_button_in_search_page"
-        android:background = "@drawable/food_comment_page_done_button_customization"
-        android:layout_height = "wrap_content"
-        android:layout_width = "match_parent"
-        android:layout_marginTop = "12dp"
-        android:text = "Finding result"
-        android:textAllCaps="false"
-        android:textStyle = "bold"
-        android:textSize = "20sp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:textColor = "#4D4D4D"
-        tools:ignore="HardcodedText">
-    </androidx.appcompat.widget.AppCompatButton>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

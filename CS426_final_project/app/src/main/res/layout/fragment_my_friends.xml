@@ -20,7 +20,8 @@
         android:outlineProvider="bounds"
         android:src="@drawable/my_friends_page_x"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -28,7 +29,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/my_friends_page_background_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnFriendsClose"></ImageView>
+        app:layout_constraintTop_toBottomOf="@+id/btnFriendsClose" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
@@ -40,7 +41,11 @@
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -49,16 +54,16 @@
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText">
-                </TextView>
+                    android:paddingBottom="16dp"
+                    tools:ignore="HardcodedText"/>
 
                 <ExpandableListView
                     android:groupIndicator="@null"
                     android:id="@+id/account_list_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </ExpandableListView>
+                    android:layout_height="wrap_content"/>
 
+            </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

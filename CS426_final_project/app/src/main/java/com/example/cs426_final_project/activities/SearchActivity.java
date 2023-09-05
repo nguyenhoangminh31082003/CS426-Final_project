@@ -1,21 +1,22 @@
 package com.example.cs426_final_project.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
 
 import com.example.cs426_final_project.MutableTypeOptionsData;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.TypeOptionsStatus;
-import com.google.android.material.internal.FlowLayout;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -26,10 +27,44 @@ public class SearchActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_search);
         this.setTypeOptionsStatus();
         this.setSearchView();
+
+        initBackButton();
+
+        initSearchView();
+    }
+
+    private void initSearchView() {
+        androidx.appcompat.widget.SearchView sevSearch = this.findViewById(R.id.sevSearch);
+        sevSearch.setQueryHint("Type here to search");
+//        sevSearch.setIconified(false);
+//        sevSearch.setOnTouchListener((v, event) -> {
+//            // Open the SearchView when touched anywhere on it
+//            if (event.getAction() == MotionEvent.ACTION_UP) {
+//                sevSearch.setIconified(false); // Expand the SearchView
+//                return true;
+//            }
+//            return false;
+//        });
+        sevSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+    }
+
+    private void initBackButton() {
+        AppCompatImageView btnSearchBack = this.findViewById(R.id.acivSearchBack);
+        btnSearchBack.setOnClickListener(view -> finish());
     }
 
     private void setSearchView() {
-        androidx.appcompat.widget.SearchView searchView = this.findViewById(R.id.search_view_in_search_page);
+        androidx.appcompat.widget.SearchView searchView = this.findViewById(R.id.sevSearch);
         EditText editText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         ImageView closeButton = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
         ImageView searchMagIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
@@ -44,7 +79,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setTypeOptionsStatus() {
-        com.nex3z.flowlayout.FlowLayout flowLayout = this.findViewById(R.id.flow_list_of_type_options);
+        com.nex3z.flowlayout.FlowLayout flowLayout = this.findViewById(R.id.fllSearchOption);
         this.typeOptionsStatus = new TypeOptionsStatus((new MutableTypeOptionsData()).toList());
 
         final int numberOfOptions = this.typeOptionsStatus.getSize();
