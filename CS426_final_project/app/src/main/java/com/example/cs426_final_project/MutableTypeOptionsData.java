@@ -122,6 +122,7 @@ public class MutableTypeOptionsData {
                 "Pizza",
                 "Bánh mì",
                 "Bánh tráng",
+                "Bún đậu mắm tôm",
                 "Cà phê",
                 "Trà sữa",
                 "Chè",
