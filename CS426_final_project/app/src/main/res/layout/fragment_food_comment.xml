@@ -102,10 +102,12 @@
             android:layout_width="match_parent"
             android:layout_marginTop="12dp"
             android:text = "Done"
+            android:textAllCaps="false"
             android:textStyle = "bold"
             android:textSize = "20sp"
             android:textColor = "#4D4D4D"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText">
+        </Button>
 
     </LinearLayout>
 
