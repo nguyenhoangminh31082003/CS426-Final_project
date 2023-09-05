@@ -42,6 +42,7 @@
                 android:foreground="@drawable/clipping_image_mask"
                 android:id = "@+id/ivPreviewImage"
                 android:contentDescription="preview image"
+                android:scaleType="fitXY"
                 tools:ignore="HardcodedText">
             </ImageView>
 
