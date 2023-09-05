@@ -55,6 +55,7 @@ public class MyFriendsFragment extends MainPageFragment {
                                         final int groupPosition,
                                         final long id) {
                 System.err.println("Is expanded???" + parent.isGroupExpanded(groupPosition));
+                listView.expandGroup(groupPosition);
                 return true;
             }
         });

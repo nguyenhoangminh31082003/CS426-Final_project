@@ -135,7 +135,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         System.err.println("10");
         accountName.setText(accountRow.getName());
         System.err.println("11");
-        if (headers[y].equals(SUGGESTIONS_HEADER)) {
+        if (headers[x].equals(SUGGESTIONS_HEADER)) {
             System.err.println("11.1a");
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
             System.err.println("11.1b");
