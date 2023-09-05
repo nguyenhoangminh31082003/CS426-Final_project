@@ -9,13 +9,7 @@
     </solid>
 
     <corners
-        android:radius="60dp">
+        android:radius="36dp">
     </corners>
-
-    <stroke
-        android:width="4dp"
-        android:color="#FFB800">
-
-    </stroke>
 
 </shape>

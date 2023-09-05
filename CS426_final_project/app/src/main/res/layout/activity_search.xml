@@ -19,20 +19,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
 
-        <ImageButton
-            android:layout_paddingRight="8dp"
+        <ImageView
             tools:ignore="HardcodedText"
             android:contentDescription="This is a back icon"
             android:id = "@+id/back_icon_in_search_page"
             android:src = "@drawable/search_page_back_icon_image"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_height="wrap_content">
-        </ImageButton>
+        </ImageView>
 
         <SearchView
+            android:id = "@+id/search_view_in_search_page"
             android:layout_width="0dp"
             android:layout_weight="9"
+            android:background="@drawable/search_view_customization_in_search_page"
             android:layout_height="wrap_content">
         </SearchView>
 
