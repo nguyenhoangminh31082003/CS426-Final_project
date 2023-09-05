@@ -29,13 +29,15 @@
             android:layout_height="wrap_content">
         </ImageView>
 
-        <SearchView
+        <androidx.appcompat.widget.SearchView
             android:id = "@+id/search_view_in_search_page"
             android:layout_width="0dp"
             android:layout_weight="9"
+            android:textColor = "@color/white"
             android:background="@drawable/search_view_customization_in_search_page"
+            android:theme="@style/SearchViewCustomizationInSearchPage"
             android:layout_height="wrap_content">
-        </SearchView>
+        </androidx.appcompat.widget.SearchView>
 
     </LinearLayout>
 

@@ -12,8 +12,10 @@
         <item name="android:screenOrientation">portrait</item>
     </style>
 
-    <!--style name="SearchViewCustomizationInSearchPage" parent="Widget.AppCompat.SearchView">
-        <item name="android:tint">@android:color/white</item>
-    </style-->
+    <style name="SearchViewCustomizationInSearchPage" parent="Widget.AppCompat.SearchView">
+        <!--item name="android:tint">@android:color/white</item-->
+        <!--item name="searchIcon">@drawable/search_page_search_icon</item-->
+        <item name="android:editTextColor">@android:color/white</item>
+    </style>
 
 </resources>
