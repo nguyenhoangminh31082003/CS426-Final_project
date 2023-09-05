@@ -11,4 +11,9 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:screenOrientation">portrait</item>
     </style>
+
+    <!--style name="SearchViewCustomizationInSearchPage" parent="Widget.AppCompat.SearchView">
+        <item name="android:tint">@android:color/white</item>
+    </style-->
+
 </resources>

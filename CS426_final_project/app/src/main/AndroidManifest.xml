@@ -51,6 +51,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.SearchActivity"
+            android:theme="@style/Theme.CS426_final_project_AppCompat"
             android:exported="false" />
         <activity
             android:name=".fragments.main.FeedsFragment"
