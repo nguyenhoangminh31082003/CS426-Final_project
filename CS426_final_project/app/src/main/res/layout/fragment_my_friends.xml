@@ -59,17 +59,6 @@
                     android:layout_height="wrap_content">
                 </ExpandableListView>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="DEBUG!!!"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    tools:ignore="HardcodedText">
-                </TextView>
-
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

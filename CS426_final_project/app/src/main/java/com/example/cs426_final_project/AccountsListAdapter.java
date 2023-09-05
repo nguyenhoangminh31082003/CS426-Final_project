@@ -112,43 +112,24 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                              final boolean isExpanded,
                              View view,
                              ViewGroup viewGroup) {
-        System.out.println("Get children view " + x + ", " + y);
         if (view == null) {
-            System.err.println("1");
             Context context = viewGroup.getContext();
-            System.err.println("2");
             LayoutInflater inflater = LayoutInflater.from(context);
-            System.err.println("3");
             view = inflater.inflate(R.layout.layout_of_account_row, null);
-            System.err.println("4");
         }
-        System.err.println("5");
         final AccountRow accountRow = this.accounts.get(headers[x]).getAccountRow(y);
-        System.err.println("6");
         TextView accountName = view.findViewById(R.id.account_name);
-        System.err.println("7");
         TextView relationship = view.findViewById(R.id.relationship_with_account);
-        System.err.println("8");
         ImageView accountProfilePicture = view.findViewById(R.id.account_profile_picture);
-        System.err.println("9");
         ImageView updateIcon = view.findViewById(R.id.update_icon);
-        System.err.println("10");
         accountName.setText(accountRow.getName());
-        System.err.println("11");
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
-            System.err.println("11.1a");
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
-            System.err.println("11.1b");
             relationship.setText("Suggestion");
-            System.err.println("11.1c");
         } else {
-            System.err.println("11.2a");
             updateIcon.setImageResource(R.drawable.my_friends_page_unfriend_icon);
-            System.err.println("11.2b");
             relationship.setText("Friend");
-            System.err.println("11.2c");
         }
-        System.err.println("12");
         return view;
     }
 
