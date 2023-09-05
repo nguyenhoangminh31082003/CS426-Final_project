@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.SurveyDetailFragment"
+    android:background="@color/dark_grey_40"
+    android:alpha="0.5">
+
+    <TextView
+        android:id="@+id/tvSurveyQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Survey Detail"
+        app:layout_constraintTop_toTopOf="parent"
+         />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
