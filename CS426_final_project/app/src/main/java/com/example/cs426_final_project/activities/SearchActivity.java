@@ -7,8 +7,6 @@ import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,15 +34,6 @@ public class SearchActivity extends AppCompatActivity {
     private void initSearchView() {
         androidx.appcompat.widget.SearchView sevSearch = this.findViewById(R.id.sevSearch);
         sevSearch.setQueryHint("Type here to search");
-//        sevSearch.setIconified(false);
-//        sevSearch.setOnTouchListener((v, event) -> {
-//            // Open the SearchView when touched anywhere on it
-//            if (event.getAction() == MotionEvent.ACTION_UP) {
-//                sevSearch.setIconified(false); // Expand the SearchView
-//                return true;
-//            }
-//            return false;
-//        });
         sevSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -80,38 +69,56 @@ public class SearchActivity extends AppCompatActivity {
 
     private void setTypeOptionsStatus() {
         com.nex3z.flowlayout.FlowLayout flowLayout = this.findViewById(R.id.fllSearchOption);
+
+        flowLayout.setChildSpacing(40);
+
         this.typeOptionsStatus = new TypeOptionsStatus((new MutableTypeOptionsData()).toList());
 
         final int numberOfOptions = this.typeOptionsStatus.getSize();
 
         for (int i = 0; i < numberOfOptions; ++i) {
             final int immutable_i = i;
-            Button button = new Button(this);
+            Button btnOption = new Button(this);
 
-            button.setLayoutParams(
+            btnOption.setLayoutParams(
                     new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
             );
-            button.setPadding(4, 0, 4, 0);
-            button.setText(this.typeOptionsStatus.getTypeOption(i));
-            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-            button.setTextColor(ContextCompat.getColor(this, R.color.white));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    typeOptionsStatus.toggle(immutable_i);
-                    if (typeOptionsStatus.checkChosen(immutable_i))
-                        button.setBackgroundResource(R.drawable.search_page_chosen_option_customization);
-                    else
-                        button.setBackgroundResource(R.drawable.search_page_unchosen_option_customization);
-                }
-            });
-            button.setAllCaps(false);
-            button.setBackgroundResource(R.drawable.search_page_unchosen_option_customization);
 
-            flowLayout.addView(button);
+            String text = this.typeOptionsStatus.getTypeOption(i);
+            btnOption.setText(text);
+            // strictly wrap content
+            btnOption.setMinWidth(40);
+
+            btnOption.setMinimumWidth(40);
+            btnOption.setMaxWidth(Integer.MAX_VALUE);
+
+
+            if(text.length() >= 16){
+                btnOption.setPadding(0, 20, 0, 20);
+                btnOption.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            } else {
+                btnOption.setPadding(25, 20, 25, 20);
+                btnOption.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            }
+
+
+
+            btnOption.setTextColor(ContextCompat.getColor(this, R.color.white));
+
+            btnOption.setOnClickListener(view -> {
+                typeOptionsStatus.toggle(immutable_i);
+                if (typeOptionsStatus.checkChosen(immutable_i))
+                    btnOption.setBackgroundResource(R.drawable.search_page_chosen_option_customization);
+                else
+                    btnOption.setBackgroundResource(R.drawable.search_page_unchosen_option_customization);
+            });
+            btnOption.setAllCaps(false);
+            btnOption.setBackgroundResource(R.drawable.search_page_unchosen_option_customization);
+
+            flowLayout.addView(btnOption);
         }
     }
 }

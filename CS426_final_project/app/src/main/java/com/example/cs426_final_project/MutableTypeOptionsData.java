@@ -1,6 +1,7 @@
 package com.example.cs426_final_project;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -134,8 +135,7 @@ public class MutableTypeOptionsData {
         };
         this.values = new HashSet<String>() {
         };
-        for (int i = 0; i < values.length; ++i)
-            this.values.add(values[i]);
+        Collections.addAll(this.values, values);
     }
 
     public MutableTypeOptionsData() {
@@ -143,12 +143,7 @@ public class MutableTypeOptionsData {
     }
 
     public List<String> toList() {
-        List<String> result = new ArrayList<String>(); ;
-
-        for (String value : this.values)
-            result.add(value);
-
-        return result;
+        return new ArrayList<>(this.values);
     }
 
 }
