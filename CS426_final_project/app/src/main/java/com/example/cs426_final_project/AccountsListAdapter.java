@@ -134,7 +134,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public boolean isChildSelectable(int i, int i1) {
+    public boolean isChildSelectable(final int x, final int y) {
         return false;
     }
 }
