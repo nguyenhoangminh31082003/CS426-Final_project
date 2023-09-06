@@ -55,6 +55,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
             this.authorUserName = itemView.findViewById(R.id.name_of_author_of_review);
             this.colorPoint = itemView.findViewById(R.id.color_point);
             this.greyPoint = itemView.findViewById(R.id.grey_point);
+            this.fullReview = itemView.findViewById(R.id.full_review_of_author_about_food);
         }
 
     }

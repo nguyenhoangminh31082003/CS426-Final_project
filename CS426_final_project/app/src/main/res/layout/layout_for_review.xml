@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:padding="12dp"
     android:gravity="center"
+    android:layout_margin="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 

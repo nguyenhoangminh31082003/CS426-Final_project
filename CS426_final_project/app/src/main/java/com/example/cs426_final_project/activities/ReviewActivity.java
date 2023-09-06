@@ -17,8 +17,16 @@ public class ReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        System.err.println("11:44PM");
+
         this.setContentView(R.layout.activity_review);
+
+        System.err.println("Back to the future!!!");
+
         this.setUpListOfReviewsView();
+
+        System.err.println("09/06/2023");
     }
 
     private void setUpListOfReviewsView() {
@@ -37,5 +45,7 @@ public class ReviewActivity extends AppCompatActivity {
             reviewCountView.setText(String.valueOf(reviewCount));
 
         this.listOfReviewsView.setLayoutManager(new LinearLayoutManager(this));
+
+        System.err.println("THIS IS " + this.listOfReviewsView);
     }
 }
