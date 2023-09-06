@@ -12,6 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultFoodsAdapter.ViewHolder> {
 
+    private ConceptualListOfFoodsInSearchResult listOfFoods;
+
+    public SearchResultFoodsAdapter() {
+        this.listOfFoods = new ConceptualListOfFoodsInSearchResult();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, final int viewType) {
@@ -25,19 +31,20 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        holder.foodName.setText(this.listOfFoods.getFoodName(position));
+        holder.aRandomReview.setText(this.listOfFoods.getARandomReview(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return this.listOfFoods.getSize();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView foodDemoImage;
-        TextView foodName, aRandomReview;
+        public ImageView foodDemoImage;
+        public TextView foodName, aRandomReview;
 
         public ViewHolder(View itemView) {
             super(itemView);

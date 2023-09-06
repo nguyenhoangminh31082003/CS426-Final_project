@@ -55,7 +55,7 @@ public class SearchResultFragment extends Fragment {
     public void onResume() {
         super.onResume();
         TextView sortModeView = getView().findViewById(R.id.sort_mode_in_search_result);
-        sortModeView.setText((new SortModeData(requireActivity())).getModeAsString());
+        sortModeView.setText((new SortModeData(requireActivity())).getReadableMode());
     }
 
     private void enableChoosingSortMode(@NonNull View view) {

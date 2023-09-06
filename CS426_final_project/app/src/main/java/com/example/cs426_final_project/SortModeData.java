@@ -56,6 +56,21 @@ public class SortModeData {
         }
     }
 
+    public String getReadableMode() {
+        try {
+            SortModeData.Mode mode = SortModeData.Mode.valueOf(this.record.getString(KEY));
+            if (mode == Mode.POPULAR)
+                return "Popular";
+            else if (mode == Mode.BEST_RATINGS)
+                return "Best ratings";
+            else if (mode == Mode.NEAR_BY)
+                return "Near by";
+        } catch (JSONException e) {
+            return null;
+        }
+        return null;
+    }
+
     public SortModeData.Mode getMode() {
         try {
             return SortModeData.Mode.valueOf(this.record.getString(KEY));
