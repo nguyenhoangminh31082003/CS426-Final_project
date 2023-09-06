@@ -33,13 +33,9 @@ public class ChoosingSortModeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("Line 36");
         super.onCreate(savedInstanceState);
-        System.out.println("Line 38");
         this.setContentView(R.layout.activity_choosing_sort_mode);
-        System.out.println("Line 40");
         this.setUpButtons();
-        System.out.println("Line 42");
     }
 
     private void setUpButtons() {
