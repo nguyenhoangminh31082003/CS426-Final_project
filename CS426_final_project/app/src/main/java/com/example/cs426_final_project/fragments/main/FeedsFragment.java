@@ -3,8 +3,10 @@ package com.example.cs426_final_project.fragments.main;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,10 @@ import android.widget.ImageButton;
 
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
+import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
+import com.example.cs426_final_project.models.FeedInfo;
+
+import java.util.ArrayList;
 
 public class FeedsFragment extends Fragment {
 
@@ -49,5 +55,22 @@ public class FeedsFragment extends Fragment {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
         });
+
+        Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
+
+
+        ArrayList<FeedInfo> feedList = new ArrayList<>();
+        feedList.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
+        feedList.add( new FeedInfo(2,"Mr. Bean",uri.toString(),"This is a very good food","15/10/2021"));
+
+
+        RecyclerFeedViewPagerAdapter adapter = new RecyclerFeedViewPagerAdapter(feedList, position -> {
+            System.out.println("Clicked on " + position);
+        });
+
+        ViewPager2 vpFeed = view.findViewById(R.id.vpFeed);
+        vpFeed.setAdapter(adapter);
+
+
     }
 }
