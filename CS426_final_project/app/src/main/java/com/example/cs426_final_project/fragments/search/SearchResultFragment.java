@@ -42,5 +42,18 @@ public class SearchResultFragment extends Fragment {
         //TextView tvNoResult = view.findViewById(R.id.tvNoResult);
         //tvNoResult.setText(String.format("No result for %s", searchQuery));
         this.setUpListOfFoods(view);
+        this.enableChoosingSortMode(view);
+    }
+
+    private void enableChoosingSortMode(@NonNull View view) {
+        TextView sortModeView = view.findViewById(R.id.sort_mode_in_search_result);
+
+        sortModeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
     }
 }
