@@ -1,7 +1,9 @@
 package com.example.cs426_final_project.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,20 +18,29 @@ public class ChoosingSortModeActivity extends AppCompatActivity {
 
     private void chooseNearByMode() {
         this.nearByButton.setBackgroundResource(R.drawable.chosen_sort_mode_customization);
+        this.nearByButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.dark_grey));
         this.bestRatingsButton.setBackgroundResource(R.drawable.unchosen_sort_mode_customization);
+        this.bestRatingsButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         this.popularButton.setBackgroundResource(R.drawable.unchosen_sort_mode_customization);
+        this.popularButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
     }
 
     private void chooseBestRatingsByMode() {
         this.nearByButton.setBackgroundResource(R.drawable.unchosen_sort_mode_customization);
+        this.nearByButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         this.bestRatingsButton.setBackgroundResource(R.drawable.chosen_sort_mode_customization);
+        this.bestRatingsButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.dark_grey));
         this.popularButton.setBackgroundResource(R.drawable.unchosen_sort_mode_customization);
+        this.popularButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
     }
 
     private void choosePopularMode() {
         this.nearByButton.setBackgroundResource(R.drawable.unchosen_sort_mode_customization);
+        this.nearByButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         this.bestRatingsButton.setBackgroundResource(R.drawable.unchosen_sort_mode_customization);
+        this.bestRatingsButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         this.popularButton.setBackgroundResource(R.drawable.chosen_sort_mode_customization);
+        this.popularButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.dark_grey));
     }
 
     @Override
