@@ -1,23 +1,19 @@
 package com.example.cs426_final_project.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.cs426_final_project.MutableTypeOptionsData;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.TypeOptionsStatus;
-import com.example.cs426_final_project.fragments.TrendingFoodFragment;
+import com.example.cs426_final_project.fragments.search.SearchResultFragment;
+import com.example.cs426_final_project.fragments.search.TrendingFoodFragment;
 
 public class SearchActivity extends AppCompatActivity {
     private androidx.appcompat.widget.SearchView sevSearch;
@@ -55,15 +51,29 @@ public class SearchActivity extends AppCompatActivity {
     private void initSearchView() {
         sevSearch = this.findViewById(R.id.sevSearch);
         sevSearch.setQueryHint("Type here to search");
+        SearchResultFragment searchResultFragment = new SearchResultFragment();
+
         sevSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return true;
+                // show search result fragment
+                searchResultFragment.setSearchQuery(sevSearch.getQuery().toString());
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fcvSearch, searchResultFragment)
+                        .addToBackStack(null)
+                        .commit();
+
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return true;
+                if(newText.isEmpty())
+                    showTrendingFood();
+                else {
+                    // show suggestion
+                }
+                return false;
             }
         });
     }

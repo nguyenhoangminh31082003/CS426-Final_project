@@ -1,4 +1,4 @@
-package com.example.cs426_final_project.fragments
+package com.example.cs426_final_project.fragments.search
 
 import android.os.Bundle
 import android.util.TypedValue

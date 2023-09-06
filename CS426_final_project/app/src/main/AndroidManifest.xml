@@ -28,7 +28,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
         tools:targetApi="31">
         <activity
             android:name=".activities.ReviewActivity"
@@ -45,25 +44,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_provider_info" />
         </receiver>
-
-        <activity
-            android:name=".activities.ResultActivity"
-            android:exported="false" />
         <activity
             android:name=".activities.SearchActivity"
             android:theme="@style/Theme.CS426_final_project_AppCompat"
             android:exported="false" />
-        <activity
-            android:name=".fragments.main.FeedsFragment"
-            android:exported="false" />
-        <activity
-            android:name=".fragments.main.MyFriendsFragment"
-            android:exported="false"
-            android:theme="@style/Theme.CS426_final_project_AppCompat" />
-        <activity
-            android:name=".fragments.main.FoodScanFragment"
-            android:exported="false"
-            android:theme="@style/Theme.CS426_final_project_AppCompat" />
         <activity
             android:name=".activities.FoodCommentActivity"
             android:exported="false"
