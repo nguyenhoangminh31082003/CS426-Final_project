@@ -6,6 +6,7 @@
     android:theme="@style/Theme.CS426_final_project_AppCompat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".fragments.main.FeedsFragment">
 
     <ImageButton
@@ -37,6 +38,7 @@
         tools:ignore="HardcodedText" />
 
     <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpFeed"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
