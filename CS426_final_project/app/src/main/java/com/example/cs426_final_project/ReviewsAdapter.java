@@ -1,6 +1,7 @@
 package com.example.cs426_final_project;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,23 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        final int colorPoint = this.listOfReviews.getColorPoint(position);
+
         holder.greyPoint.setText(this.listOfReviews.getGreyPoint(position) + "d");
-        holder.colorPoint.setText(String.valueOf(this.listOfReviews.getColorPoint(position)));
+        holder.colorPoint.setText(String.valueOf(colorPoint));
         holder.authorUserName.setText(this.listOfReviews.getUserName(position));
         holder.fullReview.setText(this.listOfReviews.getFullReview(position));
+
+        if (colorPoint == 1)
+            holder.colorPoint.setTextColor(Color.parseColor("#ff0500"));
+        else if (colorPoint == 2)
+            holder.colorPoint.setTextColor(Color.parseColor("#ffa500"));
+        else if (colorPoint == 3)
+            holder.colorPoint.setTextColor(Color.parseColor("#ffff00"));
+        else if (colorPoint == 4)
+            holder.colorPoint.setTextColor(Color.parseColor("#9acd32"));
+        else if (colorPoint == 5)
+            holder.colorPoint.setTextColor(Color.parseColor("#90ee90"));
     }
 
     @Override

@@ -1,12 +1,16 @@
 package com.example.cs426_final_project;
 
+import java.security.SecureRandom;
+
 public class ConceptualListOfReviewsAboutOneSpecificFood {
 
     public ConceptualListOfReviewsAboutOneSpecificFood() {
     }
 
     public String getUserName(final int position) {
-        return "Azizbek Karimova";
+        if (position % 2 == 0)
+            return "Azizbek Karimova";
+        return "Arman Omarov";
     }
 
     public String getFullReview(final int position) {
@@ -14,7 +18,7 @@ public class ConceptualListOfReviewsAboutOneSpecificFood {
     }
 
     public int getColorPoint(final int position) {
-        return 5;
+        return 1 + position % 5;
     }
 
     public int getGreyPoint(final int position) {
