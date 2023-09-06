@@ -194,6 +194,7 @@
                     </ImageView>
 
                     <TextView
+                        android:id = "@+id/review_count_in_reviews_page"
                         android:layout_width="0dp"
                         android:layout_weight="9"
                         android:textSize="18sp"

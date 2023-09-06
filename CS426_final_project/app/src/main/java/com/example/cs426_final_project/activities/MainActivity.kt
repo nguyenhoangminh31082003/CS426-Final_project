@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val intent = Intent(this, ReviewActivity::class.java)
+        startActivity(intent)
+
+        /*
         // fix vertical orientation
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
@@ -39,7 +43,7 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         if(needSignIn()) {
             signIn()
         }
-
+        */
     }
 
     private fun initHorizontalViewPager() {
