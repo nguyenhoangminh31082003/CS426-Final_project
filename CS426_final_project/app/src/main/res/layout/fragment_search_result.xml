@@ -4,19 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_grey"
+    android:padding="12dp"
     tools:context=".fragments.search.SearchResultFragment">
-    <TextView
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id = "@+id/back_button_in_result_page"
+        android:src = "@drawable/back_button_square"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "No result found"
-        tools:ignore="HardcodedText"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:padding="8dp"
-        android:layout_marginTop="8dp"
-        android:id = "@+id/tvNoResult"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/header_of_search_result">
+    </ImageView>
+
+    <TextView
+        android:id = "@+id/header_of_search_result"
+        android:text = "Result for Tiramisu"
+        android:textSize="20sp"
+        android:textColor = "@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="left"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/back_button_in_result_page">
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
