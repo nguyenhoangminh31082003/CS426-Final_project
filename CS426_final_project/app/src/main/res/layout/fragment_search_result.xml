@@ -60,7 +60,7 @@
         <TextView
             tools:ignore="HardcodedText"
             android:text = "Near by"
-            android:id="@+id/filter_mode_in_search_result"
+            android:id="@+id/sort_mode_in_search_result"
             android:textSize="20sp"
             android:textColor = "@color/white"
             android:layout_width="wrap_content"
