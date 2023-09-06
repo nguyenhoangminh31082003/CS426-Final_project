@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.SortModeData;
+import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 
 public class SearchResultFragment extends Fragment {
 
@@ -48,10 +51,16 @@ public class SearchResultFragment extends Fragment {
     private void enableChoosingSortMode(@NonNull View view) {
         TextView sortModeView = view.findViewById(R.id.sort_mode_in_search_result);
 
+        sortModeView.setText((new SortModeData(requireActivity())).getModeAsString());
         sortModeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Intent intent = new Intent(requireActivity(), ChoosingSortModeActivity.class);
+
+                startActivity(intent);
+
+                sortModeView.setText((new SortModeData(requireActivity())).getModeAsString());
             }
         });
 

@@ -8,10 +8,12 @@ import org.json.JSONObject;
 public class SortModeData {
 
     private final static String FILE_NAME = "search_mode_data.json";
-    private final String KEY = "mode";
-    public final String NEAR_BY_MODE = "near_by";
-    public final String BEST_RATINGS_MODE = "best_ratings";
-    public final String POPULAR_MODE = "popular";
+    private final static String KEY = "mode";
+    public enum Mode {
+        NEAR_BY,
+        BEST_RATINGS,
+        POPULAR
+    }
 
     private JSONObject record;
 
@@ -19,7 +21,7 @@ public class SortModeData {
         this.readFile(activity);
         if (Helper.getSizeOfJSONObject(this.record) == 0) {
             try {
-                this.record.put(KEY, NEAR_BY_MODE);
+                this.record.put(KEY, Mode.NEAR_BY);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -35,8 +37,29 @@ public class SortModeData {
         Helper.writeJSONObjectToJSONFile(activity, SortModeData.FILE_NAME, this.record);
     }
 
-    public void setMode() {
+    public void setMode(SortModeData.Mode mode, Activity activity) {
+        try {
+            this.record.put(KEY, mode.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        this.writeFile(activity);
+    }
 
+    public String getModeAsString() {
+        try {
+            return this.record.getString(KEY);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
+
+    public SortModeData.Mode getMode() {
+        try {
+            return SortModeData.Mode.valueOf(this.record.getString(KEY));
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
 }
