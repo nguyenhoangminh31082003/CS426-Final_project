@@ -28,8 +28,8 @@ class HorizontalMainPageHolderFragment : Fragment() {
     var onRequestToFeed = { _: Unit -> }
 
     private val mainPageContract: MainPageContract = object : MainPageContract {
-        override fun setToMainPage() =
-            vpHorizontalMain.setCurrentItem(1, true)
+        override fun setToMainPage(smoothScrolling: Boolean) =
+            vpHorizontalMain.setCurrentItem(1, smoothScrolling)
 
         override fun foodScanToProfilePage() =
             vpHorizontalMain.setCurrentItem(2, true)
@@ -41,7 +41,7 @@ class HorizontalMainPageHolderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initHorizontalViewPager(view)
-        mainPageContract.setToMainPage()
+        mainPageContract.setToMainPage(smoothScrolling = false)
     }
 
     private fun initHorizontalViewPager(view: View) {

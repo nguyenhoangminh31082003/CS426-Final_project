@@ -79,7 +79,7 @@ public class MyFriendsFragment extends MainPageFragment {
                 if(getMainPageContract() == null) {
                     throw new Exception("MainPageContract is null");
                 }
-                getMainPageContract().setToMainPage();
+                getMainPageContract().setToMainPage(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }

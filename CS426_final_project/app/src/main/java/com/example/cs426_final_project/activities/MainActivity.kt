@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         return false
     }
 
-    override fun setToMainPage() {
-        vpVerticalMain.setCurrentItem(1, true)
+    override fun setToMainPage(smoothScrolling: Boolean) {
+        vpVerticalMain.setCurrentItem(1, smoothScrolling)
 
     }
 
