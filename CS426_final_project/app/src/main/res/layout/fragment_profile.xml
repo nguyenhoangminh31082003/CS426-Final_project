@@ -6,12 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    android:theme="@style/Theme.CS426_final_project_AppCompat"
     app:layoutDescription="@xml/fragment_profile_xml_constraintlayout_scene"
     tools:context=".fragments.main.ProfileFragment">
 
     <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/composeView"
+        android:id="@+id/comvProfile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,13 +33,14 @@
         tools:ignore="HardcodedText" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cvProfile"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="-32dp"
         android:backgroundTint="@color/dark_grey"
         app:cardCornerRadius="20dp"
+
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

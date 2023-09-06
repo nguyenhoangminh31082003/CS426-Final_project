@@ -98,9 +98,7 @@ fun EmailReceiverLayout(
                     .fillMaxSize()
             ) {
                 val (btnBack, inpEmail, btnContinue) = createRefs()
-
                 Button(onClick = {
-
                     onBackPressed()
                 },
                     modifier= Modifier

@@ -4,18 +4,20 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.cs426_final_project.R
-import com.example.cs426_final_project.contracts.MainPageContract
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.widgets.WidgetUtilityClass
@@ -32,33 +34,39 @@ class ProfileFragment : MainPageFragment() {
     }
     private var composeView: ComposeView? = null
     private var showDialog = mutableStateOf(false)
-
+    private var currentEmail = mutableStateOf("")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        composeView = view.findViewById(R.id.composeView)
+        composeView = view.findViewById(R.id.comvProfile)
 
         initComposeView(composeView)
 
-        val btnAddWidget = view.findViewById<Button>(R.id.btnAddWidget)
+        initWidgetSetUp(view)
 
-        btnAddWidget.setOnClickListener {
-            WidgetUtilityClass().createWidget(requireContext())
+        initChangeEmail(view)
+
+        initClose(view)
+
+        val ibAvatar = view.findViewById<ImageButton>(R.id.ibAvatar)
+
+        loadImage(ibAvatar)
+
+        pickImage(ibAvatar)
+        val cvProfile = view.findViewById<CardView>(R.id.cvProfile)
+        val etUsername = view.findViewById<EditText>(R.id.etUsername)
+
+        // set unfocused when user click cvProfile
+        cvProfile.setOnClickListener {
+            etUsername.clearFocus()
+            hideKeyboard(it)
         }
+    }
 
-        val btnChangeEmail = view.findViewById<Button>(R.id.btnChangeEmail)
-
-        btnChangeEmail.setOnClickListener {
-            showDialog.value = true
-        }
-
+    private fun initClose(view: View) {
         val ibClose = view.findViewById<ImageButton>(R.id.ibClose)
-
         ibClose.setOnClickListener {
-
-
             try {
                 if (mainPageContract == null) {
                     throw Exception("mainPageContract is null")
@@ -67,16 +75,30 @@ class ProfileFragment : MainPageFragment() {
             } catch (e: Exception) {
                 print("mainPageContract is null")
             }
-
         }
-
-        val ibAvatar = view.findViewById<ImageButton>(R.id.ibAvatar)
-
-        loadImage(ibAvatar)
-
-        pickImage(ibAvatar)
     }
 
+    private fun initChangeEmail(view: View) {
+        val btnChangeEmail = view.findViewById<Button>(R.id.btnChangeEmail)
+
+        btnChangeEmail.setOnClickListener {
+            showDialog.value = true
+        }
+    }
+
+    private fun initWidgetSetUp(view: View) {
+        val btnAddWidget = view.findViewById<Button>(R.id.btnAddWidget)
+
+        btnAddWidget.setOnClickListener {
+            WidgetUtilityClass().createWidget(requireContext())
+        }
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(requireContext(), InputMethodManager::class.java)
+        inputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
     private fun initComposeView(composeView: ComposeView?) {
         composeView?.apply {
@@ -84,11 +106,13 @@ class ProfileFragment : MainPageFragment() {
                 if(showDialog.value) {
                     CS426_final_projectTheme {
                         CustomDialog(
+                            value = currentEmail.value,
                             setShowDialog = {
                                 showDialog.value = it
                             },
                             setValue = {
                                 storeEmail(it)
+                                currentEmail.value = it
                             },
                         )
                     }
@@ -150,6 +174,4 @@ class ProfileFragment : MainPageFragment() {
             profileMotionLayout.progress = progress
         }
     }
-
-
 }
