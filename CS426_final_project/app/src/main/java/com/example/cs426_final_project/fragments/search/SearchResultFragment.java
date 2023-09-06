@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.SearchResultFoodsAdapter;
 import com.example.cs426_final_project.SortModeData;
 import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 
 public class SearchResultFragment extends Fragment {
 
+    private SearchResultFoodsAdapter adapter;
     private String searchQuery;
 
     public void setSearchQuery(String searchQuery) {
@@ -28,7 +30,8 @@ public class SearchResultFragment extends Fragment {
     private void setUpListOfFoods(@NonNull View view) {
         RecyclerView viewOfListOfFoods = view.findViewById(R.id.list_of_foods_in_search_result);
 
-        //viewOfListOfFoods.setAdapter(adapter);
+        this.adapter = new SearchResultFoodsAdapter();
+        viewOfListOfFoods.setAdapter(this.adapter);
 
         viewOfListOfFoods.setLayoutManager(new GridLayoutManager(requireContext(), 2));
     }
@@ -62,9 +65,7 @@ public class SearchResultFragment extends Fragment {
         sortModeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("Create intent");
                 Intent intent = new Intent(requireActivity(), ChoosingSortModeActivity.class);
-                System.out.println("Start activity");
                 startActivity(intent);
             }
         });
