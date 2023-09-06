@@ -16,6 +16,12 @@ import com.nex3z.flowlayout.FlowLayout
 
 class TrendingFoodFragment : Fragment() {
 
+    interface OnFragmentInteractionListener {
+        fun onChooseOption(option: String)
+    }
+
+    var onFragmentInteractionListener: OnFragmentInteractionListener? = null
+
     private var typeOptionsStatus: TypeOptionsStatus? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,8 +34,8 @@ class TrendingFoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTypeOptionsStatus(view)
-
     }
+
     private fun setTypeOptionsStatus(view: View) {
         // check if null and return
         this.typeOptionsStatus = TypeOptionsStatus(MutableTypeOptionsData().toList())
@@ -63,6 +69,7 @@ class TrendingFoodFragment : Fragment() {
                 if (typeOptionsStatus!!.checkChosen(i)) btnOption.setBackgroundResource(R.drawable.search_page_chosen_option_customization) else btnOption.setBackgroundResource(
                     R.drawable.search_page_unchosen_option_customization
                 )
+                onFragmentInteractionListener?.onChooseOption(text)
             }
             btnOption.isAllCaps = false
             btnOption.setBackgroundResource(R.drawable.search_page_unchosen_option_customization)

@@ -1,9 +1,11 @@
 package com.example.cs426_final_project.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentContainerView;
 
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -15,10 +17,11 @@ import android.widget.ImageView;
 import com.example.cs426_final_project.MutableTypeOptionsData;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.TypeOptionsStatus;
+import com.example.cs426_final_project.fragments.TrendingFoodFragment;
 
 public class SearchActivity extends AppCompatActivity {
-
-    TypeOptionsStatus typeOptionsStatus;
+    private androidx.appcompat.widget.SearchView sevSearch;
+    TrendingFoodFragment trendingFoodFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +29,31 @@ public class SearchActivity extends AppCompatActivity {
         this.setSearchView();
 
         initBackButton();
-
         initSearchView();
+        showTrendingFood();
     }
 
+    private void showTrendingFood() {
+        trendingFoodFragment = new TrendingFoodFragment();
+
+        trendingFoodFragment.setOnFragmentInteractionListener(option -> {
+            try {
+                if(sevSearch == null)
+                    throw new Exception("sevSearch is null");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            sevSearch.setQuery(option, true);
+        });
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fcvSearch, trendingFoodFragment)
+                .commit();
+    }
+
+
     private void initSearchView() {
-        androidx.appcompat.widget.SearchView sevSearch = this.findViewById(R.id.sevSearch);
+        sevSearch = this.findViewById(R.id.sevSearch);
         sevSearch.setQueryHint("Type here to search");
         sevSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
