@@ -8,45 +8,48 @@
     android:layout_height="match_parent"
     tools:context=".fragments.main.FeedsFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <ImageButton
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/baseline_keyboard_arrow_up_24"
+        android:id = "@+id/ibToScan"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white"
+        android:contentDescription="to scan"
+        tools:ignore="HardcodedText" />
 
-        >
-        <ImageButton
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/baseline_keyboard_arrow_up_24"
-            android:id = "@+id/ibToScan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white"
-            />
-        <ImageButton
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/search_button_square_icon"
-            android:id = "@+id/ibFeedFoodSearch"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/search_button_square_icon"
+        android:id = "@+id/ibFeedFoodSearch"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="food search"
+        tools:ignore="HardcodedText" />
 
-
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/llFeedBottom"
+        app:layout_constraintTop_toBottomOf="@+id/ibFeedFoodSearch" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center"
+        android:id="@+id/llFeedBottom"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingBottom="16dp">
 
@@ -55,7 +58,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:background="?selectableItemBackgroundBorderless"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:contentDescription="app"
+            tools:ignore="HardcodedText">
         </ImageButton>
 
         <ImageButton
@@ -64,7 +69,9 @@
             android:layout_weight="1"
             android:id="@+id/ibFeedCamera"
             android:background="?selectableItemBackgroundBorderless"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:contentDescription="scan"
+            tools:ignore="HardcodedText">
         </ImageButton>
 
         <ImageButton
@@ -72,7 +79,9 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:background="?selectableItemBackgroundBorderless"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:contentDescription="share"
+            tools:ignore="HardcodedText">
         </ImageButton>
 
     </LinearLayout>
