@@ -1,7 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/layout_of_review_customization"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/name_of_author_of_review"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:text="Viserys"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"></TextView>
+
+        <LinearLayout
+            android:id="@+id/points_in_review"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|right"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/color_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="5.0"
+                android:textColor="#90EE90"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:id="@+id/grey_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="10d"
+                android:textColor="@color/white">
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/full_review_of_author_about_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This is the best dessert that I have ever eaten in my life. You will absolutely regret if you do not try this!!!"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="italic">
+    </TextView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="36dp"
+        android:padding="12dp"
+        android:layout_margin="12dp">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:src = "@drawable/demo_image_of_food_image_of_author"
+            android:id = "@+id/food_image_of_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ImageView>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
