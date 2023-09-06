@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.SearchResultFoodsAdapter;
+import com.example.cs426_final_project.adapters.SearchResultFoodsAdapter;
 import com.example.cs426_final_project.SortModeData;
 import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 

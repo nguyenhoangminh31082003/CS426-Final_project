@@ -20,7 +20,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import com.example.cs426_final_project.R
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
-import com.example.cs426_final_project.utilities.widgets.WidgetUtilityClass
+import com.example.cs426_final_project.utilities.WidgetUtilityClass
 import kotlin.math.abs
 
 

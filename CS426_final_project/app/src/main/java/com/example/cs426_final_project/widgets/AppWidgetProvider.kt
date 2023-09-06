@@ -1,10 +1,13 @@
-package com.example.cs426_final_project.utilities.widgets
+package com.example.cs426_final_project.widgets
 
 
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.SizeF
@@ -26,6 +29,8 @@ class AppWidgetProvider : AppWidgetProvider() {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
+
+
 
     override fun onAppWidgetOptionsChanged(
         context: Context?,
@@ -78,19 +83,18 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    // keep the aspect ratio of the content inside the widget
-    val widgetText = context.getString(R.string.appwidget_text)
-    // Construct the RemoteViews object
+
+
+
+
+    val intent = Intent(context, AppWidgetProvider::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
     val remoteViews = RemoteViews(context.packageName, R.layout.app_widget_provider)
-    remoteViews.setTextViewText(R.id.ivPicture, widgetText)
-
-
 
 
 
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
-
-
 
 
 }

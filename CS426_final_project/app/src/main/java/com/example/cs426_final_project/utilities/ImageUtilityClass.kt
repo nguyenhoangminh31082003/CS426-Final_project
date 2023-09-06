@@ -3,6 +3,7 @@ package com.example.cs426_final_project.utilities
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.widget.ImageView
 
 class ImageUtilityClass {
 
@@ -19,6 +20,11 @@ class ImageUtilityClass {
             matrix.postRotate(-90f)
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
             return bitmap
+        }
+
+        fun cropCenter(imageView : ImageView){
+            imageView.adjustViewBounds = true
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         }
     }
 }

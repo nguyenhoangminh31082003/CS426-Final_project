@@ -2,59 +2,60 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="60dp"
+    app:cardCornerRadius="14dp"
     app:cardBackgroundColor="@color/light_grey"
-    android:layout_margin="8dp">
+    android:layout_margin="5dp"
+    >
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
 
         <ImageView
             android:src = "@drawable/review_page_default_food_image"
             android:id = "@+id/demo_image_of_food"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:scaleType="fitXY"
+            android:foreground="@drawable/clipping_image_mask"
             android:layout_height="wrap_content">
         </ImageView>
 
-        <LinearLayout
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id = "@+id/food_name"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:text="Tiramisu"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:ignore="HardcodedText">
+        </TextView>
 
-            <TextView
-                android:id = "@+id/food_name"
-                android:padding="12dp"
-                android:textSize="28sp"
-                android:textColor="@color/white"
-                android:text="Tiramisu"
-                android:textStyle="bold"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="center_vertical|left"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-            </TextView>
-
-            <TextView
-                android:id = "@+id/a_random_food_review"
-                android:padding="12dp"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:text="This is the best dessert that I have ever eaten in my life. You will absolutely regret if you do not try this!!!"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:gravity="center_vertical|left"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-            </TextView>
-
-        </LinearLayout>
+        <TextView
+            android:id = "@+id/a_random_food_review"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:text="This is the best dessert that I have ever eaten in my life. You will absolutely regret if you do not try this!!!"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:ignore="HardcodedText">
+        </TextView>
 
     </LinearLayout>
 

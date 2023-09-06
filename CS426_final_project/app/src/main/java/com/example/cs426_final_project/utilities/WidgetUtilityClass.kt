@@ -1,9 +1,10 @@
-package com.example.cs426_final_project.utilities.widgets
+package com.example.cs426_final_project.utilities
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 
 import android.content.Context
+import com.example.cs426_final_project.widgets.AppWidgetProvider
 
 
 class WidgetUtilityClass() {

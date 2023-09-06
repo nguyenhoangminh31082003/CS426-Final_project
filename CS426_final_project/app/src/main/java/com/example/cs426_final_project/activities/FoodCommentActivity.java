@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.fragments.SurveyDetailFragment;
+import com.example.cs426_final_project.utilities.ImageUtilityClass;
 import com.google.android.material.button.MaterialButton;
 
 
@@ -113,8 +114,7 @@ public class FoodCommentActivity extends AppCompatActivity {
         ivPreviewImage.setImageURI(previewImageUri);
 
         // preserve ratio 1:1 of ivPreviewImage
-        ivPreviewImage.setAdjustViewBounds(true);
-        ivPreviewImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        ImageUtilityClass.Companion.cropCenter(ivPreviewImage);
     }
 
 }

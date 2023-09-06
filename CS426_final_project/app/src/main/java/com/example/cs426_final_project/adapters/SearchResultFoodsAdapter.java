@@ -1,4 +1,4 @@
-package com.example.cs426_final_project;
+package com.example.cs426_final_project.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cs426_final_project.ConceptualListOfFoodsInSearchResult;
+import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.utilities.ImageUtilityClass;
 
 public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultFoodsAdapter.ViewHolder> {
 
@@ -26,14 +30,14 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
 
         View view = inflater.inflate(R.layout.layout_of_food_in_search_result, parent, false);
 
-        SearchResultFoodsAdapter.ViewHolder viewHolder = new SearchResultFoodsAdapter.ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.foodName.setText(this.listOfFoods.getFoodName(position));
         holder.aRandomReview.setText(this.listOfFoods.getARandomReview(position));
+        ImageUtilityClass.Companion.cropCenter(holder.foodDemoImage);
     }
 
     @Override
@@ -41,7 +45,7 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
         return this.listOfFoods.getSize();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView foodDemoImage;
         public TextView foodName, aRandomReview;

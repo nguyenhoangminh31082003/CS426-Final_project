@@ -25,7 +25,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.layout_for_review, parent, false);
+        View view = inflater.inflate(R.layout.review_layout, parent, false);
 
         ReviewsAdapter.ViewHolder viewHolder = new ReviewsAdapter.ViewHolder(view);
         return viewHolder;

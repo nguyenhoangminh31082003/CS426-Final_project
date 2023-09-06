@@ -1,26 +1,18 @@
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Widget.CS426Final_project.AppWidget.Container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="0dp"
     android:id="@+id/widget_layout"
-    android:theme="@style/Theme.CS426Final_project.AppWidgetContainer">
+
+    >
 
     <ImageView
         android:id="@+id/ivPicture"
-        style="@style/Widget.CS426Final_project.AppWidget.InnerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintDimensionRatio="1:1"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/appwidget_text"
-        android:src="@drawable/baseline_close_24"
-
-        />
-</RelativeLayout>
+        android:src="@drawable/food_comment_page_demo_food_image"
+        app:layout_constraintDimensionRatio="1:1" />
+</FrameLayout>
