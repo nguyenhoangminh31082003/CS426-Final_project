@@ -33,17 +33,36 @@ public class ChoosingSortModeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Line 36");
         super.onCreate(savedInstanceState);
+        System.out.println("Line 38");
         this.setContentView(R.layout.activity_choosing_sort_mode);
+        System.out.println("Line 40");
         this.setUpButtons();
+        System.out.println("Line 42");
     }
 
     private void setUpButtons() {
+        System.out.println("Start setting up buttons");
+
         final SortModeData.Mode initialMode = (new SortModeData(this)).getMode();
+
+        System.out.println("Find initial mode!!!");
 
         this.nearByButton = this.findViewById(R.id.near_by_option_in_sort_modes);
         this.bestRatingsButton = this.findViewById(R.id.best_rating_option_in_sort_modes);
         this.popularButton = this.findViewById(R.id.popular_option_in_sort_modes);
+
+        System.out.println("Find buttons corresponding to modes");
+
+        if (initialMode == SortModeData.Mode.NEAR_BY)
+            this.chooseNearByMode();
+        else if (initialMode == SortModeData.Mode.BEST_RATINGS)
+            this.chooseBestRatingsByMode();
+        else if (initialMode == SortModeData.Mode.POPULAR)
+            this.choosePopularMode();
+
+        System.out.println("Set up initial mode");
 
         this.nearByButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,5 +87,7 @@ public class ChoosingSortModeActivity extends AppCompatActivity {
                 (new SortModeData(ChoosingSortModeActivity.this)).setMode(SortModeData.Mode.POPULAR, ChoosingSortModeActivity.this);
             }
         });
+
+        System.out.println("Set up events");
     }
 }

@@ -48,6 +48,13 @@ public class SearchResultFragment extends Fragment {
         this.enableChoosingSortMode(view);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        TextView sortModeView = getView().findViewById(R.id.sort_mode_in_search_result);
+        sortModeView.setText((new SortModeData(requireActivity())).getModeAsString());
+    }
+
     private void enableChoosingSortMode(@NonNull View view) {
         TextView sortModeView = view.findViewById(R.id.sort_mode_in_search_result);
 
@@ -55,12 +62,10 @@ public class SearchResultFragment extends Fragment {
         sortModeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                System.out.println("Create intent");
                 Intent intent = new Intent(requireActivity(), ChoosingSortModeActivity.class);
-
+                System.out.println("Start activity");
                 startActivity(intent);
-
-                sortModeView.setText((new SortModeData(requireActivity())).getModeAsString());
             }
         });
 

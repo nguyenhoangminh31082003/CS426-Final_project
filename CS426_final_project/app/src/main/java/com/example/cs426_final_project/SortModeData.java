@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public class SortModeData {
 
-    private final static String FILE_NAME = "search_mode_data.json";
+    private final static String FILE_NAME = "sort_mode_data.json";
     private final static String KEY = "mode";
     public enum Mode {
         NEAR_BY,
@@ -20,6 +20,7 @@ public class SortModeData {
     public SortModeData(Activity activity) {
         this.readFile(activity);
         if (Helper.getSizeOfJSONObject(this.record) == 0) {
+            System.out.println("Initialized with default value");
             try {
                 this.record.put(KEY, Mode.NEAR_BY);
             } catch (JSONException e) {
@@ -27,6 +28,7 @@ public class SortModeData {
             }
             this.writeFile(activity);
         }
+        System.out.println("Finish initializing");
     }
 
     public void readFile(Activity activity) {
