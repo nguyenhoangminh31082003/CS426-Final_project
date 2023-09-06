@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.SortModeData;
@@ -36,6 +37,18 @@ public class ChoosingSortModeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_choosing_sort_mode);
         this.setUpButtons();
+        this.setUpBackButton();
+    }
+
+    private void setUpBackButton() {
+        ImageView button = this.findViewById(R.id.back_button_in_choosing_sort_modes);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void setUpButtons() {

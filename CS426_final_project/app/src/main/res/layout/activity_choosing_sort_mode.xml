@@ -9,6 +9,7 @@
     tools:context=".activities.ChoosingSortModeActivity">
 
     <ImageView
+        android:id = "@+id/back_button_in_choosing_sort_modes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src = "@drawable/back_button_square"
@@ -45,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:padding="12dp"
                 android:background = "@color/dark_grey"
                 android:text = "Near by"
                 android:textColor="@color/white"
@@ -59,9 +61,10 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardCodedText">
-            </Button>
+            </androidx.appcompat.widget.AppCompatButton>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:padding="12dp"
                 tools:ignore="HardCodedText"
                 android:id = "@+id/best_rating_option_in_sort_modes"
                 android:background = "@color/dark_grey"
@@ -75,9 +78,10 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/near_by_option_in_sort_modes">
-            </Button>
+            </androidx.appcompat.widget.AppCompatButton>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
+                android:padding="12dp"
                 tools:ignore="HardCodedText"
                 android:id = "@+id/popular_option_in_sort_modes"
                 android:background = "@color/dark_grey"
@@ -91,7 +95,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/best_rating_option_in_sort_modes">
-            </Button>
+            </androidx.appcompat.widget.AppCompatButton>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
