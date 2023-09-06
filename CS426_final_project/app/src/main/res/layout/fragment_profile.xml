@@ -76,10 +76,11 @@
                 android:id="@+id/tvWidgetSetup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alpha="0.7"
                 android:layout_marginStart="50dp"
                 android:paddingBottom="5dp"
                 android:text="Widget Setup"
-                android:textColor="@color/light_grey"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
@@ -109,7 +110,8 @@
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="50dp"
                 android:text="General"
-                android:textColor="@color/light_grey"
+                android:textColor="@color/white"
+                android:alpha="0.7"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />

@@ -38,6 +38,12 @@ public class FeedsFragment extends Fragment {
                 listener.onRequestToScanFood();
         });
 
+        ImageButton ibFeedCamera = view.findViewById(R.id.ibFeedCamera);
+        ibFeedCamera.setOnClickListener(v -> {
+            if (listener != null)
+                listener.onRequestToScanFood();
+        });
+
         ImageButton ibFeedFoodSearch = view.findViewById(R.id.ibFeedFoodSearch);
         ibFeedFoodSearch.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);

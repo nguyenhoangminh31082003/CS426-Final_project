@@ -27,7 +27,7 @@ public class SearchResultFragment extends Fragment {
 
         //viewOfListOfFoods.setAdapter(adapter);
 
-        viewOfListOfFoods.setLayoutManager(new GridLayoutManager(this, 2));
+        viewOfListOfFoods.setLayoutManager(new GridLayoutManager(requireContext(), 2));
     }
 
     @Nullable

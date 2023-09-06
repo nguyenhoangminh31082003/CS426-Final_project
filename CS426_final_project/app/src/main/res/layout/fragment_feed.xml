@@ -56,26 +56,30 @@
 
         android:paddingBottom="16dp">
 
-        <ImageView
+        <ImageButton
             android:src = "@drawable/feeds_page_album"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:background="?selectableItemBackgroundBorderless"
             android:layout_height="match_parent">
-        </ImageView>
+        </ImageButton>
 
-        <ImageView
+        <ImageButton
             android:src = "@drawable/feeds_page_camera"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:id="@+id/ibFeedCamera"
+            android:background="?selectableItemBackgroundBorderless"
             android:layout_height="match_parent">
-        </ImageView>
+        </ImageButton>
 
-        <ImageView
+        <ImageButton
             android:src = "@drawable/feeds_page_share"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:background="?selectableItemBackgroundBorderless"
             android:layout_height="match_parent">
-        </ImageView>
+        </ImageButton>
 
     </LinearLayout>
 
