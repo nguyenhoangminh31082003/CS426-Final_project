@@ -3,15 +3,13 @@ package com.example.cs426_final_project.fragments.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.BitmapShader
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.Shader
+import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,16 +25,41 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder
+import androidx.datastore.rxjava3.RxDataStore
+import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.R
+import com.example.cs426_final_project.models.viewmodel.ProfileViewModel
+import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
 import com.example.cs426_final_project.notifications.CustomDialog
+import com.example.cs426_final_project.storage.ProfileInfo
+import com.example.cs426_final_project.storage.ProfilePreferences
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.ImageUtilityClass
+import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropCircleBitmap
+import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropSquareBitmap
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import java.util.prefs.Preferences
 import kotlin.math.abs
 
+private const val USER_PREFERENCES_NAME = "profile_preferences"
+private val Context.dataStore by preferencesDataStore(
+    name = USER_PREFERENCES_NAME,
+    produceMigrations = { context ->
+        // Since we're migrating from SharedPreferences, add a migration based on the
+        // SharedPreferences name
+        listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME))
+    }
+)
 
 class ProfileFragment : MainPageFragment() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,10 +72,8 @@ class ProfileFragment : MainPageFragment() {
                         val inputStream = requireContext().contentResolver.openInputStream(uri)
                         var bitmap = BitmapFactory.decodeStream(inputStream)
 
-                        // crop bitmap to have circle shape
                         bitmap = cropSquareBitmap(bitmap)
                         bitmap = cropCircleBitmap(bitmap)
-
 
                         ibAvatar.setImageBitmap(bitmap)
                         ImageUtilityClass.cropCenter(ibAvatar)
@@ -73,83 +94,14 @@ class ProfileFragment : MainPageFragment() {
                 startPickImageResult.launch(intent)
             }
         }
+
+
+
     }
+
+    private lateinit var viewModel: ProfileViewModel
 
     private var isChooseImage = false
-
-    private fun cropSquareBitmap(originalBitmap: Bitmap?): Bitmap? {
-
-// Calculate the size of the square
-
-// Calculate the size of the square
-        val size = originalBitmap?.let { it.width.coerceAtMost(originalBitmap.height) }
-
-// Create a square bitmap
-
-// Create a square bitmap
-        val squareBitmap = size?.let { Bitmap.createBitmap(it, size, Bitmap.Config.ARGB_8888) }
-
-// Create a canvas with the square bitmap
-
-// Create a canvas with the square bitmap
-        val canvas = squareBitmap?.let { Canvas(it) }
-
-// Calculate the coordinates to crop the center of the original bitmap
-
-// Calculate the coordinates to crop the center of the original bitmap
-        val left = (originalBitmap!!.width - size!!) / 2
-        val top = (originalBitmap.height - size) / 2
-
-// Copy the square portion from the original bitmap to the square bitmap
-
-// Copy the square portion from the original bitmap to the square bitmap
-        val srcRect = Rect(left, top, left + size, top + size)
-        val destRect = Rect(0, 0, size, size)
-        canvas?.drawBitmap(originalBitmap, srcRect, destRect, null)
-
-        print("squareBitmap: ${squareBitmap?.width}, ${squareBitmap?.height}\n")
-
-
-        return squareBitmap
-    }
-
-    private fun cropCircleBitmap(originalBitmap: Bitmap?): Bitmap? {
-        val circularBitmap = Bitmap.createBitmap(
-            originalBitmap!!.width,
-            originalBitmap.height,
-            Bitmap.Config.ARGB_8888
-        )
-
-// Create a canvas with the circular bitmap
-
-// Create a canvas with the circular bitmap
-        val canvas = Canvas(circularBitmap)
-
-// Create a paint object for drawing
-
-// Create a paint object for drawing
-        val paint = Paint()
-        paint.shader = BitmapShader(
-            originalBitmap,
-            Shader.TileMode.CLAMP,
-            Shader.TileMode.CLAMP
-        )
-
-// Calculate the radius for the circle
-
-// Calculate the radius for the circle
-        val radius = Math.min(originalBitmap.width, originalBitmap.height) / 2
-
-// Draw a circle with the image as the shader
-
-// Draw a circle with the image as the shader
-        canvas.drawCircle(
-            (originalBitmap.width / 2).toFloat(),
-            (originalBitmap.height / 2).toFloat(), radius.toFloat(), paint
-        )
-
-        return circularBitmap
-    }
 
 
 
@@ -188,14 +140,68 @@ class ProfileFragment : MainPageFragment() {
         val cvProfile = view.findViewById<CardView>(R.id.cvProfile)
         val etUsername = view.findViewById<EditText>(R.id.etUsername)
 
+        // set on text change listener
+        etUsername.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // do nothing
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // do nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // do nothing
+            }
+        })
+
         // set unfocused when user click cvProfile
         cvProfile.setOnClickListener {
-            etUsername.clearFocus()
-            hideKeyboard(it)
+            clearFocusUsername(etUsername, it)
         }
 
+        viewModel = ViewModelProvider(
+            this,
+            ProfileViewModelFactory(
+                ProfileInfo(
+                    "1",
+                   "Nguyễn Quang",
+                    "",
+                    currentEmail.value
+                ),
+                ProfilePreferences(requireContext().dataStore)
+            )
+        )[ProfileViewModel::class.java]
 
+        viewModel.profileUiModel.observe(viewLifecycleOwner) { profileUiModel ->
+            etUsername.setText(profileUiModel.name)
+            currentEmail.value = profileUiModel.email
+            // debug profileUiModel
+            print("ProfileUiModel: ${profileUiModel.name}, ${profileUiModel.email}, ${profileUiModel.avatar}\n")
+            val uri : Uri?
+            try {
+                uri = Uri.parse(profileUiModel.avatar)
+                if(uri == null || uri == Uri.EMPTY) {
+                    throw Exception("uri is null")
+                }
+                ibAvatar.setImageURI(uri)
 
+            } catch (e: Exception) {
+                print(e.message)
+                ibAvatar.setImageResource(R.drawable.avatar)
+            }
+        }
+    }
+
+    private fun clearFocusUsername(etUsername: EditText, it: View) {
+        // check if etUsername is empty
+        if (etUsername.text.toString().isEmpty()) {
+            //set hint
+            etUsername.hint = "Enter your username"
+            return;
+        }
+        etUsername.clearFocus()
+        hideKeyboard(it)
     }
 
     private fun initClose(view: View) {
@@ -208,6 +214,7 @@ class ProfileFragment : MainPageFragment() {
                 mainPageContract!!.setToMainPage()
             } catch (e: Exception) {
                 print("mainPageContract is null")
+
             }
         }
     }
@@ -232,6 +239,18 @@ class ProfileFragment : MainPageFragment() {
         val inputMethodManager =
             getSystemService(requireContext(), InputMethodManager::class.java)
         inputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private val USER_PREFERENCES_NAME = "user_preferences"
+
+    private val Context.dataStore by preferencesDataStore(
+        name = USER_PREFERENCES_NAME
+    )
+    object PreferencesKeys {
+        val EMAIL = stringPreferencesKey("email")
+        val USERNAME = stringPreferencesKey("username")
+        val AVATAR_URI = stringPreferencesKey("avatar_uri")
+        val USER_ID = stringPreferencesKey("user_id")
     }
 
     private fun initComposeView(composeView: ComposeView?) {
@@ -266,24 +285,15 @@ class ProfileFragment : MainPageFragment() {
             if(isChooseImage) {
                 return@setOnClickListener
             }
-//            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            // check if version is greater than 23 then we need to ask for runtime permission
+
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
-                // check if permission is given
-                if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) ==
-                    android.content.pm.PackageManager.PERMISSION_GRANTED
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == android.content.pm.PackageManager.PERMISSION_GRANTED
                 ) {
-                    // if permission granted then go to gallery
                     goToGallery()
                 } else {
-                    // if permission not granted ask for permission
                     requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
             } else {
-
                 goToGallery()
             }
         }

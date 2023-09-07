@@ -1,8 +1,6 @@
 package com.example.cs426_final_project.notifications
 
 
-import android.R
-import android.graphics.fonts.FontFamily
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,13 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
-import com.example.cs426_final_project.ui.theme.LightGrey
 import com.example.cs426_final_project.ui.theme.Yellow
 import com.example.cs426_final_project.utilities.EmailUtilityClass
-import com.google.type.Money
-import java.time.format.TextStyle
 
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
