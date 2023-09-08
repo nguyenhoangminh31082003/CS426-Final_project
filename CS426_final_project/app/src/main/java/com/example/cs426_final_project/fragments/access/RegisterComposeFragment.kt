@@ -239,7 +239,7 @@ fun RegisterLayout(
                             start.linkTo(parent.start, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
                         },
-                    title = "Enter your password",
+                    title = "password",
                     onChangePassword = {
                         onChangePassword(it)
                     }
@@ -255,7 +255,7 @@ fun RegisterLayout(
                             start.linkTo(parent.start, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
                         },
-                    title = "Confirm your password",
+                    title = "Confirmed password",
                     onChangePassword = {
                         onChangePassword(it)
                     }

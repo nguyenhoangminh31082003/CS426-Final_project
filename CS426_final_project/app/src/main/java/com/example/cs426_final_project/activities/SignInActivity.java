@@ -13,17 +13,17 @@ import com.example.cs426_final_project.adapters.ViewPagerAdapter;
 import com.example.cs426_final_project.fragments.access.RegisterComposeFragmentKt;
 import com.example.cs426_final_project.fragments.access.RegisterFragment;
 import com.example.cs426_final_project.fragments.access.WelcomeFragment;
-import com.example.cs426_final_project.contracts.SignInContract;
+import com.example.cs426_final_project.contracts.LoginContract;
 import com.example.cs426_final_project.contracts.ViewPagerContract;
-import com.example.cs426_final_project.fragments.access.EmailReceiverComposeFragmentKt;
+import com.example.cs426_final_project.fragments.access.LoginComposeFragmentKt;
 
 public class SignInActivity extends AppCompatActivity {
 
     // create enum for fragment
-    public class enumPage {
+    public static class enumPage {
         public static final int WELCOME = 1;
         public static final int REGISTER = 0;
-        public static final int EMAIL_RECEIVER = 2;
+        public static final int LOGIN = 2;
     }
     ViewPagerAdapter adapter;
     ViewPager2 vpSignIn;
@@ -48,37 +48,15 @@ public class SignInActivity extends AppCompatActivity {
             public Fragment createFragment(int position) {
                 Fragment fragment = null;
                 if (position == enumPage.WELCOME)
-                    fragment = WelcomeFragment.newInstance(new WelcomeFragment.WelcomeContract() {
-                        @Override
-                        public void signIn() {
-                            vpSignIn.setCurrentItem(enumPage.EMAIL_RECEIVER, true);
-                        }
-
-                        @Override
-                        public void register() {
-                            vpSignIn.setCurrentItem(enumPage.REGISTER, true);
-                        }
-                    });
-                if (position == enumPage.EMAIL_RECEIVER) {
-                    fragment = EmailReceiverComposeFragmentKt.newInstance(getSignInContract());
+                    fragment = createWelcomeFragment();
+                if (position == enumPage.LOGIN) {
+                    fragment = LoginComposeFragmentKt.newInstance(getSignInContract());
                 }
                 if(position == enumPage.REGISTER){
-                    fragment = RegisterComposeFragmentKt.newInstance(new RegisterFragment.RegisterContract() {
-                        @Override
-                        public void onSuccessRegister() {
-                            vpSignIn.setCurrentItem(enumPage.EMAIL_RECEIVER, true);
-                        }
-
-                        @Override
-                        public void onUnSuccessRegister() {
-                            vpSignIn.setCurrentItem(enumPage.WELCOME, true);
-                        }
-                    });
-                    return fragment;
+                    fragment = createRegisterFragment();
                 }
                 return fragment;
             }
-
             @Override
             public int getItemCount() {
                 return 3;
@@ -88,11 +66,43 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private SignInContract getSignInContract() {
-        return new SignInContract() {
+    private Fragment createRegisterFragment() {
+        Fragment fragment;
+        fragment = RegisterComposeFragmentKt.newInstance(new RegisterFragment.RegisterContract() {
+            @Override
+            public void onSuccessRegister() {
+                vpSignIn.setCurrentItem(enumPage.LOGIN, true);
+            }
+
+            @Override
+            public void onUnSuccessRegister() {
+                vpSignIn.setCurrentItem(enumPage.WELCOME, true);
+            }
+        });
+        return fragment;
+    }
+
+    @NonNull
+    private WelcomeFragment createWelcomeFragment() {
+        return WelcomeFragment.newInstance(new WelcomeFragment.WelcomeContract() {
             @Override
             public void signIn() {
-                vpSignIn.setCurrentItem(enumPage.EMAIL_RECEIVER, true);
+                vpSignIn.setCurrentItem(enumPage.LOGIN, true);
+            }
+
+            @Override
+            public void register() {
+                vpSignIn.setCurrentItem(enumPage.REGISTER, true);
+            }
+        });
+    }
+
+    @NonNull
+    private LoginContract getSignInContract() {
+        return new LoginContract() {
+            @Override
+            public void signIn() {
+                vpSignIn.setCurrentItem(enumPage.LOGIN, true);
             }
 
             @Override
@@ -109,6 +119,4 @@ public class SignInActivity extends AppCompatActivity {
             }
         };
     }
-
-
 }

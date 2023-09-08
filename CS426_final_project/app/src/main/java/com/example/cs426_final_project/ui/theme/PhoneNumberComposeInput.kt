@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PhoneNumberInput(
     modifier: Modifier = Modifier,
-    title: String = "Enter your phone number",
+    title: String = "Phone number",
     onChangePhoneNumber: (String) -> Unit = {}
 ) {
     var phoneNumber by remember { mutableStateOf("") }

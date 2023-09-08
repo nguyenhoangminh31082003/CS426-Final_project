@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FullNameInput(
+    title: String = "Full name",
     modifier: Modifier = Modifier,
     onChangeFullName: (String) -> Unit = {}
 ) {
@@ -35,7 +36,7 @@ fun FullNameInput(
         modifier = modifier
     ) {
         Text(
-            text ="Enter your full name",
+            text = title,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp, 0.dp, 16.dp, 0.dp)

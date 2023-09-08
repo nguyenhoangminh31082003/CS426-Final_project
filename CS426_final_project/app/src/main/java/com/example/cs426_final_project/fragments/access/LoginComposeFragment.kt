@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,18 +33,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.example.cs426_final_project.contracts.SignInContract
+import com.example.cs426_final_project.contracts.LoginContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
 import com.example.cs426_final_project.ui.theme.EmailInput
+import com.example.cs426_final_project.ui.theme.PasswordInput
 import com.example.cs426_final_project.ui.theme.Yellow
 import com.example.cs426_final_project.utilities.EmailUtilityClass
+import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 
-class EmailReceiverComposeFragment : Fragment() {
+class LoginComposeFragment : Fragment() {
 
-    var signInContract: SignInContract? = null
+    var loginContract: LoginContract? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +59,11 @@ class EmailReceiverComposeFragment : Fragment() {
             setContent {
                 EmailReceiverLayout(
                     onBackPressed = {
-                        signInContract?.returnToWelcome()
+                        KeyboardUtilityClass.hideKeyboard(requireActivity(), this)
+                        loginContract?.returnToWelcome()
                     },
                     onContinueButtonClicked = {
-                        signInContract?.confirmEmail()
+                        loginContract?.confirmEmail()
                     }
                 )
             }
@@ -85,12 +90,12 @@ fun EmailReceiverLayout(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                val (btnBack, inpEmail, btnContinue) = createRefs()
+                val (btnBack, inpEmail, inpPassword, btnContinue, div) = createRefs()
                 Button(onClick = {
                     onBackPressed()
                 },
                     modifier= Modifier
-                        .size(50.dp)
+                        .size(48.dp)
                         .constrainAs(btnBack) {
                             top.linkTo(parent.top, margin = 8.dp)
                             start.linkTo(parent.start, margin = 8.dp)
@@ -112,11 +117,45 @@ fun EmailReceiverLayout(
                             top.linkTo(parent.top, margin = 8.dp)
                             start.linkTo(parent.start, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
-                            bottom.linkTo(parent.bottom, margin = 8.dp)
                         },
+                    title = "Email",
                     onChangeEmail = {
                         currentEmail = it
-                    }
+                    },
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp)
+                        .constrainAs(div) {
+                            top.linkTo(inpEmail.bottom, margin = 8.dp)
+                            start.linkTo(parent.start, margin = 8.dp)
+                            end.linkTo(parent.end, margin = 8.dp)
+                        },
+                    color = Color.Transparent
+                )
+
+                PasswordInput(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(inpPassword) {
+                            top.linkTo(div.bottom, margin = 8.dp)
+                            start.linkTo(parent.start, margin = 8.dp)
+                            end.linkTo(parent.end, margin = 8.dp)
+                        },
+                    onChangePassword = {
+                        currentEmail = it
+                    },
+                    title = "Password"
+                )
+
+                // create chain email and password
+                createVerticalChain(
+                    inpEmail,
+                    div,
+                    inpPassword,
+                    chainStyle = ChainStyle.Packed
                 )
 
                 Button(
@@ -160,9 +199,9 @@ fun EmailReceiverLayout(
 
 
 fun newInstance(
-    signInContract: SignInContract
+    loginContract: LoginContract
 ): Fragment {
-    return EmailReceiverComposeFragment().also {
-        it.signInContract = signInContract
+    return LoginComposeFragment().also {
+        it.loginContract = loginContract
     }
 }

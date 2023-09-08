@@ -30,14 +30,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun EmailInput(
     modifier: Modifier = Modifier,
-    onChangeEmail: (String) -> Unit = {}
+    onChangeEmail: (String) -> Unit = {},
+    title: String = "Enter your email"
 ) {
     var email by remember { mutableStateOf("") }
     Column(
         modifier = modifier
     ) {
         Text(
-            text ="Enter your email",
+            text = title,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp, 0.dp, 16.dp, 0.dp)
