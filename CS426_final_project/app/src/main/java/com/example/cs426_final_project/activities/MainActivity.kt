@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -22,8 +23,8 @@ import com.example.cs426_final_project.utilities.PagerUtilityClass
 class MainActivity : AppCompatActivity(), MainPageContract {
 
     private lateinit var vpVerticalMain: ViewPager2
-    private lateinit var pagerUtils: PagerUtilityClass
 
+    // Register intent result
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity(), MainPageContract {
 
     private fun initHorizontalViewPager() {
         vpVerticalMain = findViewById(R.id.vpVerticalMain)
+
+        // unable user scroll
 
         // set vertical instead of horizontal
         vpVerticalMain.orientation = ViewPager2.ORIENTATION_VERTICAL
@@ -80,8 +83,14 @@ class MainActivity : AppCompatActivity(), MainPageContract {
     }
 
     private fun signIn() {
+        val registerForActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != RESULT_OK) {
+                finish()
+            }
+        }
+
         val signInIntent = Intent(this, SignInActivity::class.java)
-        startActivity(signInIntent)
+        registerForActivityResult.launch(signInIntent)
     }
 
     private fun needSignIn(): Boolean {

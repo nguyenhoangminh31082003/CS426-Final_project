@@ -43,6 +43,7 @@ import com.example.cs426_final_project.utilities.EmailUtilityClass
 
 class EmailReceiverComposeFragment : Fragment() {
 
+    var signInContract: SignInContract? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,21 +51,14 @@ class EmailReceiverComposeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val signInContract: SignInContract
-        try {
-            signInContract = context as SignInContract
-        } catch (e: ClassCastException) {
-            throw ClassCastException("$context must implement SignInContract")
-        }
-
         return ComposeView(requireContext()).apply {
             setContent {
                 EmailReceiverLayout(
                     onBackPressed = {
-                        signInContract.returnToWelcome()
+                        signInContract?.returnToWelcome()
                     },
                     onContinueButtonClicked = {
-                        signInContract.confirmEmail()
+                        signInContract?.confirmEmail()
                     }
                 )
             }
@@ -165,6 +159,10 @@ fun EmailReceiverLayout(
 
 
 
-fun newInstance(): Fragment {
-    return EmailReceiverComposeFragment()
+fun newInstance(
+    signInContract: SignInContract
+): Fragment {
+    return EmailReceiverComposeFragment().also {
+        it.signInContract = signInContract
+    }
 }

@@ -20,27 +20,43 @@ import java.util.Objects;
 public class WelcomeFragment extends Fragment {
 
     public WelcomeFragment() {
+
+    }
+
+    public interface WelcomeContract {
+        void signIn();
+
+        void register();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SignInContract contract;
-
-        try {
-            contract = (SignInContract) getActivity();
-            if(contract == null)
-                throw new ClassCastException();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(requireActivity() + " must implement SignInContract");
-        }
-
         MaterialButton mbSignIn = view.findViewById(R.id.mbSignIn);
+        MaterialButton mbRegister = view.findViewById(R.id.mbRegister);
 
         mbSignIn.setOnClickListener(v -> {
-            contract.signIn();
+            if(contract != null){
+                contract.signIn();
+            }
         });
+        
+        mbRegister.setOnClickListener(v -> {
+            if(contract != null){
+                contract.register();
+            }
+        });
+    }
+
+    private WelcomeContract contract;
+
+    public static WelcomeFragment newInstance(
+            WelcomeContract welcomeContract
+    ) {
+        WelcomeFragment fragment = new WelcomeFragment();
+        fragment.contract = welcomeContract;
+        return fragment;
     }
 
     @Override

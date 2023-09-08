@@ -41,6 +41,14 @@
                motion:motionTarget="@+id/mbSignIn"
                motion:framePosition="100"
                android:alpha="1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/mbRegister"
+               motion:framePosition="0"
+               android:alpha="0" />
+           <KeyAttribute
+               motion:motionTarget="@+id/mbRegister"
+               motion:framePosition="100"
+               android:alpha="1" />
        </KeyFrameSet>
     </Transition>
 

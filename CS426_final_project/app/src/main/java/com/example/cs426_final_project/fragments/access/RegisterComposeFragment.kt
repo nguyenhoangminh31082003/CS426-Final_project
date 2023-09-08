@@ -6,31 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -40,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
@@ -57,6 +49,7 @@ import com.example.cs426_final_project.ui.theme.PasswordInput
 import com.example.cs426_final_project.ui.theme.PhoneNumberInput
 import com.example.cs426_final_project.ui.theme.Yellow
 import com.example.cs426_final_project.utilities.EmailUtilityClass
+import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 
 
 private const val USER_PREFERENCES_NAME = "profile_preferences"
@@ -71,11 +64,22 @@ private val Context.dataStore by preferencesDataStore(
 class RegisterFragment : Fragment() {
     lateinit var registerViewModel: RegisterViewModel
 
+    interface RegisterContract {
+        fun onSuccessRegister()
+        fun onUnSuccessRegister()
+    }
+
+    var registerContract: RegisterContract? = null
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
 
         registerViewModel = ViewModelProvider(
             this,
@@ -83,9 +87,6 @@ class RegisterFragment : Fragment() {
                 ProfilePreferences(requireContext().dataStore)
             )
         )[RegisterViewModel::class.java]
-
-
-
 
         return ComposeView(requireContext()).apply {
             setContent {
@@ -129,10 +130,13 @@ class RegisterFragment : Fragment() {
 
     private fun onContinueButtonClicked() {
         registerViewModel.confirmRegisterInfo()
+        registerContract?.onSuccessRegister()
     }
 
     private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.onBackPressed()
+//        requireActivity().onBackPressedDispatcher.onBackPressed()
+        KeyboardUtilityClass.hideKeyboard(requireContext(), requireView())
+        registerContract?.onUnSuccessRegister()
     }
 
 }
@@ -161,8 +165,9 @@ fun RegisterLayout(
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
-                val (txtRegister, btnBack, inpEmail, inpFullName, inpPassword, inpPassword2, inpPhoneNumber, btnContinue) = createRefs()
+                val (txtRegister, btnBack, inpEmail, div, inpFullName, inpPassword, inpPassword2, inpPhoneNumber, btnContinue) = createRefs()
                 Button(onClick = {
                     onBackPressed()
                 },
@@ -187,13 +192,26 @@ fun RegisterLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .constrainAs(txtRegister) {
-                            top.linkTo(parent.top, margin = 8.dp)
+                            top.linkTo(btnBack.bottom, margin = 8.dp)
                             start.linkTo(btnBack.end, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
                         },
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp
+                    fontSize = 24.sp
+                )
+
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp)
+                        .constrainAs(div) {
+                            top.linkTo(txtRegister.bottom, margin = 8.dp)
+                            start.linkTo(parent.start, margin = 8.dp)
+                            end.linkTo(parent.end, margin = 8.dp)
+                        },
+                    color = Color.Transparent,
+                    thickness = 32.dp
                 )
 
                 EmailInput(
@@ -202,7 +220,7 @@ fun RegisterLayout(
                         // margin bottom 8dp
                         .padding(bottom = 32.dp)
                         .constrainAs(inpEmail) {
-                            top.linkTo(parent.top, margin = 8.dp)
+                            top.linkTo(div.bottom, margin = 8.dp)
                             start.linkTo(parent.start, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
                         },
@@ -276,16 +294,14 @@ fun RegisterLayout(
 
 
                 // create chain for email, password, fullname, phone number
-                createVerticalChain(
-                    inpEmail,
-                    inpPassword,
-                    inpPassword2,
-                    inpFullName,
-                    inpPhoneNumber,
-                    chainStyle = ChainStyle.Packed(0.5f),
-
-                )
-
+//                createVerticalChain(
+//                    inpEmail,
+//                    inpPassword,
+//                    inpPassword2,
+//                    inpFullName,
+//                    inpPhoneNumber,
+//                    chainStyle = ChainStyle.Packed(0.5f),
+//                )
 
                 Button(
                     onClick = onContinueButtonClicked,
@@ -324,7 +340,12 @@ fun RegisterLayout(
     }
 }
 
-
-fun newInstance1(): Fragment {
-    return EmailReceiverComposeFragment()
+fun newInstance(
+    registerContract: RegisterFragment.RegisterContract
+): Fragment {
+    val fragment = RegisterFragment()
+    fragment.registerContract = registerContract
+    return fragment
 }
+
+

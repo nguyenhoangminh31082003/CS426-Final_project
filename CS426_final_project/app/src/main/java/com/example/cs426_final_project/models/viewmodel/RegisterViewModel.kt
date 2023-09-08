@@ -64,6 +64,7 @@ class RegisterViewModel(
                     val registerResponse = response.body()
                     if (registerResponse != null) {
                         saveProfileInfo()
+
                     }
                 }
             }

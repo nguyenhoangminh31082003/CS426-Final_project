@@ -43,6 +43,7 @@ import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.ImageUtilityClass
 import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropCircleBitmap
 import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropSquareBitmap
+import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -201,7 +202,7 @@ class ProfileFragment : MainPageFragment() {
             return;
         }
         etUsername.clearFocus()
-        hideKeyboard(it)
+        KeyboardUtilityClass.hideKeyboard(requireContext(), it)
     }
 
     private fun initClose(view: View) {
@@ -235,11 +236,7 @@ class ProfileFragment : MainPageFragment() {
         }
     }
 
-    private fun hideKeyboard(view: View) {
-        val inputMethodManager =
-            getSystemService(requireContext(), InputMethodManager::class.java)
-        inputMethodManager!!.hideSoftInputFromWindow(view.windowToken, 0)
-    }
+
 
     private val USER_PREFERENCES_NAME = "user_preferences"
 
