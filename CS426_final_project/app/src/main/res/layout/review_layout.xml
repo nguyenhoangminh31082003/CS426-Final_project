@@ -70,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="36dp"
+        app:strokeColor = "#FFB800"
+        app:strokeWidth = "8dp"
         android:padding="12dp"
         android:layout_margin="12dp">
 
