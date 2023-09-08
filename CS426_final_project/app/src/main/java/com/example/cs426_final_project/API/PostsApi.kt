@@ -1,8 +1,8 @@
 package com.example.cs426_final_project.API
 
-import com.example.cs426_final_project.models.Posts.CreatePostRespone
-import com.example.cs426_final_project.models.Posts.ReactPostRespone
-import com.example.cs426_final_project.models.Posts.UpdatePostRespone
+import com.example.cs426_final_project.models.Posts.CreatePostResponse
+import com.example.cs426_final_project.models.Posts.ReactPostResponse
+import com.example.cs426_final_project.models.Posts.UpdatePostResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -20,14 +20,14 @@ interface PostsApi {
         @Part image: MultipartBody.Part,
         @Part("rating") rating: RequestBody,
         @Part("image_name") imageName: RequestBody
-    ): Call<CreatePostRespone>
+    ): Call<CreatePostResponse>
 
     @FormUrlEncoded
     @POST("posts/{postId}")
     fun updatePost(
         @Field("content") content: String,
         @Field("image") image: String
-    ): Call<UpdatePostRespone>
+    ): Call<UpdatePostResponse>
 
 //    @FormUrlEncoded
 //    @POST("posts/search")
@@ -39,5 +39,5 @@ interface PostsApi {
     @POST("posts/reactions/{postId}")
     fun reactPost(
         @Field("reaction") reaction: String
-    ): Call<ReactPostRespone>
+    ): Call<ReactPostResponse>
 }

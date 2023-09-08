@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), MainPageContract {
     }
 
     private fun needSignIn(): Boolean {
-        return false
+        return true
     }
 
     override fun setToMainPage(smoothScrolling: Boolean) {

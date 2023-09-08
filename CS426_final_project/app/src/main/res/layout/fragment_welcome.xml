@@ -8,7 +8,7 @@
     android:background="#252525"
     android:orientation="vertical"
     app:layoutDescription="@xml/fragment_welcome_scene"
-    tools:context=".fragments.WelcomeFragment">
+    tools:context=".fragments.access.WelcomeFragment">
 
     <ImageView
         android:id="@+id/leftImage"
@@ -79,7 +79,28 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:layout_constraintVertical_bias="0.811"
         app:strokeColor="@color/white"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="2dp"
+        tools:ignore="HardcodedText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Register"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:cornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mbSignIn"
+        app:layout_constraintVertical_bias="0.811"
+        app:strokeColor="@color/white"
+        app:strokeWidth="2dp"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
 

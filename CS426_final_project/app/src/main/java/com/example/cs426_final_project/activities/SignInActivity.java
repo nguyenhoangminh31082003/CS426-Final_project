@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.cs426_final_project.fragments.EmailReceiverComposeFragmentKt;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.adapters.ViewPagerAdapter;
-import com.example.cs426_final_project.fragments.WelcomeFragment;
+import com.example.cs426_final_project.fragments.access.WelcomeFragment;
 import com.example.cs426_final_project.contracts.SignInContract;
 import com.example.cs426_final_project.contracts.ViewPagerContract;
+import com.example.cs426_final_project.fragments.access.EmailReceiverComposeFragmentKt;
 
 public class SignInActivity extends AppCompatActivity implements SignInContract {
 

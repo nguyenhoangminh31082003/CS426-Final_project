@@ -1,4 +1,4 @@
-package com.example.cs426_final_project.fragments;
+package com.example.cs426_final_project.fragments.access;
 
 import android.os.Bundle;
 
@@ -14,6 +14,8 @@ import android.widget.Button;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.contracts.SignInContract;
 import com.google.android.material.button.MaterialButton;
+
+import java.util.Objects;
 
 public class WelcomeFragment extends Fragment {
 
@@ -31,7 +33,7 @@ public class WelcomeFragment extends Fragment {
             if(contract == null)
                 throw new ClassCastException();
         } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() + " must implement SignInContract");
+            throw new ClassCastException(requireActivity() + " must implement SignInContract");
         }
 
         MaterialButton mbSignIn = view.findViewById(R.id.mbSignIn);

@@ -1,30 +1,23 @@
-package com.example.cs426_final_project.fragments
+package com.example.cs426_final_project.fragments.access
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +37,7 @@ import androidx.fragment.app.Fragment
 import com.example.cs426_final_project.contracts.SignInContract
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
+import com.example.cs426_final_project.ui.theme.EmailInput
 import com.example.cs426_final_project.ui.theme.Yellow
 import com.example.cs426_final_project.utilities.EmailUtilityClass
 
@@ -168,52 +162,6 @@ fun EmailReceiverLayout(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EmailInput(
-    modifier: Modifier = Modifier,
-    onChangeEmail: (String) -> Unit = {}
-) {
-    var email by remember { mutableStateOf("") }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text ="Enter your email",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 0.dp, 16.dp, 0.dp)
-            ,
-
-            color = Color.White,
-            fontWeight = FontWeight.Bold
-
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = email,
-            onValueChange = {
-                email = it
-                onChangeEmail(it)
-            },
-            // disable bottom line
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent,
-                cursorColor = Yellow,
-            ),
-            // set cursor color
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                // set border radius
-                .border(3.dp, SolidColor(Color.Gray), shape = RoundedCornerShape(16.dp))
-
-        )
-    }
-}
 
 
 
