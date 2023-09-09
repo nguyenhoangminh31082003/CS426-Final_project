@@ -1,122 +1,122 @@
-package com.example.cs426_final_project.activities;
+package com.example.cs426_final_project.activities
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import com.example.cs426_final_project.R
+import com.example.cs426_final_project.adapters.ViewPagerAdapter
+import com.example.cs426_final_project.contracts.LoginContract
+import com.example.cs426_final_project.contracts.ViewPagerContract
+import com.example.cs426_final_project.fragments.access.RegisterFragment.RegisterContract
+import com.example.cs426_final_project.fragments.access.WelcomeFragment
+import com.example.cs426_final_project.fragments.access.WelcomeFragment.WelcomeContract
+import com.example.cs426_final_project.fragments.access.newInstance
+import com.example.cs426_final_project.fragments.main.ProfileFragment
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import java.io.IOException
 
-import android.content.Intent;
-import android.os.Bundle;
 
-import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.adapters.ViewPagerAdapter;
-import com.example.cs426_final_project.fragments.access.RegisterComposeFragmentKt;
-import com.example.cs426_final_project.fragments.access.RegisterFragment;
-import com.example.cs426_final_project.fragments.access.WelcomeFragment;
-import com.example.cs426_final_project.contracts.LoginContract;
-import com.example.cs426_final_project.contracts.ViewPagerContract;
-import com.example.cs426_final_project.fragments.access.LoginComposeFragmentKt;
-
-public class SignInActivity extends AppCompatActivity {
-
-    // create enum for fragment
-    public static class enumPage {
-        public static final int WELCOME = 1;
-        public static final int REGISTER = 0;
-        public static final int LOGIN = 2;
-    }
-    ViewPagerAdapter adapter;
-    ViewPager2 vpSignIn;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_sign_in_page);
-        this.setUpViewPager();
+internal class SignInActivity : AppCompatActivity() {
+    object EnumPage {
+        const val WELCOME = 1
+        const val REGISTER = 0
+        const val LOGIN = 2
     }
 
-    private void setUpViewPager() {
-        vpSignIn = this.findViewById(R.id.vpSignIn);
-        setUpAdapter();
-        vpSignIn.setCurrentItem(1, false);
-        vpSignIn.setOffscreenPageLimit(1);
-        vpSignIn.setUserInputEnabled(false);
+
+    var adapter: ViewPagerAdapter? = null
+    var vpSignIn: ViewPager2? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+        this.setContentView(R.layout.activity_sign_in_page)
+        setUpViewPager()
     }
 
-    private void setUpAdapter() {
-        adapter = new ViewPagerAdapter(this, new ViewPagerContract() {
-            @Override
-            public Fragment createFragment(int position) {
-                Fragment fragment = null;
-                if (position == enumPage.WELCOME)
-                    fragment = createWelcomeFragment();
-                if (position == enumPage.LOGIN) {
-                    fragment = LoginComposeFragmentKt.newInstance(getSignInContract());
+    private fun setUpViewPager() {
+
+        vpSignIn = findViewById(R.id.vpSignIn)
+        setUpAdapter()
+        vpSignIn?.setCurrentItem(1, false)
+        vpSignIn?.offscreenPageLimit = 1
+        vpSignIn?.isUserInputEnabled = false
+    }
+
+
+    private fun setUpAdapter() {
+        adapter = ViewPagerAdapter(this, object : ViewPagerContract {
+            override fun createFragment(position: Int): Fragment {
+                var fragment: Fragment? = null
+                if (position == EnumPage.WELCOME) fragment = createWelcomeFragment()
+                if (position == EnumPage.LOGIN) {
+                    fragment = newInstance(loginContract)
                 }
-                if(position == enumPage.REGISTER){
-                    fragment = createRegisterFragment();
+                if (position == EnumPage.REGISTER) {
+                    fragment = createRegisterFragment()
                 }
-                return fragment;
+                return fragment!!
             }
-            @Override
-            public int getItemCount() {
-                return 3;
+
+            override fun getItemCount(): Int {
+                return 3
             }
-        });
-        this.vpSignIn.setAdapter(this.adapter);
+        })
+        vpSignIn!!.adapter = adapter
     }
 
-    @NonNull
-    private Fragment createRegisterFragment() {
-        Fragment fragment;
-        fragment = RegisterComposeFragmentKt.newInstance(new RegisterFragment.RegisterContract() {
-            @Override
-            public void onSuccessRegister() {
-                vpSignIn.setCurrentItem(enumPage.LOGIN, true);
+    private fun createRegisterFragment(): Fragment {
+        return newInstance(object : RegisterContract {
+            override fun onSuccessRegister() {
+                vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
             }
 
-            @Override
-            public void onUnSuccessRegister() {
-                vpSignIn.setCurrentItem(enumPage.WELCOME, true);
+            override fun onUnSuccessRegister() {
+                vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
             }
-        });
-        return fragment;
+        })
     }
 
-    @NonNull
-    private WelcomeFragment createWelcomeFragment() {
-        return WelcomeFragment.newInstance(new WelcomeFragment.WelcomeContract() {
-            @Override
-            public void signIn() {
-                vpSignIn.setCurrentItem(enumPage.LOGIN, true);
+    private fun createWelcomeFragment(): WelcomeFragment {
+        return WelcomeFragment.newInstance(object : WelcomeContract {
+            override fun login() {
+                vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
             }
 
-            @Override
-            public void register() {
-                vpSignIn.setCurrentItem(enumPage.REGISTER, true);
+            override fun register() {
+                vpSignIn!!.setCurrentItem(EnumPage.REGISTER, true)
             }
-        });
+
+            override fun onLogged() {
+                val intent = Intent()
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        })
     }
 
-    @NonNull
-    private LoginContract getSignInContract() {
-        return new LoginContract() {
-            @Override
-            public void signIn() {
-                vpSignIn.setCurrentItem(enumPage.LOGIN, true);
+    private val loginContract: LoginContract
+        get() = object : LoginContract {
+            override fun login() {
+                vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
             }
 
-            @Override
-            public void returnToWelcome() {
-                vpSignIn.setCurrentItem(enumPage.WELCOME, true);
+            override fun returnToWelcome() {
+                vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
             }
 
-            @Override
-            public void confirmEmail() {
-                // set result ok for intent
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
+            override fun onConfirm() {
+                val intent = Intent()
+                setResult(RESULT_OK, intent)
+                finish()
             }
-        };
-    }
+        }
 }

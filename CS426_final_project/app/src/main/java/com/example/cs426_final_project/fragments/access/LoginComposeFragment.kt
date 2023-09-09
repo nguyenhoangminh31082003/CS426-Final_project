@@ -57,13 +57,13 @@ class LoginComposeFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                EmailReceiverLayout(
+                LoginLayout(
                     onBackPressed = {
                         KeyboardUtilityClass.hideKeyboard(requireActivity(), this)
                         loginContract?.returnToWelcome()
                     },
                     onContinueButtonClicked = {
-                        loginContract?.confirmEmail()
+                        loginContract?.onConfirm()
                     }
                 )
             }
@@ -72,7 +72,7 @@ class LoginComposeFragment : Fragment() {
 }
 @Preview(showBackground = true)
 @Composable
-fun EmailReceiverLayout(
+fun LoginLayout(
     onBackPressed: () -> Unit = {},
     onContinueButtonClicked: () -> Unit = {}
 ) {

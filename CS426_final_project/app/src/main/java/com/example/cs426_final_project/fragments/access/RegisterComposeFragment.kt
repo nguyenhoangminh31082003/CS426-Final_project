@@ -39,8 +39,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModel
+import com.example.cs426_final_project.models.viewmodel.RegisterViewModelContract
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModelFactory
-import com.example.cs426_final_project.storage.ProfilePreferences
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.ui.theme.DarkGrey40
 import com.example.cs426_final_project.ui.theme.EmailInput
@@ -51,16 +51,6 @@ import com.example.cs426_final_project.ui.theme.Yellow
 import com.example.cs426_final_project.utilities.EmailUtilityClass
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 
-
-private const val USER_PREFERENCES_NAME = "profile_preferences"
-private val Context.dataStore by preferencesDataStore(
-    name = USER_PREFERENCES_NAME,
-    produceMigrations = { context ->
-        // Since we're migrating from SharedPreferences, add a migration based on the
-        // SharedPreferences name
-        listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME))
-    }
-)
 class RegisterFragment : Fragment() {
     lateinit var registerViewModel: RegisterViewModel
 
@@ -71,6 +61,9 @@ class RegisterFragment : Fragment() {
 
     var registerContract: RegisterContract? = null
 
+    private val android.content.Context.dataStore by preferencesDataStore(
+        name = USER_PREFERENCES_NAME
+    )
 
 
     override fun onCreateView(
@@ -79,14 +72,17 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
-
-        registerViewModel = ViewModelProvider(
-            this,
-            RegisterViewModelFactory(
-                ProfilePreferences(requireContext().dataStore)
+        registerViewModel = ViewModelProvider(this, RegisterViewModelFactory(
+            object : RegisterViewModelContract {
+                override fun onRegisterSuccess() {
+                    registerContract?.onSuccessRegister()
+                }
+            },
+            profilePreferences = requireActivity().getSharedPreferences(
+                USER_PREFERENCES_NAME,
+                Context.MODE_PRIVATE
             )
-        )[RegisterViewModel::class.java]
+        ))[RegisterViewModel::class.java]
 
         return ComposeView(requireContext()).apply {
             setContent {

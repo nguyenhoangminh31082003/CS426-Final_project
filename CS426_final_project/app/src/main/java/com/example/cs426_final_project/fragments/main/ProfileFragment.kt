@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -34,11 +35,9 @@ import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder
 import androidx.datastore.rxjava3.RxDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.R
-import com.example.cs426_final_project.models.viewmodel.ProfileViewModel
-import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
+import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
+//import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
 import com.example.cs426_final_project.notifications.CustomDialog
-import com.example.cs426_final_project.storage.ProfileInfo
-import com.example.cs426_final_project.storage.ProfilePreferences
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.ImageUtilityClass
 import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropCircleBitmap
@@ -49,16 +48,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import java.util.prefs.Preferences
 import kotlin.math.abs
-
-private const val USER_PREFERENCES_NAME = "profile_preferences"
-private val Context.dataStore by preferencesDataStore(
-    name = USER_PREFERENCES_NAME,
-    produceMigrations = { context ->
-        // Since we're migrating from SharedPreferences, add a migration based on the
-        // SharedPreferences name
-        listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME))
-    }
-)
 
 class ProfileFragment : MainPageFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +89,7 @@ class ProfileFragment : MainPageFragment() {
 
     }
 
-    private lateinit var viewModel: ProfileViewModel
+//    private lateinit var viewModel: ProfileViewModel
 
     private var isChooseImage = false
 
@@ -120,8 +109,26 @@ class ProfileFragment : MainPageFragment() {
     private var currentEmail = mutableStateOf("")
     private lateinit var startPickImageResult: ActivityResultLauncher<Intent>
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var profilePreferences: SharedPreferences
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        profilePreferences = requireContext().getSharedPreferences(
+            USER_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
+        )
+
+        profilePreferences.getString("email", null)?.also {
+            currentEmail.value = it
+        }
+
+        profilePreferences.getString("username", null)?.also {
+            val etUsername = view.findViewById<EditText>(R.id.etUsername)
+            etUsername.setText(it)
+        }
+
+
 
         composeView = view.findViewById(R.id.comvProfile)
 
@@ -161,37 +168,19 @@ class ProfileFragment : MainPageFragment() {
             clearFocusUsername(etUsername, it)
         }
 
-        viewModel = ViewModelProvider(
-            this,
-            ProfileViewModelFactory(
-                ProfileInfo(
-                    "1",
-                   "Nguyễn Quang",
-                    "",
-                    currentEmail.value
-                ),
-                ProfilePreferences(requireContext().dataStore)
-            )
-        )[ProfileViewModel::class.java]
+    }
 
-        viewModel.profileUiModel.observe(viewLifecycleOwner) { profileUiModel ->
-            etUsername.setText(profileUiModel.name)
-            currentEmail.value = profileUiModel.email
-            // debug profileUiModel
-            print("ProfileUiModel: ${profileUiModel.name}, ${profileUiModel.email}, ${profileUiModel.avatar}\n")
-            val uri : Uri?
-            try {
-                uri = Uri.parse(profileUiModel.avatar)
-                if(uri == null || uri == Uri.EMPTY) {
-                    throw Exception("uri is null")
-                }
-                ibAvatar.setImageURI(uri)
+    // when pause or stop, we store the data
+    override fun onPause() {
+        super.onPause()
+        storeData()
+    }
 
-            } catch (e: Exception) {
-                print(e.message)
-                ibAvatar.setImageResource(R.drawable.avatar)
-            }
-        }
+    private fun storeData() {
+        val etUsername = view?.findViewById<EditText>(R.id.etUsername)
+        val username = etUsername?.text.toString()
+        profilePreferences.edit().putString("username", username).apply()
+        profilePreferences.edit().putString("email", currentEmail.value).apply()
     }
 
     private fun clearFocusUsername(etUsername: EditText, it: View) {
@@ -236,19 +225,6 @@ class ProfileFragment : MainPageFragment() {
         }
     }
 
-
-
-    private val USER_PREFERENCES_NAME = "user_preferences"
-
-    private val Context.dataStore by preferencesDataStore(
-        name = USER_PREFERENCES_NAME
-    )
-    object PreferencesKeys {
-        val EMAIL = stringPreferencesKey("email")
-        val USERNAME = stringPreferencesKey("username")
-        val AVATAR_URI = stringPreferencesKey("avatar_uri")
-        val USER_ID = stringPreferencesKey("user_id")
-    }
 
     private fun initComposeView(composeView: ComposeView?) {
         composeView?.apply {

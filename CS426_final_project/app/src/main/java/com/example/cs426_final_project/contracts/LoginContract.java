@@ -1,7 +1,7 @@
 package com.example.cs426_final_project.contracts;
 
 public interface LoginContract {
-    void signIn();
+    void login();
     void returnToWelcome();
-    void confirmEmail();
+    void onConfirm();
 }

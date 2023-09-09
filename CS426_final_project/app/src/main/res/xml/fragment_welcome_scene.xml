@@ -34,21 +34,25 @@
                motion:framePosition="100"
                android:alpha="1" />
            <KeyAttribute
-               motion:motionTarget="@+id/mbSignIn"
+               motion:motionTarget="@+id/mbLogin"
                motion:framePosition="0"
                android:alpha="0" />
            <KeyAttribute
-               motion:motionTarget="@+id/mbSignIn"
+               motion:motionTarget="@+id/mbLogin"
+               motion:framePosition="100"
+               android:alpha="1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/mbRegister"
+               motion:framePosition="50"
+               android:alpha="0" />
+           <KeyAttribute
+               motion:motionTarget="@+id/mbRegister"
                motion:framePosition="100"
                android:alpha="1" />
            <KeyAttribute
                motion:motionTarget="@+id/mbRegister"
                motion:framePosition="0"
                android:alpha="0" />
-           <KeyAttribute
-               motion:motionTarget="@+id/mbRegister"
-               motion:framePosition="100"
-               android:alpha="1" />
        </KeyFrameSet>
     </Transition>
 
@@ -59,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintBottom_toTopOf="@+id/mbSignIn"
+            motion:layout_constraintBottom_toTopOf="@+id/mbLogin"
             motion:layout_constraintTop_toBottomOf="@+id/middleImage"
             motion:layout_constraintHorizontal_bias="0.5" />
         <Constraint
@@ -81,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintBottom_toTopOf="@+id/mbSignIn"
+            motion:layout_constraintBottom_toTopOf="@+id/mbLogin"
             motion:layout_constraintTop_toBottomOf="@+id/middleImage" />
         <Constraint
             android:id="@+id/middleImage"

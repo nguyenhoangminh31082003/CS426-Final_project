@@ -53,7 +53,7 @@
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/mbSignIn"
+        app:layout_constraintBottom_toTopOf="@+id/mbLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,11 +63,11 @@
     </TextView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/mbSignIn"
+        android:id="@+id/mbLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Sign in"
+        android:text="Login"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mbSignIn"
+        app:layout_constraintTop_toBottomOf="@+id/mbLogin"
         app:layout_constraintVertical_bias="0.811"
         app:strokeColor="@color/white"
         app:strokeWidth="2dp"

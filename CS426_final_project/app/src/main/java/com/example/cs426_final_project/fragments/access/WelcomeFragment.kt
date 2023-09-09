@@ -1,69 +1,102 @@
-package com.example.cs426_final_project.fragments.access;
+package com.example.cs426_final_project.fragments.access
 
-import android.os.Bundle;
+import ProfileInfo
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.ContextMenu
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.Fragment
+import com.example.cs426_final_project.R
+import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+const val USER_PREFERENCES_NAME = "profile_preferences"
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.cs426_final_project.R;
-import com.google.android.material.button.MaterialButton;
+class WelcomeFragment : Fragment() {
 
-public class WelcomeFragment extends Fragment {
-
-    public WelcomeFragment() {
-
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_welcome, container, false)
     }
 
-    public interface WelcomeContract {
-        void signIn();
-
-        void register();
+    interface WelcomeContract {
+        fun login()
+        fun register()
+        fun onLogged()
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mbLogin = view.findViewById<MaterialButton>(R.id.mbLogin)
+        val mbRegister = view.findViewById<MaterialButton>(R.id.mbRegister)
+        mbLogin.setOnClickListener {
+            if (contract != null) {
+                if (!isProfileStored()) {
+                    print("profile is not stored")
+                    contract!!.login()
 
-        MaterialButton mbSignIn = view.findViewById(R.id.mbSignIn);
-        MaterialButton mbRegister = view.findViewById(R.id.mbRegister);
-
-        mbSignIn.setOnClickListener(v -> {
-            if(contract != null){
-                contract.signIn();
+                } else {
+                    contract!!.onLogged()
+                }
             }
-        });
-        
-        mbRegister.setOnClickListener(v -> {
-            if(contract != null){
-                contract.register();
+
+        }
+        mbRegister.setOnClickListener {
+            if (contract != null) {
+                contract!!.register()
             }
-        });
+        }
+
     }
 
-    private WelcomeContract contract;
-
-    public static WelcomeFragment newInstance(
-            WelcomeContract welcomeContract
-    ) {
-        WelcomeFragment fragment = new WelcomeFragment();
-        fragment.contract = welcomeContract;
-        return fragment;
+    private fun testSharePreferences() {
+        val sharePreferences = requireActivity().getSharedPreferences("test", Context.MODE_PRIVATE)
+        sharePreferences.edit().putString("test", "test").apply()
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
+    private fun isProfileStored(): Boolean {
+        val profilePreferences = requireContext().getSharedPreferences(
+            USER_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
+        )
+
+        // get content for profile
+        val profileInfo = ProfileInfo()
+//        profilePreferences.getString("userId", null).toString().also { profileInfo.userId = it }
+        profilePreferences.getString("username", "").toString().also { profileInfo.username = it }
+//        profilePreferences.getString("email", null).toString().also { profileInfo.email = it }
+//        profilePreferences.getString("avatarUri", null).toString().also { profileInfo.avatarUri = it }
+
+        // clear shared preferences
+//        profilePreferences.edit().clear().apply()
+
+        return profileInfo.username != ""
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_welcome, container, false);
+
+    private var contract: WelcomeContract? = null
+
+    companion object {
+        fun newInstance(
+            welcomeContract: WelcomeContract?
+        ): WelcomeFragment {
+            val fragment = WelcomeFragment()
+            fragment.contract = welcomeContract
+            return fragment
+        }
     }
 }
