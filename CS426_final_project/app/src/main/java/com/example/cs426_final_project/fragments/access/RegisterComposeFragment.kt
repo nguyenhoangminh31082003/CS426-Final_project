@@ -24,6 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -37,7 +40,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.cs426_final_project.models.viewmodel.RegisterUiModel
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModel
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModelContract
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModelFactory
@@ -52,7 +57,6 @@ import com.example.cs426_final_project.utilities.EmailUtilityClass
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 
 class RegisterFragment : Fragment() {
-    lateinit var registerViewModel: RegisterViewModel
 
     interface RegisterContract {
         fun onSuccessRegister()
@@ -61,10 +65,6 @@ class RegisterFragment : Fragment() {
 
     var registerContract: RegisterContract? = null
 
-    private val android.content.Context.dataStore by preferencesDataStore(
-        name = USER_PREFERENCES_NAME
-    )
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,61 +72,62 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        registerViewModel = ViewModelProvider(this, RegisterViewModelFactory(
-            object : RegisterViewModelContract {
-                override fun onRegisterSuccess() {
-                    registerContract?.onSuccessRegister()
-                }
-            },
-            profilePreferences = requireActivity().getSharedPreferences(
-                USER_PREFERENCES_NAME,
-                Context.MODE_PRIVATE
-            )
-        ))[RegisterViewModel::class.java]
-
         return ComposeView(requireContext()).apply {
             setContent {
                 CS426_final_projectTheme {
-                    RegisterLayout(
-                        viewModel = registerViewModel,
-                        onBackPressed = { onBackPressed() },
-                        onContinueButtonClicked = {onContinueButtonClicked()},
-                        onChangeEmail = {
-                            onChangeEmail(it)
-                        },
-                        onChangePassword = {
-                            onChangePassword(it)
-                        },
-                        onChangeFullName = {
-                            onChangeFullName(it)
-                        }
-                    ) {
-                        onChangePhoneNumber(it)
+                    val registerViewModel = lazy {
+                        ViewModelProvider(
+                            this@RegisterFragment,
+                            RegisterViewModelFactory(
+                                object : RegisterViewModelContract {
+                                    override fun onRegisterSuccess() {
+                                        registerContract?.onSuccessRegister()
+                                    }
+                                },
+                                requireActivity().getSharedPreferences(
+                                    USER_PREFERENCES_NAME,
+                                    Context.MODE_PRIVATE
+                                )
+                            )
+                        )[RegisterViewModel::class.java]
                     }
+
+                    val registerUiModel = remember {
+                        registerViewModel.value.registerUiModel
+                    }
+
+
+                    RegisterLayout(
+                        registerUiModel = registerUiModel,
+                        isValid = {
+                            EmailUtilityClass().isValidEmail(registerUiModel.value.email)
+//                                  true
+//                                  EmailUtilityClass().isValidEmail(registerUiModel.email)
+                        },
+                        onBackPressed = { onBackPressed() },
+                        onContinueButtonClicked = {
+                            registerViewModel.value.confirmRegisterInfo()
+                            registerContract?.onSuccessRegister()
+                                                  },
+                        onChangeEmail = {
+//                            registerUiModel.value = registerUiModel.value.copy(email = it)
+                            registerUiModel.value = registerUiModel.value.copy(email = it)
+
+                        },
+//                        onChangePassword = {
+//                            registerUiModel.value = registerUiModel.value.copy(password = it)
+//                        },
+//                        onChangeFullName = {
+//                            registerUiModel.value = registerUiModel.value.copy(fullName = it)
+//
+//                        },
+//                        onChangePhoneNumber = {
+//                            registerUiModel.value = registerUiModel.value.copy(phoneNumber = it)
+//                        },
+                    )
                 }
             }
         }
-    }
-
-    private fun onChangePhoneNumber(phoneNumber: String) {
-        registerViewModel.registerUiModel.phoneNumber = phoneNumber
-    }
-
-    private fun onChangeFullName(fullname: String) {
-        registerViewModel.registerUiModel.fullName = fullname
-    }
-
-    private fun onChangePassword(password: String) {
-        registerViewModel.registerUiModel.password = password
-    }
-
-    private fun onChangeEmail(email: String) {
-        registerViewModel.registerUiModel.email = email
-    }
-
-    private fun onContinueButtonClicked() {
-        registerViewModel.confirmRegisterInfo()
-        registerContract?.onSuccessRegister()
     }
 
     private fun onBackPressed() {
@@ -140,7 +141,8 @@ class RegisterFragment : Fragment() {
 @Preview(showBackground = true)
 @Composable
 fun RegisterLayout(
-    viewModel: RegisterViewModel? = null,
+    registerUiModel : MutableState<RegisterUiModel>? = null,
+    isValid: () -> Boolean = { true },
     onBackPressed: () -> Unit = {},
     onContinueButtonClicked: () -> Unit = {},
     onChangeEmail: (String) -> Unit = {},
@@ -149,6 +151,7 @@ fun RegisterLayout(
     onChangePhoneNumber: (String) -> Unit = {},
 
     ) {
+
     CS426_final_projectTheme(
         darkTheme = true,
         dynamicColor = false,
@@ -163,7 +166,12 @@ fun RegisterLayout(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-                val (txtRegister, btnBack, inpEmail, div, inpFullName, inpPassword, inpPassword2, inpPhoneNumber, btnContinue) = createRefs()
+                val (
+                    txtRegister, btnBack,
+                    inpEmail, div,
+                    inpFullName, inpPassword,
+                    inpPassword2, inpPhoneNumber,
+                    btnContinue) = createRefs()
                 Button(onClick = {
                     onBackPressed()
                 },
@@ -222,6 +230,9 @@ fun RegisterLayout(
                         },
                     onChangeEmail = {
                         onChangeEmail(it)
+//                        if (registerUiModel != null) {
+//                            registerUiModel.value = registerUiModel.value.copy(email = it)
+//                        }
                     }
                 )
 
@@ -238,6 +249,7 @@ fun RegisterLayout(
                     title = "password",
                     onChangePassword = {
                         onChangePassword(it)
+//                        registerUiModel.value.password = it
                     }
                 )
 
@@ -299,36 +311,39 @@ fun RegisterLayout(
 //                    chainStyle = ChainStyle.Packed(0.5f),
 //                )
 
-                Button(
-                    onClick = onContinueButtonClicked,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .border(1.dp, SolidColor(Color.Black), shape = CircleShape)
-                        .constrainAs(btnContinue) {
-                            bottom.linkTo(parent.bottom, margin = 8.dp)
-                            start.linkTo(parent.start, margin = 8.dp)
-                            end.linkTo(parent.end, margin = 8.dp)
-                        },
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor =
-                        if(EmailUtilityClass().isValidEmail(viewModel?.registerUiModel?.email ?: "")) Yellow
-                        else DarkGrey40,
-                        contentColor = Color.Black
-                    ),
-                    enabled = EmailUtilityClass().isValidEmail(viewModel?.registerUiModel?.email ?: "")
-
-                ){
-                    Text(
-                        text = "Continue",
+                if (registerUiModel != null) {
+                    Button(
+                        onClick = onContinueButtonClicked,
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        // set text size
-                        fontSize = 20.sp
-                    )
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .border(1.dp, SolidColor(Color.Black), shape = CircleShape)
+                            .constrainAs(btnContinue) {
+                                bottom.linkTo(parent.bottom, margin = 8.dp)
+                                start.linkTo(parent.start, margin = 8.dp)
+                                end.linkTo(parent.end, margin = 8.dp)
+                            },
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor =
+                            if(isValid())
+                                Yellow
+                            else DarkGrey40,
+                            contentColor = Color.Black
+                        ),
+                        enabled =  isValid()
+
+                    ){
+                        Text(
+                            text = "Continue",
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            // set text size
+                            fontSize = 20.sp
+                        )
+                    }
                 }
             }
         }

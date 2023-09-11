@@ -46,7 +46,7 @@ class RegisterViewModel(
     private val registerViewModelContract: RegisterViewModelContract,
     private val profilePreferences: SharedPreferences
 ) : ViewModel(){
-    var registerUiModel by mutableStateOf(RegisterUiModel())
+    var registerUiModel = mutableStateOf(RegisterUiModel())
 
     private fun callApiRegister() {
         val retrofit = Retrofit.Builder()
@@ -54,7 +54,7 @@ class RegisterViewModel(
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val apiService: UsersApi = retrofit.create(UsersApi::class.java)
-        val call = apiService.userRegister(registerUiModel)
+        val call = apiService.userRegister(registerUiModel.value)
 
         call.enqueue(object : retrofit2.Callback<RegisterResponse> {
             override fun onResponse(
@@ -72,16 +72,17 @@ class RegisterViewModel(
 
             override fun onFailure(call: retrofit2.Call<RegisterResponse>, t: Throwable) {
                // throw message from server return
+                print("Oh no! Something went wrong in register view model")
                 throw Exception("Error: ${t.message}")
             }
         })
     }
 
     fun saveProfileInfo() {
-        profilePreferences.edit().putString("username", registerUiModel.username).apply()
-        profilePreferences.edit().putString("password", registerUiModel.password).apply()
-        profilePreferences.edit().putString("email", registerUiModel.email).apply()
-        profilePreferences.edit().putString("phoneNumber", registerUiModel.phoneNumber).apply()
+        profilePreferences.edit().putString("username", registerUiModel.value.username).apply()
+        profilePreferences.edit().putString("password", registerUiModel.value.password).apply()
+        profilePreferences.edit().putString("email", registerUiModel.value.email).apply()
+        profilePreferences.edit().putString("phoneNumber", registerUiModel.value.phoneNumber).apply()
     }
 
     // update register info
