@@ -52,6 +52,7 @@ import com.example.cs426_final_project.ui.theme.EmailInput
 import com.example.cs426_final_project.ui.theme.FullNameInput
 import com.example.cs426_final_project.ui.theme.PasswordInput
 import com.example.cs426_final_project.ui.theme.PhoneNumberInput
+import com.example.cs426_final_project.ui.theme.UserNameInput
 import com.example.cs426_final_project.ui.theme.Yellow
 import com.example.cs426_final_project.utilities.EmailUtilityClass
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
@@ -114,16 +115,22 @@ class RegisterFragment : Fragment() {
                             registerUiModel.value = registerUiModel.value.copy(email = it)
 
                         },
-//                        onChangePassword = {
-//                            registerUiModel.value = registerUiModel.value.copy(password = it)
-//                        },
-//                        onChangeFullName = {
-//                            registerUiModel.value = registerUiModel.value.copy(fullName = it)
-//
-//                        },
-//                        onChangePhoneNumber = {
-//                            registerUiModel.value = registerUiModel.value.copy(phoneNumber = it)
-//                        },
+                        onChangePassword = {
+                            registerUiModel.value = registerUiModel.value.copy(password = it)
+                        },
+                        onChangeFullName = {
+                            registerUiModel.value = registerUiModel.value.copy(fullName = it)
+
+                        },
+                        onChangePhoneNumber = {
+                            registerUiModel.value = registerUiModel.value.copy(phoneNumber = it)
+                        },
+                        onChangeUserName = {
+                            registerUiModel.value = registerUiModel.value.copy(username = it)
+                        },
+                        onChangePassword2 = {
+                            registerUiModel.value = registerUiModel.value.copy(confirmPassword = it)
+                        },
                     )
                 }
             }
@@ -149,7 +156,8 @@ fun RegisterLayout(
     onChangePassword: (String) -> Unit = {},
     onChangeFullName: (String) -> Unit = {},
     onChangePhoneNumber: (String) -> Unit = {},
-
+    onChangeUserName: (String) -> Unit = {},
+    onChangePassword2: (String) -> Unit = {},
     ) {
 
     CS426_final_projectTheme(
@@ -171,7 +179,7 @@ fun RegisterLayout(
                     inpEmail, div,
                     inpFullName, inpPassword,
                     inpPassword2, inpPhoneNumber,
-                    btnContinue) = createRefs()
+                    inpUsername, btnContinue) = createRefs()
                 Button(onClick = {
                     onBackPressed()
                 },
@@ -265,7 +273,21 @@ fun RegisterLayout(
                         },
                     title = "Confirmed password",
                     onChangePassword = {
-                        onChangePassword(it)
+                        onChangePassword2(it)
+                    }
+                )
+
+                UserNameInput(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp)
+                        .constrainAs(inpUsername) {
+                            top.linkTo(inpPassword2.bottom, margin = 8.dp)
+                            start.linkTo(parent.start, margin = 8.dp)
+                            end.linkTo(parent.end, margin = 8.dp)
+                        },
+                    onChangeFullName = {
+                        onChangeUserName(it)
                     }
                 )
 
@@ -275,7 +297,7 @@ fun RegisterLayout(
                         .padding(bottom = 32.dp)
 
                         .constrainAs(inpFullName) {
-                            top.linkTo(inpPassword2.bottom, margin = 8.dp)
+                            top.linkTo(inpUsername.bottom, margin = 8.dp)
                             start.linkTo(parent.start, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
                         },

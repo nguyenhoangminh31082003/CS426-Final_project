@@ -56,6 +56,9 @@ class RegisterViewModel(
         val apiService: UsersApi = retrofit.create(UsersApi::class.java)
         val call = apiService.userRegister(registerUiModel.value)
 
+        // debug json in call
+        println("call: ${call.request()}")
+
         call.enqueue(object : retrofit2.Callback<RegisterResponse> {
             override fun onResponse(
                 call: retrofit2.Call<RegisterResponse>,
@@ -67,6 +70,8 @@ class RegisterViewModel(
                         saveProfileInfo()
                         registerViewModelContract.onRegisterSuccess()
                     }
+                } else {
+                    throw Exception("Oh no, oh no, Error: ${response.code()}")
                 }
             }
 

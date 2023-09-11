@@ -18,7 +18,6 @@ interface UsersApi {
         @Field("password") password: String
     ): Call<LoginResponse>
 
-    @FormUrlEncoded
     @POST("users/register")
     fun userRegister(
         @Body registerUiModel: RegisterUiModel

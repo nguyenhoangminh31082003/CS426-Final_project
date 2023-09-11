@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FullNameInput(
+fun UserNameInput(
     modifier: Modifier = Modifier,
-    title: String = "Full name",
+    title: String = "Username",
     onChangeFullName: (String) -> Unit = {}
 ) {
-    var fullname by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
     Column(
         modifier = modifier
     ) {
@@ -48,9 +48,9 @@ fun FullNameInput(
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = fullname,
+            value = username,
             onValueChange = {
-                fullname = it
+                username = it
                 onChangeFullName(it)
             },
             // disable bottom line
