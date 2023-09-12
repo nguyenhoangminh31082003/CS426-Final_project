@@ -1,8 +1,8 @@
-package com.example.cs426_final_project.API
+package com.example.cs426_final_project.api
 
-import com.example.cs426_final_project.models.Posts.CreatePostResponse
-import com.example.cs426_final_project.models.Posts.ReactPostResponse
-import com.example.cs426_final_project.models.Posts.UpdatePostResponse
+import com.example.cs426_final_project.models.posts.CreatePostResponse
+import com.example.cs426_final_project.models.posts.ReactPostResponse
+import com.example.cs426_final_project.models.posts.UpdatePostResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

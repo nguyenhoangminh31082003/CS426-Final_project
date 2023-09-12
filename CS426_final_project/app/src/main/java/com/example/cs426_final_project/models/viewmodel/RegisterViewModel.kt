@@ -7,9 +7,9 @@ import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.cs426_final_project.API.UsersApi
+import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.models.data.RegisterDataModel
-import com.example.cs426_final_project.models.User.RegisterResponse
+import com.example.cs426_final_project.models.response.RegisterResponse
 //import com.example.cs426_final_project.storage.ProfilePreferences
 import com.example.cs426_final_project.utilities.ApiUtilityClass
 import retrofit2.Retrofit
@@ -44,15 +44,13 @@ class RegisterViewModel(
                 response: retrofit2.Response<RegisterResponse>
             ) {
                 if (response.isSuccessful) {
-                    val registerResponse = response.body()
-                    if (registerResponse != null) {
-                        // make sure save profile info first then call onRegisterSuccess
+                    response.body()?.also {
                         saveProfileInfo()
                         registerViewModelContract.onRegisterSuccess()
                     }
                 } else {
                     // parse body by using
-                    throw Exception("Oh no, oh no, Error: ${response.body()}")
+                    throw Exception("Oh no, oh no, Error: ${ApiUtilityClass.parseError(response.errorBody())}")
                 }
             }
 

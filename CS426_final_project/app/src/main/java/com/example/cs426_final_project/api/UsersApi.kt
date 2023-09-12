@@ -1,7 +1,7 @@
-package com.example.cs426_final_project.API
+package com.example.cs426_final_project.api
 
-import com.example.cs426_final_project.models.User.LoginResponse
-import com.example.cs426_final_project.models.User.RegisterResponse
+import com.example.cs426_final_project.models.response.LoginResponse
+import com.example.cs426_final_project.models.response.RegisterResponse
 import com.example.cs426_final_project.models.data.LoginDataModel
 import com.example.cs426_final_project.models.data.RegisterDataModel
 import retrofit2.Call
