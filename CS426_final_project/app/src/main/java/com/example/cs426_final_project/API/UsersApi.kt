@@ -2,23 +2,20 @@ package com.example.cs426_final_project.API
 
 import com.example.cs426_final_project.models.User.LoginResponse
 import com.example.cs426_final_project.models.User.RegisterResponse
-import com.example.cs426_final_project.models.viewmodel.RegisterUiModel
-//import com.example.cs426_final_project.models.viewmodel.RegisterUiModel
+import com.example.cs426_final_project.models.data.LoginDataModel
+import com.example.cs426_final_project.models.data.RegisterDataModel
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface UsersApi {
     @POST("users/login")
     fun userLogin(
-        @Field("username") username: String,
-        @Field("password") password: String
+        @Body loginInfo: LoginDataModel
     ): Call<LoginResponse>
 
     @POST("users/register")
     fun userRegister(
-        @Body registerUiModel: RegisterUiModel
+        @Body registerDataModel: RegisterDataModel
     ): Call<RegisterResponse>
 }

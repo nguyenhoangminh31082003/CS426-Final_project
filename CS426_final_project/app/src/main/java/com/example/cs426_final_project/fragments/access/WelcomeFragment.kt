@@ -46,11 +46,10 @@ class WelcomeFragment : Fragment() {
             if (contract != null) {
                 if (!isProfileStored()) {
                     print("profile is not stored")
-                    contract!!.login()
 
-                } else {
-                    contract!!.onLogged()
+
                 }
+                contract!!.login()
             }
 
         }

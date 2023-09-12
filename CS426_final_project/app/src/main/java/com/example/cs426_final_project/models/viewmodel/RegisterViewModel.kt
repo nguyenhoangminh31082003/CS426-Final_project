@@ -3,42 +3,19 @@ package com.example.cs426_final_project.models.viewmodel
 // create view model for register activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.API.UsersApi
-import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
+import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.User.RegisterResponse
 //import com.example.cs426_final_project.storage.ProfilePreferences
 import com.example.cs426_final_project.utilities.ApiUtilityClass
-import com.google.gson.annotations.SerializedName
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 //
-data class RegisterUiModel(
-    @SerializedName("full_name")
-    var fullName: String = "",
 
-    @SerializedName("username")
-    val username: String = "",
-
-    @SerializedName("email")
-    var email: String = "",
-
-    @SerializedName("password")
-    var password : String = "",
-
-    @SerializedName("password2")
-    var confirmPassword : String = "",
-
-    @SerializedName("phone_number")
-    var phoneNumber: String = "",
-)
 
 interface RegisterViewModelContract {
     fun onRegisterSuccess()
@@ -48,7 +25,7 @@ class RegisterViewModel(
     private val registerViewModelContract: RegisterViewModelContract,
     private val profilePreferences: SharedPreferences
 ) : ViewModel(){
-    var registerUiModel = mutableStateOf(RegisterUiModel())
+    var registerUiModel = mutableStateOf(RegisterDataModel())
 
     private fun callApiRegister() {
         val retrofit = Retrofit.Builder()
@@ -69,12 +46,9 @@ class RegisterViewModel(
                 if (response.isSuccessful) {
                     val registerResponse = response.body()
                     if (registerResponse != null) {
-
-
                         // make sure save profile info first then call onRegisterSuccess
                         saveProfileInfo()
                         registerViewModelContract.onRegisterSuccess()
-
                     }
                 } else {
                     // parse body by using
@@ -112,12 +86,14 @@ class RegisterViewModel(
 
 }
 
+@Suppress("UNCHECKED_CAST")
 class RegisterViewModelFactory(
     private val registerViewModelContract: RegisterViewModelContract,
     private val profilePreferences: SharedPreferences
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(RegisterViewModel::class.java)){
+
             return RegisterViewModel(
                 registerViewModelContract
                 , profilePreferences

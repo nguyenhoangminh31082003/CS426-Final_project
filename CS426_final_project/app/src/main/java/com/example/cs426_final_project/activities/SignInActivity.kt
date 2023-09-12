@@ -21,6 +21,7 @@ import com.example.cs426_final_project.fragments.access.WelcomeFragment.WelcomeC
 import com.example.cs426_final_project.fragments.access.newInstance
 import com.example.cs426_final_project.fragments.main.ProfileFragment
 import com.example.cs426_final_project.models.User.LoginResponse
+import com.example.cs426_final_project.models.data.LoginDataModel
 import com.example.cs426_final_project.utilities.ApiUtilityClass
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -134,8 +135,11 @@ internal class SignInActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+
+
         val apiService: UsersApi = retrofit.create(UsersApi::class.java)
-        val call = apiService.userLogin(email, password)
+
+        val call = apiService.userLogin(LoginDataModel(email, password))
 
         call.enqueue(object : retrofit2.Callback<LoginResponse> {
             override fun onResponse(
@@ -150,16 +154,12 @@ internal class SignInActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    println("Oh no, oh no, Error code: ${response.code()}")
-                    println("Oh no, oh no, Error body: ${response.body()}")
-                    println("Oh no, oh no, Error errorBody: ${response.errorBody()}")
-                    println("Oh no, oh no, Error message: ${response.message()}")
-
+                    val error = ApiUtilityClass.parseError(response)
+                    val code = response.code()
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
-                // throw message from server return
                 print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })

@@ -25,7 +25,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,12 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.datastore.preferences.SharedPreferencesMigration
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.cs426_final_project.models.viewmodel.RegisterUiModel
+import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModel
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModelContract
 import com.example.cs426_final_project.models.viewmodel.RegisterViewModelFactory
@@ -148,7 +144,7 @@ class RegisterFragment : Fragment() {
 @Preview(showBackground = true)
 @Composable
 fun RegisterLayout(
-    registerUiModel : MutableState<RegisterUiModel>? = null,
+    registerUiModel : MutableState<RegisterDataModel>? = null,
     isValid: () -> Boolean = { true },
     onBackPressed: () -> Unit = {},
     onContinueButtonClicked: () -> Unit = {},

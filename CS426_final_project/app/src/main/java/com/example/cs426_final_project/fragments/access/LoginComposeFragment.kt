@@ -93,9 +93,13 @@ class LoginComposeFragment : Fragment() {
 
                     onBackPressed = {
                         KeyboardUtilityClass.hideKeyboard(requireActivity(), this)
+                        // check null
+                        println("onBackPressed: ${loginContract == null}")
                         loginContract?.returnToWelcome()
                     },
                     onContinueButtonClicked = {
+                        //check null
+                        println("onContinueButtonClicked: ${loginContract == null}")
                         loginContract?.onConfirm(
                             currentEmail.value,
                             currentPassword.value
