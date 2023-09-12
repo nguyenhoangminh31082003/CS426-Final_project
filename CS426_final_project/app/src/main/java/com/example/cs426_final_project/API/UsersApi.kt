@@ -11,7 +11,6 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface UsersApi {
-    @FormUrlEncoded
     @POST("users/login")
     fun userLogin(
         @Field("username") username: String,

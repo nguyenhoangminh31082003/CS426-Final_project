@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import com.example.cs426_final_project.API.UsersApi
 import com.example.cs426_final_project.R
 import com.example.cs426_final_project.adapters.ViewPagerAdapter
 import com.example.cs426_final_project.contracts.LoginContract
@@ -19,9 +20,13 @@ import com.example.cs426_final_project.fragments.access.WelcomeFragment
 import com.example.cs426_final_project.fragments.access.WelcomeFragment.WelcomeContract
 import com.example.cs426_final_project.fragments.access.newInstance
 import com.example.cs426_final_project.fragments.main.ProfileFragment
+import com.example.cs426_final_project.models.User.LoginResponse
+import com.example.cs426_final_project.utilities.ApiUtilityClass
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 
@@ -49,6 +54,7 @@ internal class SignInActivity : AppCompatActivity() {
         vpSignIn?.setCurrentItem(1, false)
         vpSignIn?.offscreenPageLimit = 1
         vpSignIn?.isUserInputEnabled = false
+
     }
 
 
@@ -65,6 +71,7 @@ internal class SignInActivity : AppCompatActivity() {
                 }
                 return fragment!!
             }
+
 
             override fun getItemCount(): Int {
                 return 3
@@ -113,10 +120,46 @@ internal class SignInActivity : AppCompatActivity() {
                 vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
             }
 
-            override fun onConfirm() {
-                val intent = Intent()
-                setResult(RESULT_OK, intent)
-                finish()
+            override fun onConfirm(email : String, password : String) {
+                // use retrofit to login
+                callApiLogin(email, password)
+
             }
         }
+
+    private fun callApiLogin(email: String, password: String) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(ApiUtilityClass.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService: UsersApi = retrofit.create(UsersApi::class.java)
+        val call = apiService.userLogin(email, password)
+
+        call.enqueue(object : retrofit2.Callback<LoginResponse> {
+            override fun onResponse(
+                call: retrofit2.Call<LoginResponse>,
+                response: retrofit2.Response<LoginResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val loginResponse = response.body()
+                    if (loginResponse != null) {
+                        val intent = Intent()
+                        setResult(RESULT_OK, intent)
+                        finish()
+                    }
+                } else {
+                    throw Exception("Oh no, oh no, Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
+                // throw message from server return
+                print("Oh no! Something went wrong in register view model")
+                throw Exception("Error: ${t.message}")
+            }
+        })
+
+
+    }
 }

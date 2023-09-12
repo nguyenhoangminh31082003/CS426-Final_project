@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.API.UsersApi
@@ -57,7 +58,7 @@ class RegisterViewModel(
         val call = apiService.userRegister(registerUiModel.value)
 
         // debug json in call
-        println("call: ${call.request()}")
+//        println("call: ${call.request()}")
 
         call.enqueue(object : retrofit2.Callback<RegisterResponse> {
             override fun onResponse(
@@ -67,11 +68,16 @@ class RegisterViewModel(
                 if (response.isSuccessful) {
                     val registerResponse = response.body()
                     if (registerResponse != null) {
+
+
+                        // make sure save profile info first then call onRegisterSuccess
                         saveProfileInfo()
                         registerViewModelContract.onRegisterSuccess()
+
                     }
                 } else {
-                    throw Exception("Oh no, oh no, Error: ${response.code()}")
+                    // parse body by using
+                    throw Exception("Oh no, oh no, Error: ${response.body()}")
                 }
             }
 
@@ -88,9 +94,12 @@ class RegisterViewModel(
         profilePreferences.edit().putString("password", registerUiModel.value.password).apply()
         profilePreferences.edit().putString("email", registerUiModel.value.email).apply()
         profilePreferences.edit().putString("phoneNumber", registerUiModel.value.phoneNumber).apply()
+        profilePreferences.edit().putString("fullName", registerUiModel.value.fullName).apply()
+
+
+        println("saved username: ${profilePreferences.getString("username", "")}")
     }
 
-    // update register info
     fun confirmRegisterInfo(){
         try {
             callApiRegister()

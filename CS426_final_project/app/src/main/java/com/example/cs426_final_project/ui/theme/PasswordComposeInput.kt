@@ -32,9 +32,10 @@ import androidx.compose.ui.unit.dp
 fun PasswordInput(
     modifier: Modifier = Modifier,
     title: String = "Enter your password",
-    onChangePassword: (String) -> Unit = {}
+    onChangePassword: (String) -> Unit = {},
+    initValue : String = ""
 ) {
-    var password by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf(initValue) }
     Column(
         modifier = modifier
     ) {

@@ -22,6 +22,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         return this.contract.createFragment(position);
     }
 
+
+
     @Override
     public int getItemCount() {
         return this.contract.getItemCount();

@@ -1,5 +1,6 @@
 package com.example.cs426_final_project.fragments.access
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,34 +51,88 @@ class LoginComposeFragment : Fragment() {
 
     var loginContract: LoginContract? = null
 
+    val mutableStateUsername = mutableStateOf("")
+    val mutableStatePassword = mutableStateOf("")
+
+    private fun fetchSavedValue(){
+        val (savedEmail: String, savedPassword: String) = getSavedEmailAndPassword()
+        mutableStateUsername.value = savedEmail
+        mutableStatePassword.value = savedPassword
+
+        println("fetchSavedValue: $savedEmail, $savedPassword")
+    }
+    override fun onResume() {
+        super.onResume()
+        fetchSavedValue()
+
+        print("onResume: ${mutableStateUsername.value}, ${mutableStatePassword.value}")
+
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fetchSavedValue()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        fetchSavedValue()
+
+
         return ComposeView(requireContext()).apply {
+
             setContent {
+                val currentEmail = remember { mutableStateUsername }
+                val currentPassword = remember { mutableStatePassword }
                 LoginLayout(
+
                     onBackPressed = {
                         KeyboardUtilityClass.hideKeyboard(requireActivity(), this)
                         loginContract?.returnToWelcome()
                     },
                     onContinueButtonClicked = {
-                        loginContract?.onConfirm()
-                    }
+                        loginContract?.onConfirm(
+                            currentEmail.value,
+                            currentPassword.value
+                        )
+                    },
+                    savedEmail = mutableStateUsername.value,
+                    savedPassword = mutableStatePassword.value,
+                    currentEmail = currentEmail,
+                    currentPassword = currentPassword
                 )
             }
         }
+    }
+
+    private fun getSavedEmailAndPassword(): Pair<String, String> {
+        val savedEmail: String
+        val savedPassword: String
+
+        // get shared preferences with name "login"
+        val sharedPref = requireContext().getSharedPreferences(USER_PREFERENCES_NAME, MODE_PRIVATE)
+        // get saved email and password
+        savedEmail = sharedPref?.getString("email", "").toString()
+        savedPassword = sharedPref?.getString("password", "").toString()
+        return Pair(savedEmail, savedPassword)
     }
 }
 @Preview(showBackground = true)
 @Composable
 fun LoginLayout(
     onBackPressed: () -> Unit = {},
-    onContinueButtonClicked: () -> Unit = {}
+    onContinueButtonClicked: () -> Unit = {},
+    savedEmail : String = "",
+    savedPassword : String = "",
+    currentEmail : MutableState<String> = remember { mutableStateOf(savedEmail) },
+    currentPassword : MutableState<String> = remember { mutableStateOf(savedPassword) }
 ) {
-    var currentEmail by remember { mutableStateOf("") }
+
     CS426_final_projectTheme(
         darkTheme = true,
         dynamicColor = false,
@@ -119,8 +175,9 @@ fun LoginLayout(
                             end.linkTo(parent.end, margin = 8.dp)
                         },
                     title = "Email",
+                    initValue = currentEmail.value,
                     onChangeEmail = {
-                        currentEmail = it
+                        currentEmail.value = it
                     },
                 )
 
@@ -145,9 +202,10 @@ fun LoginLayout(
                             end.linkTo(parent.end, margin = 8.dp)
                         },
                     onChangePassword = {
-                        currentEmail = it
+                        currentPassword.value = it
                     },
-                    title = "Password"
+                    title = "Password",
+                    initValue = currentPassword.value
                 )
 
                 // create chain email and password
@@ -172,11 +230,11 @@ fun LoginLayout(
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
                         containerColor =
-                            if(EmailUtilityClass().isValidEmail(currentEmail)) Yellow
+                            if(EmailUtilityClass().isValidEmail(currentEmail.value)) Yellow
                             else DarkGrey40,
                         contentColor = Color.Black
                     ),
-                    enabled = EmailUtilityClass().isValidEmail(currentEmail)
+                    enabled = EmailUtilityClass().isValidEmail(currentEmail.value)
 
                 ){
                     Text(

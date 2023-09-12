@@ -31,9 +31,10 @@ import androidx.compose.ui.unit.dp
 fun EmailInput(
     modifier: Modifier = Modifier,
     onChangeEmail: (String) -> Unit = {},
-    title: String = "Enter your email"
+    title: String = "Enter your email",
+    initValue : String = ""
 ) {
-    var email by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf(initValue) }
     Column(
         modifier = modifier
     ) {
