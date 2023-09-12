@@ -22,7 +22,7 @@ class ApiUtilityClass {
 
         }
 
-        const val BASE_URL = "https://12e2-137-132-26-94.ngrok-free.app"
+        const val BASE_URL = "https://4c27-137-132-26-190.ngrok-free.app"
     }
 
 
