@@ -2,6 +2,7 @@ package com.example.cs426_final_project.models.viewmodel
 
 // create view model for register activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
@@ -89,14 +90,15 @@ class RegisterViewModel(
         })
     }
 
+    @SuppressLint("ApplySharedPref")
     fun saveProfileInfo() {
-        profilePreferences.edit().putString("username", registerUiModel.value.username).apply()
-        profilePreferences.edit().putString("password", registerUiModel.value.password).apply()
-        profilePreferences.edit().putString("email", registerUiModel.value.email).apply()
-        profilePreferences.edit().putString("phoneNumber", registerUiModel.value.phoneNumber).apply()
-        profilePreferences.edit().putString("fullName", registerUiModel.value.fullName).apply()
-
-
+        val editor = profilePreferences.edit()
+        editor.putString("username", registerUiModel.value.username)
+        editor.putString("password", registerUiModel.value.password)
+        editor.putString("email", registerUiModel.value.email)
+        editor.putString("phoneNumber", registerUiModel.value.phoneNumber)
+        editor.putString("fullName", registerUiModel.value.fullName)
+        editor.commit()
         println("saved username: ${profilePreferences.getString("username", "")}")
     }
 

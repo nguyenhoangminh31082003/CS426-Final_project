@@ -51,8 +51,8 @@ class LoginComposeFragment : Fragment() {
 
     var loginContract: LoginContract? = null
 
-    val mutableStateUsername = mutableStateOf("")
-    val mutableStatePassword = mutableStateOf("")
+    private val mutableStateUsername = mutableStateOf("")
+    private val mutableStatePassword = mutableStateOf("")
 
     private fun fetchSavedValue(){
         val (savedEmail: String, savedPassword: String) = getSavedEmailAndPassword()
@@ -205,7 +205,6 @@ fun LoginLayout(
                         currentPassword.value = it
                     },
                     title = "Password",
-                    initValue = currentPassword.value
                 )
 
                 // create chain email and password

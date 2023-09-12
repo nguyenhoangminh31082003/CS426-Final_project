@@ -117,6 +117,7 @@ internal class SignInActivity : AppCompatActivity() {
             }
 
             override fun returnToWelcome() {
+//                println("returnToWelcome")
                 vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
             }
 
@@ -149,14 +150,17 @@ internal class SignInActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    throw Exception("Oh no, oh no, Error: ${response.code()}")
+                    println("Oh no, oh no, Error code: ${response.code()}")
+                    println("Oh no, oh no, Error body: ${response.body()}")
+                    println("Oh no, oh no, Error errorBody: ${response.errorBody()}")
+                    println("Oh no, oh no, Error message: ${response.message()}")
+
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
                 // throw message from server return
-                print("Oh no! Something went wrong in register view model")
-                throw Exception("Error: ${t.message}")
+                print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })
 
