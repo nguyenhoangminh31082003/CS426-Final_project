@@ -58,16 +58,22 @@ public class FoodCommentActivity extends AppCompatActivity {
                 Helper.getRandomStringOfAlphabets(12),
                 Helper.getRandomIntegerInRange(1, 5),
                 Helper.getRandomStringOfAlphabets(12),
-
+                ((BitmapDrawable)ivPreviewImage.getDrawable()).getBitmap().toString()
         )).enqueue(new Callback<CreatePostResponse>() {
             @Override
-            public void onResponse(Call<CreatePostResponse> call, Response<CreatePostResponse> response) {
-
+            public void onResponse(
+                    Call<CreatePostResponse> call,
+                    Response<CreatePostResponse> response) {
+                if (response.isSuccessful()) {
+                    System.out.println("Send successfully");
+                } else {
+                    System.err.println("Something is not ok? Please check quick");
+                }
             }
 
             @Override
             public void onFailure(Call<CreatePostResponse> call, Throwable t) {
-
+                System.err.println("OMG");
             }
         });
     }

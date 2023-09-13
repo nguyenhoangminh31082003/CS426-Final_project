@@ -8,14 +8,14 @@ public class CreatePostRequest {
     public String body;
     public int rating;
     public String image_name;
-    public MultipartBody.Part image_base64;
+    public String image_base64;
 
     public CreatePostRequest(
             final String title,
             final String body,
             final int rating,
             final String image_name,
-            final MultipartBody.Part image_base64
+            final String image_base64
     ) {
         this.title = title;
         this.body = body;
@@ -40,7 +40,7 @@ public class CreatePostRequest {
         return image_name;
     }
 
-    public MultipartBody.Part getImage_base64() {
+    public String getImage_base64() {
         return image_base64;
     }
 
@@ -60,7 +60,7 @@ public class CreatePostRequest {
         this.image_name = image_name;
     }
 
-    public void setImage_base64(MultipartBody.Part image_base64) {
+    public void setImage_base64(String image_base64) {
         this.image_base64 = image_base64;
     }
 }
