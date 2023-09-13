@@ -16,14 +16,46 @@ import android.widget.ImageButton;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
+import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.models.FeedInfo;
+import com.example.cs426_final_project.models.data.PostDataModel;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FeedsFragment extends Fragment {
 
     public interface OnFeedsFragmentListener {
         void onRequestToScanFood();
+    }
+
+    private void getFeedRequest() {
+        FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(getContext()).create(FeedApi.class);
+        Call<PostDataModel>  call = feedApi.getTimelineFeeds();
+        call.enqueue(new Callback<PostDataModel>() {
+            @Override
+            public void onResponse(
+                    Call<PostDataModel> call,
+                    Response<PostDataModel> response
+            ) {
+                if (response.isSuccessful()) {
+                    System.out.println("Feeds is successfully taken?");
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostDataModel> call, Throwable t) {
+                System.err.println("Can not get feeds");
+            }
+        });
     }
 
     public OnFeedsFragmentListener listener;
@@ -55,6 +87,8 @@ public class FeedsFragment extends Fragment {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
         });
+
+        getFeedRequest();
 
         Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
 
