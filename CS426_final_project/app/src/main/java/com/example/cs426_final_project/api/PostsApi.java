@@ -1,4 +1,24 @@
-package com.example.cs426_final_project.api
+package com.example.cs426_final_project.api;
+
+import com.example.cs426_final_project.models.posts.CreatePostRequest;
+import com.example.cs426_final_project.models.posts.CreatePostResponse;
+
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+
+public interface PostsApi {
+
+    @POST("posts")
+    public Call<CreatePostResponse> createPost(
+        @Body CreatePostRequest request
+    );
+
+}
+
+/*
+*
+* package com.example.cs426_final_project.api
 
 
 import com.example.cs426_final_project.models.posts.CreatePostResponse
@@ -39,3 +59,4 @@ interface PostsApi {
 //        @Field("reaction") reaction: String
 //    ): Call<ReactPostResponse>
 }
+* */
