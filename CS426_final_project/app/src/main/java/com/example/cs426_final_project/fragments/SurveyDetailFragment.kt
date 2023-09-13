@@ -184,7 +184,7 @@ fun SurveyLayout(
                 Button(
                     onClick = {
                         onDone(answer)
-                              },
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)

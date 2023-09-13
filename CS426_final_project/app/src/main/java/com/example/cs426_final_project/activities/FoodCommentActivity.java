@@ -10,16 +10,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.cs426_final_project.Helper;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.api.FeedApi;
+import com.example.cs426_final_project.api.PostsApi;
 import com.example.cs426_final_project.fragments.SurveyDetailFragment;
+import com.example.cs426_final_project.models.data.PostDataModel;
+import com.example.cs426_final_project.models.posts.CreatePostRequest;
+import com.example.cs426_final_project.models.posts.CreatePostResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.android.material.button.MaterialButton;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class FoodCommentActivity extends AppCompatActivity {
@@ -33,31 +45,66 @@ public class FoodCommentActivity extends AppCompatActivity {
     LinearLayout llFoodComment;
     MaterialButton mbAddInfo;
 
-    private void enableComment(boolean enable) {
-        etFoodComment.setEnabled(enable);
-        btnFoodCommentDone.setEnabled(enable);
-        llFoodComment.setVisibility(enable ? LinearLayout.VISIBLE : LinearLayout.GONE);
+    private void enableComment(final boolean enable) {
+        this.etFoodComment.setEnabled(enable);
+        this.btnFoodCommentDone.setEnabled(enable);
+        this.llFoodComment.setVisibility(enable ? LinearLayout.VISIBLE : LinearLayout.GONE);
+    }
+
+    private void sendPost() {
+        PostsApi postsApi = ApiUtilityClass.Companion.getApiClient(this).create(PostsApi.class);
+        postsApi.createPost(new CreatePostRequest(
+                Helper.getRandomStringOfAlphabets(12),
+                Helper.getRandomStringOfAlphabets(12),
+                Helper.getRandomIntegerInRange(1, 5),
+                Helper.getRandomStringOfAlphabets(12),
+                ((BitmapDrawable)ivPreviewImage.getDrawable()).getBitmap().toString()
+        )).enqueue(new Callback<CreatePostResponse>() {
+            @Override
+            public void onResponse(
+                    Call<CreatePostResponse> call,
+                    Response<CreatePostResponse> response) {
+                if (response.isSuccessful()) {
+                    System.out.println("Send successfully");
+                } else {
+                    System.err.println("Something is not ok? Please check quick");
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreatePostResponse> call, Throwable t) {
+                System.err.println("OMG");
+            }
+        });
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_food_comment);
+        this.setContentView(R.layout.fragment_food_comment);
 
         mbAddInfo = findViewById(R.id.mbAddInfo);
-        mbAddInfo.setOnClickListener(v -> {
+        this.mbAddInfo.setOnClickListener(v -> {
             surveyLocation();
         });
 
         ibToScan = findViewById(R.id.ibToScan);
         ibToScan.setOnClickListener(v -> finish());
 
-        llFoodComment = findViewById(R.id.llFoodComment);
+        this.llFoodComment = findViewById(R.id.llFoodComment);
 
-        ivPreviewImage = findViewById(R.id.ivPreviewImage);
+        this.ivPreviewImage = findViewById(R.id.ivPreviewImage);
 
-        etFoodComment = findViewById(R.id.etFoodComment);
-        btnFoodCommentDone = findViewById(R.id.btnFoodCommentDone);
+        this.etFoodComment = findViewById(R.id.etFoodComment);
+        this.btnFoodCommentDone = findViewById(R.id.btnFoodCommentDone);
+
+        this.btnFoodCommentDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendPost();
+            }
+        });
 
         Intent intent = getIntent();
 
@@ -74,7 +121,7 @@ public class FoodCommentActivity extends AppCompatActivity {
     }
 
     private void surveyLocation() {
-        enableComment(false);
+        this.enableComment(false);
         doSurvey("The tag of the location", new SurveyDetailFragment.SurveyDetailFragmentListener() {
             @Override
             public void onClose() {
@@ -92,7 +139,10 @@ public class FoodCommentActivity extends AppCompatActivity {
         });
     }
 
-    private void doSurvey(String question, SurveyDetailFragment.SurveyDetailFragmentListener listener) {
+    private void doSurvey(
+            String question,
+            SurveyDetailFragment.SurveyDetailFragmentListener listener
+    ) {
 
 
         surveyDetailFragment = new SurveyDetailFragment();

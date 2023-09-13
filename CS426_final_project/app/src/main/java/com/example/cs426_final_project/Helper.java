@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.security.SecureRandom;
+import java.util.Random;
 
 public class Helper {
 
@@ -92,6 +94,27 @@ public class Helper {
         }
 
         System.out.println("File " + "'" + fileName + "'"  + "is successfully written!!! ");
+    }
+
+    public static int getRandomIntegerInRange(final int l, final int r) {
+        SecureRandom randomness = new SecureRandom();
+        return l + randomness.nextInt(r - l);
+    }
+
+    public static String getRandomStringOfAlphabets(final int length) {
+        final int lowerBound = 97, upperBound = 122;
+        Random randomness = new Random();
+        /*
+        String result = "";
+        for (int i = 0; i < length; ++i)
+            result += Helper.getRandomIntegerInRange(lowerBound, upperBound);
+        return result;
+
+         */
+        return randomness.ints(lowerBound, upperBound + 1)
+                .limit(length)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 
 }
