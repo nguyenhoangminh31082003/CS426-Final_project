@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,8 @@ import com.example.cs426_final_project.models.posts.CreatePostResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.android.material.button.MaterialButton;
+
+import java.io.ByteArrayOutputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +54,15 @@ public class FoodCommentActivity extends AppCompatActivity {
         this.llFoodComment.setVisibility(enable ? LinearLayout.VISIBLE : LinearLayout.GONE);
     }
 
+    private String getImageBase64() {
+        Bitmap bitmap = ((BitmapDrawable)ivPreviewImage.getDrawable()).getBitmap();;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
     private void sendPost() {
         PostsApi postsApi = ApiUtilityClass.Companion.getApiClient(this).create(PostsApi.class);
         postsApi.createPost(new CreatePostRequest(
@@ -58,7 +70,7 @@ public class FoodCommentActivity extends AppCompatActivity {
                 Helper.getRandomStringOfAlphabets(12),
                 Helper.getRandomIntegerInRange(1, 5),
                 Helper.getRandomStringOfAlphabets(12),
-                ((BitmapDrawable)ivPreviewImage.getDrawable()).getBitmap().toString()
+                getImageBase64()
         )).enqueue(new Callback<CreatePostResponse>() {
             @Override
             public void onResponse(
@@ -84,13 +96,13 @@ public class FoodCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.fragment_food_comment);
 
-        mbAddInfo = findViewById(R.id.mbAddInfo);
+        this.mbAddInfo = findViewById(R.id.mbAddInfo);
         this.mbAddInfo.setOnClickListener(v -> {
             surveyLocation();
         });
 
-        ibToScan = findViewById(R.id.ibToScan);
-        ibToScan.setOnClickListener(v -> finish());
+        this.ibToScan = findViewById(R.id.ibToScan);
+        this.ibToScan.setOnClickListener(v -> finish());
 
         this.llFoodComment = findViewById(R.id.llFoodComment);
 

@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 
 public interface PostsApi {
 
-    @POST("posts")
+    @POST("posts/")
     public Call<CreatePostResponse> createPost(
         @Body CreatePostRequest request
     );
