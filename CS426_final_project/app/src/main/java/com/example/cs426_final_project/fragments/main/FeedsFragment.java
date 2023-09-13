@@ -35,24 +35,34 @@ public class FeedsFragment extends Fragment {
         void onRequestToScanFood();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getFeedRequest();
+    }
+
     private void getFeedRequest() {
         FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
-        Call<PostDataModel>  call = feedApi.getTimelineFeeds();
-        call.enqueue(new Callback<PostDataModel>() {
+        Call<ArrayList<PostDataModel>> call = feedApi.getTimelineFeeds();
+        call.enqueue(new Callback<ArrayList<PostDataModel>>() {
             @Override
             public void onResponse(
-                    @NonNull Call<PostDataModel> call,
-                    @NonNull Response<PostDataModel> response
+                    @NonNull Call<ArrayList<PostDataModel>> call,
+                    @NonNull Response<ArrayList<PostDataModel>> response
             ) {
                 if (response.isSuccessful()) {
-                    System.out.println("Feeds is successfully taken?");
+                    ArrayList<PostDataModel> feeds = response.body();
+                    if (feeds != null) {
+                        System.out.println("Feeds: " + feeds);
+                    }
                 } else {
-                    System.err.println("Something is not right!!!");
+                    ApiUtilityClass.Companion.debug(response);
                 }
             }
 
             @Override
-            public void onFailure(Call<PostDataModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<PostDataModel>> call, Throwable t) {
                 System.err.println("Can not get feeds");
             }
         });
@@ -88,7 +98,7 @@ public class FeedsFragment extends Fragment {
             startActivity(intent);
         });
 
-        getFeedRequest();
+
 
         Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
 
