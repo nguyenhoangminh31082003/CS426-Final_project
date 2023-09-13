@@ -7,7 +7,7 @@ import retrofit2.http.GET;
 
 public interface FeedApi {
 
-    @GET("feed/timeline")
+    @GET("feed")
     public Call<PostDataModel> getTimelineFeeds();
 
 }
