@@ -15,13 +15,13 @@ import retrofit2.http.Part
 
 interface PostsApi {
 
-//    @POST("posts")
-//    fun createPost(
-//        @Part image: MultipartBody.Part,
-//        @Part("rating") rating: RequestBody,
-//        @Part("image_name") imageName: RequestBody
-//    ): Call<CreatePostResponse>
-//
+    @POST("posts")
+    fun createPost(
+        @Part image: MultipartBody.Part,
+        @Part("rating") rating: RequestBody,
+        @Part("image_name") imageName: RequestBody
+    ): Call<CreatePostResponse>
+
 //    @POST("posts/{postId}")
 //    fun updatePost(
 //        @Field("content") content: String,

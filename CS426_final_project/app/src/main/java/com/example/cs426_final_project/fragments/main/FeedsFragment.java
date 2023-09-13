@@ -47,7 +47,7 @@ public class FeedsFragment extends Fragment {
                 if (response.isSuccessful()) {
                     System.out.println("Feeds is successfully taken?");
                 } else {
-
+                    System.err.println("Something is not right!!!");
                 }
             }
 
