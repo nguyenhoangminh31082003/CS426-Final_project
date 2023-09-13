@@ -54,22 +54,17 @@ class ApiUtilityClass {
         }
 
         @SuppressLint("ApplySharedPref")
-// Modify the createOkHttpClient function to include stored cookies in the headers
         private fun createOkHttpClient(context: Context): OkHttpClient {
             val clientBuilder = OkHttpClient.Builder()
 
-            // Create a shared preference to store cookies
             val cookiePrefs: SharedPreferences =
                 context.getSharedPreferences("Cookies_Prefs", Context.MODE_PRIVATE)
 
-            // Retrieve stored cookies
             val storedCookies = cookiePrefs.getStringSet("Set-Cookie", HashSet())
 
-            // Interceptor to store and retrieve cookies
             val cookieInterceptor = Interceptor { chain ->
                 val requestBuilder = chain.request().newBuilder()
 
-                // Add stored cookies to request headers
                 if (storedCookies != null) {
                     for (cookie in storedCookies) {
                         requestBuilder.addHeader("Cookie", cookie)
@@ -79,7 +74,6 @@ class ApiUtilityClass {
                 val request = requestBuilder.build()
                 val response = chain.proceed(request)
 
-                // Store any new cookies received in the response
                 if (response.headers("Set-Cookie").isNotEmpty()) {
                     val cookies = HashSet<String>()
                     for (header in response.headers("Set-Cookie")) {
