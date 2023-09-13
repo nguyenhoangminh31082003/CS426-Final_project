@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class ProfileDataModel(
     @SerializedName("full_name")
-    val name: String,
+    var name: String,
     @Transient
-    val email: String,
+    var email: String,
     val avatar: String,
     val bio : String,
 )
