@@ -103,7 +103,7 @@ class RegisterFragment : Fragment() {
                         },
                         onBackPressed = { onBackPressed() },
                         onContinueButtonClicked = {
-                            registerViewModel.value.confirmRegisterInfo()
+                            registerViewModel.value.confirmRegisterInfo(requireContext())
                             registerContract?.onSuccessRegister()
                                                   },
                         onChangeEmail = {

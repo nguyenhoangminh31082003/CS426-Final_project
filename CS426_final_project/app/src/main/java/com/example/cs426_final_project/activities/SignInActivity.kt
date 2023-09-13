@@ -1,5 +1,6 @@
 package com.example.cs426_final_project.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +12,14 @@ import com.example.cs426_final_project.adapters.ViewPagerAdapter
 import com.example.cs426_final_project.contracts.LoginContract
 import com.example.cs426_final_project.contracts.ViewPagerContract
 import com.example.cs426_final_project.fragments.access.RegisterFragment.RegisterContract
+import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.fragments.access.WelcomeFragment
 import com.example.cs426_final_project.fragments.access.WelcomeFragment.WelcomeContract
 import com.example.cs426_final_project.fragments.access.newInstance
-import com.example.cs426_final_project.models.response.LoginResponse
 import com.example.cs426_final_project.models.data.LoginDataModel
-import com.example.cs426_final_project.utilities.ApiUtilityClass
+import com.example.cs426_final_project.models.data.ProfileDataModel
+import com.example.cs426_final_project.models.response.StatusResponse
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -86,18 +89,13 @@ internal class SignInActivity : AppCompatActivity() {
     private fun createWelcomeFragment(): WelcomeFragment {
         return WelcomeFragment.newInstance(object : WelcomeContract {
             override fun login() {
-                vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
+                processLoginRequest()
             }
 
             override fun register() {
                 vpSignIn!!.setCurrentItem(EnumPage.REGISTER, true)
             }
 
-            override fun onLogged() {
-                val intent = Intent()
-                setResult(RESULT_OK, intent)
-                finish()
-            }
         })
     }
 
@@ -115,45 +113,84 @@ internal class SignInActivity : AppCompatActivity() {
             override fun onConfirm(email : String, password : String) {
                 // use retrofit to login
                 callApiLogin(email, password)
-
             }
         }
 
     private fun callApiLogin(email: String, password: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(ApiUtilityClass.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-
-
-        val apiService: UsersApi = retrofit.create(UsersApi::class.java)
+        val apiService: UsersApi = ApiUtilityClass.getApiClient(this).create(UsersApi::class.java)
 
         val call = apiService.userLogin(LoginDataModel(email, password))
 
-        call.enqueue(object : retrofit2.Callback<LoginResponse> {
+        call.enqueue(object : retrofit2.Callback<StatusResponse> {
             override fun onResponse(
-                call: retrofit2.Call<LoginResponse>,
-                response: retrofit2.Response<LoginResponse>
+                call: retrofit2.Call<StatusResponse>,
+                response: retrofit2.Response<StatusResponse>
             ) {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
+                        val cookies = response.headers().values("Set-Cookie")
+                        println("cookies: $cookies")
                         val intent = Intent()
                         setResult(RESULT_OK, intent)
                         finish()
                     }
                 } else {
-                    val error = ApiUtilityClass.parseError(response.errorBody())
-                    val code = response.code()
+                    ApiUtilityClass.debug(response)
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<StatusResponse>, t: Throwable) {
                 print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })
-
-
     }
+
+    private fun processLoginRequest() {
+        val usersApi = ApiUtilityClass.getApiClient(this).create(UsersApi::class.java)
+        val call = usersApi.getLoggedProfile()
+        call.enqueue(object : retrofit2.Callback<ProfileDataModel> {
+            override fun onResponse(
+                call: retrofit2.Call<ProfileDataModel>,
+                response: retrofit2.Response<ProfileDataModel>
+            ) {
+                if (response.isSuccessful ) {
+                    val profile = response.body()
+                    if (profile != null) {
+
+                        storeResponseProfile(profile)
+                        onLogged()
+                    }
+
+                } else {
+                    vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
+                    ApiUtilityClass.debug(response)
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<ProfileDataModel>, t: Throwable) {
+                println("failed to get profile")
+            }
+        })
+    }
+
+    @SuppressLint("ApplySharedPref")
+    private fun storeResponseProfile(profile: ProfileDataModel) {
+        val sharedPreferences = getSharedPreferences(
+            USER_PREFERENCES_NAME,
+            MODE_PRIVATE
+        )
+        val editor = sharedPreferences.edit()
+        editor.putString("avatar", profile.avatar)
+        editor.putString("email", profile.email)
+        editor.putString("name", profile.name)
+        editor.commit()
+    }
+
+    private fun onLogged() {
+        val intent = Intent()
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+
 }

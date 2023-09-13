@@ -7,14 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -25,28 +21,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.SharedPreferencesMigration
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder
-import androidx.datastore.rxjava3.RxDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.R
+import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
+import com.example.cs426_final_project.models.data.ProfileDataModel
 //import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import com.example.cs426_final_project.utilities.ImageUtilityClass
 import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropCircleBitmap
 import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropSquareBitmap
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import java.util.prefs.Preferences
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.math.abs
 
 class ProfileFragment : MainPageFragment() {
@@ -103,6 +93,11 @@ class ProfileFragment : MainPageFragment() {
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
     private lateinit var ibAvatar: ImageButton
+    private lateinit var etUsername: EditText
+    private lateinit var cvProfile: CardView
+    private lateinit var btnChangeEmail: Button
+    private lateinit var ibClose: ImageButton
+    private lateinit var btnAddWidget: Button
 
     private var composeView: ComposeView? = null
     private var showDialog = mutableStateOf(false)
@@ -111,9 +106,46 @@ class ProfileFragment : MainPageFragment() {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var profilePreferences: SharedPreferences
 
+    override fun onResume() {
+        super.onResume()
+
+        loadFromServer()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ibAvatar = view.findViewById(R.id.ibAvatar)
+        cvProfile = view.findViewById(R.id.cvProfile)
+        etUsername = view.findViewById(R.id.etUsername)
+        btnChangeEmail = view.findViewById(R.id.btnChangeEmail)
+        ibClose = view.findViewById(R.id.ibClose)
+        btnAddWidget = view.findViewById(R.id.btnAddWidget)
+
+        loadFromServer()
+
+        composeView = view.findViewById(R.id.comvProfile)
+
+        initComposeView(composeView)
+
+        initWidgetSetUp(view)
+
+        initChangeEmail()
+
+        initClose()
+
+        loadImage(ibAvatar)
+
+        pickImage(ibAvatar)
+
+        // set unfocused when user click cvProfile
+        cvProfile.setOnClickListener {
+            clearFocusUsername(etUsername, it)
+        }
+
+    }
+
+    private fun loadLocalData() {
         profilePreferences = requireContext().getSharedPreferences(
             USER_PREFERENCES_NAME,
             Context.MODE_PRIVATE
@@ -124,50 +156,42 @@ class ProfileFragment : MainPageFragment() {
         }
 
         profilePreferences.getString("username", null)?.also {
-            val etUsername = view.findViewById<EditText>(R.id.etUsername)
             etUsername.setText(it)
         }
+    }
 
-
-
-        composeView = view.findViewById(R.id.comvProfile)
-
-        initComposeView(composeView)
-
-        initWidgetSetUp(view)
-
-        initChangeEmail(view)
-
-        initClose(view)
-
-        ibAvatar = view.findViewById(R.id.ibAvatar)
-
-        loadImage(ibAvatar)
-
-        pickImage(ibAvatar)
-        val cvProfile = view.findViewById<CardView>(R.id.cvProfile)
-        val etUsername = view.findViewById<EditText>(R.id.etUsername)
-
-        // set on text change listener
-        etUsername.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                // do nothing
+    private fun loadFromServer() {
+        val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
+        val call = usersApi.getLoggedProfile()
+        call.enqueue(object : retrofit2.Callback<ProfileDataModel> {
+            override fun onResponse(
+                call: retrofit2.Call<ProfileDataModel>,
+                response: retrofit2.Response<ProfileDataModel>
+            ) {
+                if (response.isSuccessful ) {
+                    println("loadFromServer: ${response.body()}")
+                    val profile = response.body()
+                    if (profile != null) {
+                        syncData(profile)
+                    }
+                } else {
+                    ApiUtilityClass.debug(response)
+                    loadLocalData()
+                }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // do nothing
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // do nothing
+            override fun onFailure(call: retrofit2.Call<ProfileDataModel>, t: Throwable) {
+                print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })
 
-        // set unfocused when user click cvProfile
-        cvProfile.setOnClickListener {
-            clearFocusUsername(etUsername, it)
-        }
+    }
 
+    private fun syncData(profile: ProfileDataModel) {
+        val etUsername = view?.findViewById<EditText>(R.id.etUsername)
+        etUsername?.setText(profile.name)
+        currentEmail.value = profile.email
+        // debug
     }
 
     // when pause or stop, we store the data
@@ -179,6 +203,10 @@ class ProfileFragment : MainPageFragment() {
     private fun storeData() {
         val etUsername = view?.findViewById<EditText>(R.id.etUsername)
         val username = etUsername?.text.toString()
+        profilePreferences = requireContext().getSharedPreferences(
+            USER_PREFERENCES_NAME,
+            Context.MODE_PRIVATE
+        )
         profilePreferences.edit().putString("username", username).apply()
         profilePreferences.edit().putString("email", currentEmail.value).apply()
     }
@@ -194,8 +222,8 @@ class ProfileFragment : MainPageFragment() {
         KeyboardUtilityClass.hideKeyboard(requireContext(), it)
     }
 
-    private fun initClose(view: View) {
-        val ibClose = view.findViewById<ImageButton>(R.id.ibClose)
+    private fun initClose() {
+
         ibClose.setOnClickListener {
             try {
                 if (mainPageContract == null) {
@@ -209,8 +237,8 @@ class ProfileFragment : MainPageFragment() {
         }
     }
 
-    private fun initChangeEmail(view: View) {
-        val btnChangeEmail = view.findViewById<Button>(R.id.btnChangeEmail)
+    private fun initChangeEmail() {
+
 
         btnChangeEmail.setOnClickListener {
             showDialog.value = true
@@ -218,7 +246,7 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun initWidgetSetUp(view: View) {
-        val btnAddWidget = view.findViewById<Button>(R.id.btnAddWidget)
+
 
         btnAddWidget.setOnClickListener {
             WidgetUtilityClass().createWidget(requireContext())

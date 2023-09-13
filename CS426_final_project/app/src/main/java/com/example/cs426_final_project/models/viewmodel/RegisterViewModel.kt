@@ -3,6 +3,7 @@ package com.example.cs426_final_project.models.viewmodel
 // create view model for register activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,9 +12,8 @@ import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.response.RegisterResponse
 //import com.example.cs426_final_project.storage.ProfilePreferences
-import com.example.cs426_final_project.utilities.ApiUtilityClass
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
+
 //
 
 
@@ -27,12 +27,8 @@ class RegisterViewModel(
 ) : ViewModel(){
     var registerUiModel = mutableStateOf(RegisterDataModel())
 
-    private fun callApiRegister() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(ApiUtilityClass.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val apiService: UsersApi = retrofit.create(UsersApi::class.java)
+    private fun callApiRegister(context : Context) {
+        val apiService: UsersApi = ApiUtilityClass.getApiClient(context).create(UsersApi::class.java)
         val call = apiService.userRegister(registerUiModel.value)
 
         // debug json in call
@@ -74,9 +70,9 @@ class RegisterViewModel(
         println("saved username: ${profilePreferences.getString("username", "")}")
     }
 
-    fun confirmRegisterInfo(){
+    fun confirmRegisterInfo(context: Context) {
         try {
-            callApiRegister()
+            callApiRegister(context)
         } catch (e: Exception) {
             throw e
         }

@@ -1,21 +1,16 @@
-//package com.example.cs426_final_project.models.viewmodel
+package com.example.cs426_final_project.models.viewmodel
+
+import ProfileInfo
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import androidx.lifecycle.asLiveData
 //
-//import ProfileInfo
-//import androidx.lifecycle.ViewModel
-//import androidx.lifecycle.ViewModelProvider
-//import androidx.lifecycle.viewModelScope
-//import kotlinx.coroutines.flow.combine
-//import kotlinx.coroutines.flow.flowOf
-//import kotlinx.coroutines.launch
-//import androidx.lifecycle.asLiveData
 //
-//
-//data class ProfileUiModel(
-//    val name: String,
-//    val email: String,
-//    val avatar: String,
-//    val userId : String
-//)
+
 //
 //class ProfileViewModel(
 //    val profileInfo: ProfileInfo,
