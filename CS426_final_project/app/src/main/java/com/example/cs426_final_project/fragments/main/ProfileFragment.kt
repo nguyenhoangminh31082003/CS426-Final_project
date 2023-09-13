@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -25,6 +27,7 @@ import com.example.cs426_final_project.R
 import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.models.data.ProfileDataModel
+import com.example.cs426_final_project.models.response.StatusResponse
 //import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
@@ -40,9 +43,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.math.abs
 
 class ProfileFragment : MainPageFragment() {
+
+    private lateinit var profileFragmentContract: ProfileFragmentContract
+    private var profileDataModel  = ProfileDataModel("", "", "", "")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         startPickImageResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -74,16 +79,9 @@ class ProfileFragment : MainPageFragment() {
                 startPickImageResult.launch(intent)
             }
         }
-
-
-
     }
 
-//    private lateinit var viewModel: ProfileViewModel
-
     private var isChooseImage = false
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,13 +96,15 @@ class ProfileFragment : MainPageFragment() {
     private lateinit var btnChangeEmail: Button
     private lateinit var ibClose: ImageButton
     private lateinit var btnAddWidget: Button
+    private lateinit var btnLogout : Button
 
     private var composeView: ComposeView? = null
-    private var showDialog = mutableStateOf(false)
-    private var currentEmail = mutableStateOf("")
+    private lateinit var showDialog : MutableState<Boolean>
+    private lateinit var currentEmail :MutableState<String>
     private lateinit var startPickImageResult: ActivityResultLauncher<Intent>
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var profilePreferences: SharedPreferences
+
 
     override fun onResume() {
         super.onResume()
@@ -115,34 +115,64 @@ class ProfileFragment : MainPageFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentEmail = mutableStateOf("")
+
+        showDialog = mutableStateOf(false)
+
         ibAvatar = view.findViewById(R.id.ibAvatar)
         cvProfile = view.findViewById(R.id.cvProfile)
         etUsername = view.findViewById(R.id.etUsername)
         btnChangeEmail = view.findViewById(R.id.btnChangeEmail)
         ibClose = view.findViewById(R.id.ibClose)
         btnAddWidget = view.findViewById(R.id.btnAddWidget)
-
+        btnLogout = view.findViewById(R.id.btnLogout)
         loadFromServer()
 
-        composeView = view.findViewById(R.id.comvProfile)
-
-        initComposeView(composeView)
+//        composeView = view.findViewById(R.id.comvProfile)
+//
+//        initComposeView(composeView)
 
         initWidgetSetUp(view)
-
         initChangeEmail()
-
         initClose()
-
         loadImage(ibAvatar)
-
         pickImage(ibAvatar)
-
         // set unfocused when user click cvProfile
         cvProfile.setOnClickListener {
             clearFocusUsername(etUsername, it)
         }
 
+        btnLogout.setOnClickListener {
+            logout()
+        }
+
+    }
+
+    private fun logout() {
+        val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
+        val call = usersApi.userLogout()
+        call.enqueue(object : retrofit2.Callback<StatusResponse> {
+            override fun onResponse(
+                call: retrofit2.Call<StatusResponse>,
+                response: retrofit2.Response<StatusResponse>
+            ) {
+                if (response.isSuccessful) {
+                    println("logout: ${response.body()}")
+                    val status = response.body()
+                    if (status != null) {
+                        if(status.status == "You are now logged out") {
+                            profileFragmentContract.logout()
+                        }
+                    }
+                } else {
+                    ApiUtilityClass.debug(response)
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<StatusResponse>, t: Throwable) {
+                print("Oh no! Something went wrong in register view model ${t.message}")
+            }
+        })
     }
 
     private fun loadLocalData() {
@@ -151,11 +181,11 @@ class ProfileFragment : MainPageFragment() {
             Context.MODE_PRIVATE
         )
 
-        profilePreferences.getString("email", null)?.also {
+        profilePreferences.getString("email", "")?.also {
             currentEmail.value = it
         }
 
-        profilePreferences.getString("username", null)?.also {
+        profilePreferences.getString("username", "")?.also {
             etUsername.setText(it)
         }
     }
@@ -168,15 +198,16 @@ class ProfileFragment : MainPageFragment() {
                 call: retrofit2.Call<ProfileDataModel>,
                 response: retrofit2.Response<ProfileDataModel>
             ) {
-                if (response.isSuccessful ) {
+                if (response.isSuccessful) {
                     println("loadFromServer: ${response.body()}")
                     val profile = response.body()
                     if (profile != null) {
+
                         syncData(profile)
                     }
                 } else {
                     ApiUtilityClass.debug(response)
-                    loadLocalData()
+//                    loadLocalData()
                 }
             }
 
@@ -188,9 +219,9 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun syncData(profile: ProfileDataModel) {
-        val etUsername = view?.findViewById<EditText>(R.id.etUsername)
-        etUsername?.setText(profile.name)
+        etUsername.setText(profile.name)
         currentEmail.value = profile.email
+        profileDataModel = profile
         // debug
     }
 
@@ -201,8 +232,35 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun storeData() {
-        val etUsername = view?.findViewById<EditText>(R.id.etUsername)
-        val username = etUsername?.text.toString()
+        storeToServer()
+    }
+
+    private fun storeToServer() {
+
+        profileDataModel.name = etUsername.text.toString()
+
+
+        val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
+        val call = usersApi.updateProfile(profileDataModel)
+        call.enqueue(object : retrofit2.Callback<StatusResponse> {
+            override fun onResponse(
+                call: retrofit2.Call<StatusResponse>,
+                response: retrofit2.Response<StatusResponse>
+            ) {
+                if (response.isSuccessful ) {
+                    println("storeToServer: ${response.body()}")
+                } else {
+                    ApiUtilityClass.debug(response)
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<StatusResponse>, t: Throwable) {
+                print("Oh no! Something went wrong in register view model ${t.message}")
+            }
+        })
+    }
+
+    private fun storeLocalData(username: String) {
         profilePreferences = requireContext().getSharedPreferences(
             USER_PREFERENCES_NAME,
             Context.MODE_PRIVATE
@@ -240,14 +298,13 @@ class ProfileFragment : MainPageFragment() {
     private fun initChangeEmail() {
 
 
-        btnChangeEmail.setOnClickListener {
-            showDialog.value = true
-        }
+//        btnChangeEmail.setOnClickListener {
+//            showDialog.value = true
+//        }
+
     }
 
     private fun initWidgetSetUp(view: View) {
-
-
         btnAddWidget.setOnClickListener {
             WidgetUtilityClass().createWidget(requireContext())
         }
@@ -327,6 +384,16 @@ class ProfileFragment : MainPageFragment() {
 //            print("Profile: position: $position, direction: $direction, relDisplacement: $relDisplacement, progress: $progress\n")
 //            print("direction from profile: $direction\n")
             profileMotionLayout.progress = progress
+        }
+
+        interface ProfileFragmentContract {
+            fun logout()
+        }
+
+        fun newInstance(profileFragmentContract: ProfileFragmentContract): ProfileFragment {
+            return ProfileFragment().also {
+                it.profileFragmentContract = profileFragmentContract
+            }
         }
     }
 }

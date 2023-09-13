@@ -29,6 +29,9 @@ interface UsersApi {
     @PUT("users/profile")
     fun updateProfile(
         @Body profileDataModel: ProfileDataModel
-    ): Call<LoginResponse>
+    ): Call<StatusResponse>
+
+    @POST("users/logout")
+    fun userLogout(): Call<StatusResponse>
 
 }

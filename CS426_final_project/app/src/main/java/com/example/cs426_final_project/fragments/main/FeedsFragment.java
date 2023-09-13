@@ -36,13 +36,13 @@ public class FeedsFragment extends Fragment {
     }
 
     private void getFeedRequest() {
-        FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(getContext()).create(FeedApi.class);
+        FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
         Call<PostDataModel>  call = feedApi.getTimelineFeeds();
         call.enqueue(new Callback<PostDataModel>() {
             @Override
             public void onResponse(
-                    Call<PostDataModel> call,
-                    Response<PostDataModel> response
+                    @NonNull Call<PostDataModel> call,
+                    @NonNull Response<PostDataModel> response
             ) {
                 if (response.isSuccessful()) {
                     System.out.println("Feeds is successfully taken?");

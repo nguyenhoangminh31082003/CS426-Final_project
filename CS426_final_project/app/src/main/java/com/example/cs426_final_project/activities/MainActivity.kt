@@ -3,9 +3,11 @@ package com.example.cs426_final_project.activities
 // import view pager adapter
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,14 +17,15 @@ import com.example.cs426_final_project.adapters.ViewPagerAdapter
 import com.example.cs426_final_project.contracts.MainPageContract
 import com.example.cs426_final_project.contracts.PageTransformerContract
 import com.example.cs426_final_project.contracts.ViewPagerContract
+import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.fragments.main.FeedsFragment
 import com.example.cs426_final_project.fragments.main.HorizontalMainPageHolderFragment
 import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
-import com.example.cs426_final_project.utilities.PagerUtilityClass
 
 class MainActivity : AppCompatActivity(), MainPageContract {
 
     private lateinit var vpVerticalMain: ViewPager2
+    private lateinit var registerForActivityResult: ActivityResultLauncher<Intent>
 
     // Register intent result
 
@@ -33,6 +36,13 @@ class MainActivity : AppCompatActivity(), MainPageContract {
 
         // fix vertical orientation
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        registerForActivityResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode != RESULT_OK) {
+                    finish()
+                }
+            }
 
 
         initHorizontalViewPager()
@@ -67,6 +77,10 @@ class MainActivity : AppCompatActivity(), MainPageContract {
                         it.onRequestToFeed = {
                             vpVerticalMain.setCurrentItem(1, true)
                         }
+                        it.onLogout = {
+                            clearLocalData()
+                            signIn()
+                        }
                     }
 
                 } else FeedsFragment()
@@ -79,15 +93,16 @@ class MainActivity : AppCompatActivity(), MainPageContract {
             override fun getItemCount(): Int = 2
         })
 
+    }
 
+    private fun clearLocalData() {
+        val profilePreferences: SharedPreferences =
+            getSharedPreferences(USER_PREFERENCES_NAME, MODE_PRIVATE)
+        profilePreferences.edit().clear().apply()
     }
 
     private fun signIn() {
-        val registerForActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode != RESULT_OK) {
-                finish()
-            }
-        }
+
 
         val signInIntent = Intent(this, SignInActivity::class.java)
         registerForActivityResult.launch(signInIntent)

@@ -4,4 +4,5 @@ interface MainPageContract {
     fun setToMainPage(smoothScrolling : Boolean = false)
     fun foodScanToProfilePage()
     fun foodScanToMyFriendsPage()
+
 }
