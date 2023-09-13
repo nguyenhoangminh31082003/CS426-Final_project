@@ -68,6 +68,7 @@ public class FoodCommentActivity extends AppCompatActivity {
                     System.out.println("Send successfully");
                 } else {
                     System.err.println("Something is not ok? Please check quick");
+                    ApiUtilityClass.Companion.debug(response);
                 }
             }
 
@@ -93,9 +94,9 @@ public class FoodCommentActivity extends AppCompatActivity {
 
         this.llFoodComment = findViewById(R.id.llFoodComment);
 
-        ivPreviewImage = findViewById(R.id.ivPreviewImage);
+        this.ivPreviewImage = findViewById(R.id.ivPreviewImage);
 
-        etFoodComment = findViewById(R.id.etFoodComment);
+        this.etFoodComment = findViewById(R.id.etFoodComment);
         this.btnFoodCommentDone = findViewById(R.id.btnFoodCommentDone);
 
         this.btnFoodCommentDone.setOnClickListener(new View.OnClickListener() {
