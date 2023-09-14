@@ -18,6 +18,7 @@ import com.example.cs426_final_project.adapters.SearchResultFoodsAdapter;
 import com.example.cs426_final_project.SortModeData;
 import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 import com.example.cs426_final_project.api.SearchApi;
+import com.example.cs426_final_project.fragments.decoration.WaitingFragment;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
@@ -34,6 +35,18 @@ public class SearchResultFragment extends Fragment {
 
     private SearchResultFoodsAdapter adapter;
     private SearchQueryDataModel searchQueryDataModel;
+
+    private void showWaitingFragment() {
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fcvWaitingSearchResult, new WaitingFragment())
+                .commit();
+    }
+
+    private void hideWaitingFragment() {
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .remove(Objects.requireNonNull(requireActivity().getSupportFragmentManager().findFragmentById(R.id.fcvWaitingSearchResult)))
+                .commit();
+    }
 
 
     private void setUpListOfFoods(@NonNull View view) {
@@ -84,6 +97,7 @@ public class SearchResultFragment extends Fragment {
     }
 
     private void callApiSearchResult(SearchQueryDataModel searchQueryDataModel) {
+        showWaitingFragment();
         SearchApi searchApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(SearchApi.class);
         Call<SearchQueryResponse> call = searchApi.searchFood(
                 searchQueryDataModel.getQuery(),
@@ -101,7 +115,7 @@ public class SearchResultFragment extends Fragment {
                     if (foodDataModels != null) {
                         showSuggestions(foodDataModels.getResults());
                     }
-
+                    hideWaitingFragment();
                 } else {
                     System.err.println("Something is not ok? Please check quick");
                     ApiUtilityClass.Companion.debug(response);
@@ -126,6 +140,4 @@ public class SearchResultFragment extends Fragment {
     public void setSearchQueryDataModel(SearchQueryDataModel searchQueryDataModel) {
         this.searchQueryDataModel = searchQueryDataModel;
     }
-
-
 }
