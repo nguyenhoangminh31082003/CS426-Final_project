@@ -55,12 +55,17 @@ public class FeedsFragment extends Fragment {
         this.getFeedRequest();
     }
 
-    private String getDateWithDefaultFormat(final String dateFromServer) {
+    private String getDateWithDefaultFormat(
+            final String dateFromServer
+    ) {
         return dateFromServer.substring(8, 10) + "/" + dateFromServer.substring(5, 7) + "/" + dateFromServer.substring(0, 4);
     }
 
     private void getFeedRequest() {
-        FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
+        FeedApi feedApi = ApiUtilityClass
+                .Companion
+                .getApiClient(requireContext())
+                .create(FeedApi.class);
         Call<String> call = feedApi.getTimelineFeeds();
         call.enqueue(new Callback<String>() {
             @Override

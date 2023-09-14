@@ -6,6 +6,7 @@ import com.example.cs426_final_project.models.data.LoginDataModel
 import com.example.cs426_final_project.models.data.ProfileDataModel
 import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.data.UserDataModel
+import com.example.cs426_final_project.models.response.FindFriendResponse
 import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 import retrofit2.Call
@@ -42,4 +43,7 @@ interface UsersApi {
 
     @GET("users/friends/{userID}")
     fun getFriendsOfUser(@Path(value="userID") id : Int): Call<String>
+
+    @GET("users/friends")
+    fun getFriendsOfCurrentUser(): Call<FindFriendResponse>
 }
