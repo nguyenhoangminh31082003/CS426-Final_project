@@ -21,6 +21,7 @@ import com.example.cs426_final_project.models.FeedInfo;
 import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -45,17 +46,20 @@ public class FeedsFragment extends Fragment {
 
     private void getFeedRequest() {
         FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
-        Call<ArrayList<FeedResponse> > call = feedApi.getTimelineFeeds();
-        call.enqueue(new Callback<ArrayList<FeedResponse> >() {
+        Call<String> call = feedApi.getTimelineFeeds();
+        call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(
-                    @NonNull Call<ArrayList<FeedResponse> > call,
-                    @NonNull Response<ArrayList<FeedResponse> > response
+                    @NonNull Call<String> call,
+                    @NonNull Response<String> response
             ) {
                 if (response.isSuccessful()) {
-                    ArrayList<FeedResponse> feeds = response.body();
-                    if (feeds != null) {
-                        System.out.println("Feeds: " + feeds);
+                    String body = response.body();
+                    System.out.println("Body of response: " + body);
+                    if (body != null) {
+                        Gson gson = new Gson();
+                        FeedResponse[] feedResponses = gson.fromJson(body, FeedResponse[].class);;
+                        System.out.println("Number of feeds: " + feedResponses.length);
                     } else {
 
                     }
@@ -66,7 +70,7 @@ public class FeedsFragment extends Fragment {
 
             @Override
             public void onFailure(
-                    @NonNull Call<ArrayList<FeedResponse> > call,
+                    @NonNull Call<String> call,
                     Throwable t
             ) {
                 t.printStackTrace();

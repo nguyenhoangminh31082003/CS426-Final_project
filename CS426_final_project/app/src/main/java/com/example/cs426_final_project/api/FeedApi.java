@@ -10,6 +10,6 @@ import retrofit2.http.GET;
 
 public interface FeedApi {
     @GET("feed/timeline")
-    Call<ArrayList<FeedResponse> > getTimelineFeeds();
+    Call<String> getTimelineFeeds();
 
 }
