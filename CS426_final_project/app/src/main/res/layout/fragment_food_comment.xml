@@ -107,6 +107,46 @@
                     android:gravity="center"
                     tools:ignore="UselessLeaf">
 
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id = "@+id/rating_level_1_icon"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:src = "@drawable/unchosen_score_face_icon_level_1"
+                        android:layout_height="wrap_content">
+                    </androidx.appcompat.widget.AppCompatImageView>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id = "@+id/rating_level_2_icon"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:src = "@drawable/unchosen_score_face_icon_level_2"
+                        android:layout_height="wrap_content">
+                    </androidx.appcompat.widget.AppCompatImageView>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id = "@+id/rating_level_3_icon"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:src = "@drawable/chosen_score_face_icon_level_3"
+                        android:layout_height="wrap_content">
+                    </androidx.appcompat.widget.AppCompatImageView>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id = "@+id/rating_level_4_icon"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:src = "@drawable/unchosen_score_face_icon_level_4"
+                        android:layout_height="wrap_content">
+                    </androidx.appcompat.widget.AppCompatImageView>
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id = "@+id/rating_level_5_icon"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:src = "@drawable/unchosen_score_face_icon_level_5"
+                        android:layout_height="wrap_content">
+                    </androidx.appcompat.widget.AppCompatImageView>
+
                 </LinearLayout>
 
                 <EditText

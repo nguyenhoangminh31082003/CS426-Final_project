@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentContainerView;
 
 import android.util.Base64;
@@ -39,6 +40,7 @@ import retrofit2.Response;
 
 public class FoodCommentActivity extends AppCompatActivity {
 
+    private int rating;
     private EditText etFoodComment;
     private Button btnFoodCommentDone;
 
@@ -50,11 +52,100 @@ public class FoodCommentActivity extends AppCompatActivity {
     LinearLayout llFoodComment;
     MaterialButton mbAddInfo;
 
+    public FoodCommentActivity() {
+        super();
+        this.rating = 3;
+    }
+
     private void enableComment(final boolean enable) {
         this.foodNameText.setEnabled(enable);
         this.etFoodComment.setEnabled(enable);
         this.btnFoodCommentDone.setEnabled(enable);
         this.llFoodComment.setVisibility(enable ? LinearLayout.VISIBLE : LinearLayout.GONE);
+    }
+
+    private void enableFiveRatingIcons() {
+        AppCompatImageView[] icons = {
+                this.findViewById(R.id.rating_level_1_icon),
+                this.findViewById(R.id.rating_level_2_icon),
+                this.findViewById(R.id.rating_level_3_icon),
+                this.findViewById(R.id.rating_level_4_icon),
+                this.findViewById(R.id.rating_level_5_icon)
+        };
+        final int[] chosenImages = {
+                R.drawable.chosen_score_face_icon_level_1,
+                R.drawable.chosen_score_face_icon_level_2,
+                R.drawable.chosen_score_face_icon_level_3,
+                R.drawable.chosen_score_face_icon_level_4,
+                R.drawable.chosen_score_face_icon_level_5,
+        };
+        final int[] unchosenImages = {
+                R.drawable.unchosen_score_face_icon_level_1,
+                R.drawable.unchosen_score_face_icon_level_2,
+                R.drawable.unchosen_score_face_icon_level_3,
+                R.drawable.unchosen_score_face_icon_level_4,
+                R.drawable.unchosen_score_face_icon_level_5,
+        };
+
+        icons[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rating = 1;
+                icons[0].setImageResource(chosenImages[0]);
+                icons[1].setImageResource(unchosenImages[1]);
+                icons[2].setImageResource(unchosenImages[2]);
+                icons[3].setImageResource(unchosenImages[3]);
+                icons[4].setImageResource(unchosenImages[4]);
+            }
+        });
+
+        icons[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rating = 2;
+                icons[0].setImageResource(unchosenImages[0]);
+                icons[1].setImageResource(chosenImages[1]);
+                icons[2].setImageResource(unchosenImages[2]);
+                icons[3].setImageResource(unchosenImages[3]);
+                icons[4].setImageResource(unchosenImages[4]);
+            }
+        });
+
+        icons[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rating = 3;
+                icons[0].setImageResource(unchosenImages[0]);
+                icons[1].setImageResource(unchosenImages[1]);
+                icons[2].setImageResource(chosenImages[2]);
+                icons[3].setImageResource(unchosenImages[3]);
+                icons[4].setImageResource(unchosenImages[4]);
+            }
+        });
+
+        icons[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rating = 4;
+                icons[0].setImageResource(unchosenImages[0]);
+                icons[1].setImageResource(unchosenImages[1]);
+                icons[2].setImageResource(unchosenImages[2]);
+                icons[3].setImageResource(chosenImages[3]);
+                icons[4].setImageResource(unchosenImages[4]);
+            }
+        });
+
+        icons[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rating = 5;
+                icons[0].setImageResource(unchosenImages[0]);
+                icons[1].setImageResource(unchosenImages[1]);
+                icons[2].setImageResource(unchosenImages[2]);
+                icons[3].setImageResource(unchosenImages[3]);
+                icons[4].setImageResource(chosenImages[4]);
+            }
+        });
     }
 
     private String getImageBase64() {
@@ -71,7 +162,7 @@ public class FoodCommentActivity extends AppCompatActivity {
         postsApi.createPost(new CreatePostRequest(
                 this.foodNameText.getText().toString(),
                 this.etFoodComment.getText().toString(),
-                Helper.getRandomIntegerInRange(1, 5),
+                this.rating,
                 Helper.getRandomStringOfAlphabets(12),
                 this.getImageBase64(),
                 Helper.getRandomIntegerInRange(1, 310823)
@@ -102,6 +193,9 @@ public class FoodCommentActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.fragment_food_comment);
+
+        this.rating = 3;
+        this.enableFiveRatingIcons();
 
         this.mbAddInfo = this.findViewById(R.id.mbAddInfo);
         this.mbAddInfo.setOnClickListener(v -> {
