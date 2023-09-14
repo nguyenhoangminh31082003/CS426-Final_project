@@ -84,7 +84,8 @@ class ProfileFragment : MainPageFragment() {
     private var isChooseImage = false
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 

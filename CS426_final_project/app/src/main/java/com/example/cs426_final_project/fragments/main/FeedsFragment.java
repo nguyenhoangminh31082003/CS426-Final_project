@@ -17,8 +17,10 @@ import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.FeedApi;
+import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.FeedInfo;
 import com.example.cs426_final_project.models.data.PostDataModel;
+import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
@@ -34,7 +36,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FeedsFragment extends Fragment {
 
+    private ViewPager2 vpFeed;
     private ArrayList<FeedInfo> listOfFeeds;
+    private RecyclerFeedViewPagerAdapter adapter;
 
     public FeedsFragment() {
         this.listOfFeeds = null;
@@ -47,6 +51,8 @@ public class FeedsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        this.getFeedRequest();
     }
 
     private void getFeedRequest() {
@@ -69,12 +75,23 @@ public class FeedsFragment extends Fragment {
                         listOfFeeds.clear();
                         for (int i = 0; i < feedResponses.length; ++i) {
                             FeedFields feedFields = feedResponses[i].fields;
-                            /*
+
                             listOfFeeds.add(new FeedInfo(
-                                    feedFields.
+                                feedResponses[i].id,
+                                feedFields.username,
+                                feedFields.imageLink,
+                                feedFields.body,
+                                feedFields.createAt
                             ));
-                            */
+
+                            System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
                         }
+
+                        adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
+                            System.out.println("Clicked on " + position);
+                        });
+
+                        vpFeed.setAdapter(adapter);
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -92,6 +109,27 @@ public class FeedsFragment extends Fragment {
         });
     }
 
+    private void resetFeedsToDefault() {
+        Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
+        this.listOfFeeds = new ArrayList<>();
+        this.listOfFeeds.add(
+                new FeedInfo(
+                        1,
+                        "Mr. Bean",
+                        uri.toString(),
+                        "This is a very good food",
+                        "10/10/2021"
+                )
+        );
+        this.vpFeed.setAdapter(null);
+
+        this.adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
+            System.out.println("Clicked on " + position);
+        });
+
+        this.vpFeed.setAdapter(this.adapter);
+    }
+
     public OnFeedsFragmentListener listener;
 
     @Nullable
@@ -101,7 +139,11 @@ public class FeedsFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        return inflater.inflate(
+                R.layout.fragment_feed,
+                container,
+                false
+        );
     }
 
     @Override
@@ -112,6 +154,9 @@ public class FeedsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageButton ibToScan = view.findViewById(R.id.ibToScan);
+
+        this.vpFeed = view.findViewById(R.id.vpFeed);
+
         ibToScan.setOnClickListener(v -> {
             if (listener != null)
                 listener.onRequestToScanFood();
@@ -132,18 +177,8 @@ public class FeedsFragment extends Fragment {
             startActivity(intent);
         });
 
-        Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
+        this.resetFeedsToDefault();
 
-        this.listOfFeeds = new ArrayList<>();
-        this.listOfFeeds.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
-
-        RecyclerFeedViewPagerAdapter adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
-            System.out.println("Clicked on " + position);
-        });
-
-        ViewPager2 vpFeed = view.findViewById(R.id.vpFeed);
-        vpFeed.setAdapter(adapter);
-
-
+        this.getFeedRequest();
     }
 }
