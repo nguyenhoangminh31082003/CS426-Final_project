@@ -81,7 +81,6 @@ public class SearchResultFragment extends Fragment {
             Intent intent = new Intent(requireActivity(), ChoosingSortModeActivity.class);
             startActivity(intent);
         });
-
     }
 
     private void callApiSearchResult(SearchQueryDataModel searchQueryDataModel) {

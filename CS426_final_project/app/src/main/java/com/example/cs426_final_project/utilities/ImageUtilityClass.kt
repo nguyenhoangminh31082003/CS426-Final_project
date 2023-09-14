@@ -9,6 +9,8 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Shader
 import android.widget.ImageView
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Transformation
 
 class ImageUtilityClass {
 
@@ -80,6 +82,24 @@ class ImageUtilityClass {
             canvas?.drawBitmap(originalBitmap, srcRect, destRect, null)
 
             return squareBitmap
+        }
+
+        fun loadImageFromUrl(imageView: ImageView, url: String) {
+             Picasso.get()
+                 .load(url)
+                 .transform(object : Transformation {
+                     override fun transform(source: Bitmap?): Bitmap {
+                         val result = cropSquareBitmap(source)
+                         val scaledResult = Bitmap.createScaledBitmap(result!!, 400, 400, false)
+                         source?.recycle()
+                         return scaledResult
+                     }
+
+                     override fun key(): String {
+                         return "circle"
+                     }
+                 })
+                 .into(imageView)
         }
 
     }

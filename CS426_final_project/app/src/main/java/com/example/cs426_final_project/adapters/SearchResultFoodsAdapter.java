@@ -44,7 +44,9 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
 
         if(this.searchResultFieldsList != null) {
             SearchResultFields searchResultFields = this.searchResultFieldsList.get(position);
-
+            String url = searchResultFields.getFields().getImageLink();
+            // load image from url
+            ImageUtilityClass.Companion.loadImageFromUrl(holder.ivSearchResultFoodPreview, url);
             holder.txtSearchResultFoodName.setText(searchResultFields.getFields().getName());
             holder.txtSearchResultReview.setText("Try to be the first one to review");
             ImageUtilityClass.Companion.cropCenter(holder.ivSearchResultFoodPreview);

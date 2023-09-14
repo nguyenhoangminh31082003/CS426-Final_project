@@ -90,4 +90,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+    implementation "com.airbnb.android:lottie:4.2.2"
+
+    implementation project(":Animation")
+
 }

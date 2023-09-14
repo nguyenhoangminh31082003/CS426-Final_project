@@ -1,0 +1,6 @@
+include ':Animation'
+include ':Animation'
+project(':Animation').projectDir = new File(rootDir, 'CS426_final_project/Animation/')
+include ':Animation'
+include ':Animation'
+include ':Animation'

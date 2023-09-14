@@ -2,10 +2,10 @@ package com.example.cs426_final_project.fragments.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs426_final_project.R
 import com.example.cs426_final_project.adapters.RecyclerSearchSuggestionAdapter
@@ -31,6 +31,9 @@ class SearchSuggestionFragment : Fragment() {
         val adapter = RecyclerSearchSuggestionAdapter(searchSuggestions)
 
         rvSearchSuggestion.adapter = adapter
+
+//        val doubleBounce: Sprite = DoubleBounce()
+
     }
 
     companion object {
