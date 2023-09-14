@@ -20,6 +20,7 @@ import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 import com.example.cs426_final_project.api.SearchApi;
 import com.example.cs426_final_project.fragments.decoration.WaitingFragment;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
+import com.example.cs426_final_project.models.response.FoodSearchResultResponse;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
@@ -31,10 +32,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchResultFragment extends Fragment {
-
     private SearchResultFoodsAdapter adapter;
     private SearchQueryDataModel searchQueryDataModel;
-
     private WaitingFragment waitingFragment;
 
     private void showWaitingFragment() {
@@ -118,9 +117,8 @@ public class SearchResultFragment extends Fragment {
                 if(response.isSuccessful()) {
                     SearchQueryResponse foodDataModels = response.body();
                     if (foodDataModels != null) {
-//                        showSuggestions(foodDataModels.getResults());
+                        showSuggestions(foodDataModels.getResults());
 
-                        // show suggestions
                     }
                     hideWaitingFragment();
                 } else {
@@ -137,7 +135,7 @@ public class SearchResultFragment extends Fragment {
         });
     }
 
-    private void showSuggestions(List<SearchResultFields> results) {
+    private void showSuggestions(List<FoodSearchResultResponse> results) {
         adapter = new SearchResultFoodsAdapter(results);
         RecyclerView viewOfListOfFoods = requireView().findViewById(R.id.list_of_foods_in_search_result);
         viewOfListOfFoods.setAdapter(adapter);
