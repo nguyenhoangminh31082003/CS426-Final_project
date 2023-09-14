@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.decoration.WaitingFragment"
+    android:background="@color/dark_grey">
     >
 
 

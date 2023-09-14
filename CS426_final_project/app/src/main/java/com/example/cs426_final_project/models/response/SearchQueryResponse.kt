@@ -4,7 +4,7 @@ import com.example.cs426_final_project.models.data.FoodDataModel
 
 data class SearchQueryResponse(
     val status: String,
-    val results: List<SearchResultFields>
+    val results: List<FoodDataModel>
 )
 
 data class SearchResultFields(
@@ -12,3 +12,4 @@ data class SearchResultFields(
     val pk: Int,
     val fields: FoodDataModel
 )
+
