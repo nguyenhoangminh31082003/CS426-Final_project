@@ -130,6 +130,15 @@ public class FeedsFragment extends Fragment {
 
         this.adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
             System.out.println("Clicked on " + position);
+            Intent intent = new Intent(
+                    requireActivity(),
+                    SearchActivity.class
+            );
+            intent.putExtra(
+                    "food_id",
+                    this.adapter.getFoodID(position)
+            );
+            startActivity(intent);
         });
 
         this.vpFeed.setAdapter(this.adapter);

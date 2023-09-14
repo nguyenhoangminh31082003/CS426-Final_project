@@ -6,19 +6,29 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
+import com.example.cs426_final_project.api.FeedApi;
+import com.example.cs426_final_project.api.FoodApi;
 import com.example.cs426_final_project.api.SearchApi;
 import com.example.cs426_final_project.fragments.search.SearchResultFragment;
 import com.example.cs426_final_project.fragments.search.SearchSuggestionFragment;
 import com.example.cs426_final_project.fragments.search.TrendingFoodFragment;
+import com.example.cs426_final_project.models.FeedInfo;
+import com.example.cs426_final_project.models.data.FoodDataModel;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
+import com.example.cs426_final_project.models.posts.FeedFields;
+import com.example.cs426_final_project.models.posts.FeedResponse;
+import com.example.cs426_final_project.models.response.FoodResponse;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +48,50 @@ public class SearchActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_search);
         this.setSearchView();
 
-        searchQueryDataModel = new SearchQueryDataModel();
+        this.searchQueryDataModel = new SearchQueryDataModel();
 
-        initBackButton();
-        initSearchView();
-        showTrendingFood();
+        this.initBackButton();
+        this.initSearchView();
+        this.showTrendingFood();
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null)
+            this.queryFoodNameWithGivenID(extras.getInt("food_id"));
+    }
+
+    private void queryFoodNameWithGivenID(final int id) {
+        FoodApi foodApi = ApiUtilityClass.Companion.getApiClient(this).create(FoodApi.class);;
+        Call<FoodResponse> call = foodApi.getFood(id);
+
+        call.enqueue(new Callback<FoodResponse>() {
+            @Override
+            public void onResponse(
+                    Call<FoodResponse> call,
+                    Response<FoodResponse> response
+            ) {
+                if (response.isSuccessful()) {
+                    FoodResponse body = response.body();
+                    FoodDataModel data = body.results;
+
+                    System.out.println("Successfully response with food");
+
+                    sevSearch.setQuery(data.getName(), true);
+
+                } else {
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<FoodResponse> call,
+                    Throwable t
+            ) {
+                t.printStackTrace();
+                System.err.println("Can not get food");
+            }
+        });
     }
 
     private void showTrendingFood() {
