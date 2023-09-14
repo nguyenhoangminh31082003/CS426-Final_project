@@ -22,11 +22,14 @@ import com.example.cs426_final_project.activities.SearchActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.FeedInfo;
+import com.example.cs426_final_project.models.data.FriendDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
+import com.example.cs426_final_project.models.response.FindFriendResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -43,19 +46,20 @@ public class MyFriendsFragment extends MainPageFragment {
                 .Companion
                 .getApiClient(getContext())
                 .create(UsersApi.class);
-        Call<String> call = usersApi.getFriendsOfCurrentUser();
+        Call<FindFriendResponse> call = usersApi.getFriendsOfCurrentUser();
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<FindFriendResponse>() {
             @Override
             public void onResponse(
-                    Call<String> call,
-                    Response<String> response
+                    Call<FindFriendResponse> call,
+                    Response<FindFriendResponse> response
             ) {
                 if (response.isSuccessful()) {
-                    String body = response.body();
+                    FindFriendResponse body = response.body();
                     System.out.println("Successfully find friends");
                     if (body != null) {
-                        System.out.println("The body is " + body);
+                        List<FriendDataModel> listOfFriends = body.results;
+                        System.out.println("The number of friends: " + listOfFriends.size());
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -64,11 +68,11 @@ public class MyFriendsFragment extends MainPageFragment {
 
             @Override
             public void onFailure(
-                    Call<String> call,
+                    Call<FindFriendResponse> call,
                     Throwable t
             ) {
                 t.printStackTrace();
-                System.err.println("Can not find friends");
+                System.err.println("Can not find friends :'((");
             }
         });
     }
@@ -103,7 +107,7 @@ public class MyFriendsFragment extends MainPageFragment {
 
         this.listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public void onGroupExpand(int i) {
+            public void onGroupExpand(final int i) {
                 System.out.println("EXPAND!!!");
             }
         });

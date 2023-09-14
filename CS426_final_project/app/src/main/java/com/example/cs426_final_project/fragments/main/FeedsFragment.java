@@ -55,7 +55,9 @@ public class FeedsFragment extends Fragment {
         this.getFeedRequest();
     }
 
-    private String getDateWithDefaultFormat(final String dateFromServer) {
+    private String getDateWithDefaultFormat(
+            final String dateFromServer
+    ) {
         return dateFromServer.substring(8, 10) + "/" + dateFromServer.substring(5, 7) + "/" + dateFromServer.substring(0, 4);
     }
 
