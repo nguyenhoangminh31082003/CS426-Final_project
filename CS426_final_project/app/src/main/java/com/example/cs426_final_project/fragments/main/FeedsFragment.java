@@ -39,22 +39,24 @@ public class FeedsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getFeedRequest();
+        this.getFeedRequest();
     }
 
     private void getFeedRequest() {
         FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
-        Call<ArrayList<PostDataModel>> call = feedApi.getTimelineFeeds();
-        call.enqueue(new Callback<ArrayList<PostDataModel>>() {
+        Call<String> call = feedApi.getTimelineFeeds();
+        call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(
-                    @NonNull Call<ArrayList<PostDataModel>> call,
-                    @NonNull Response<ArrayList<PostDataModel>> response
+                    @NonNull Call<String> call,
+                    @NonNull Response<String> response
             ) {
                 if (response.isSuccessful()) {
-                    ArrayList<PostDataModel> feeds = response.body();
+                    String feeds = response.body();
                     if (feeds != null) {
                         System.out.println("Feeds: " + feeds);
+                    } else {
+
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -62,7 +64,11 @@ public class FeedsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ArrayList<PostDataModel>> call, Throwable t) {
+            public void onFailure(
+                    @NonNull Call<String> call,
+                    Throwable t
+            ) {
+                t.printStackTrace();
                 System.err.println("Can not get feeds");
             }
         });
@@ -72,12 +78,19 @@ public class FeedsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         return inflater.inflate(R.layout.fragment_feed, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(
+            @NonNull View view,
+            @Nullable Bundle savedInstanceState
+    ) {
         super.onViewCreated(view, savedInstanceState);
 
         ImageButton ibToScan = view.findViewById(R.id.ibToScan);
@@ -94,7 +107,10 @@ public class FeedsFragment extends Fragment {
 
         ImageButton ibFeedFoodSearch = view.findViewById(R.id.ibFeedFoodSearch);
         ibFeedFoodSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            Intent intent = new Intent(
+                    getActivity(),
+                    SearchActivity.class
+            );
             startActivity(intent);
         });
 
