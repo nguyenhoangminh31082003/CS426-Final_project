@@ -42,4 +42,7 @@ interface UsersApi {
 
     @GET("users/friends/{userID}")
     fun getFriendsOfUser(@Path(value="userID") id : Int): Call<String>
+
+    @GET("users/friends")
+    fun getFriendsOfCurrentUser(): Call<String>
 }

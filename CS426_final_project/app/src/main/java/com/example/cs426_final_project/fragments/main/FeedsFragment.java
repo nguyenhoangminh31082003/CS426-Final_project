@@ -60,7 +60,10 @@ public class FeedsFragment extends Fragment {
     }
 
     private void getFeedRequest() {
-        FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
+        FeedApi feedApi = ApiUtilityClass
+                .Companion
+                .getApiClient(requireContext())
+                .create(FeedApi.class);
         Call<String> call = feedApi.getTimelineFeeds();
         call.enqueue(new Callback<String>() {
             @Override
