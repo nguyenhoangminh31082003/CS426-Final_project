@@ -1,5 +1,6 @@
 package com.example.cs426_final_project.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
@@ -12,17 +13,32 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.api.SearchApi;
 import com.example.cs426_final_project.fragments.search.SearchResultFragment;
 import com.example.cs426_final_project.fragments.search.TrendingFoodFragment;
+import com.example.cs426_final_project.models.data.FoodDataModel;
+import com.example.cs426_final_project.models.data.SearchQueryDataModel;
+import com.example.cs426_final_project.models.response.SearchQueryResponse;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class SearchActivity extends AppCompatActivity {
     private androidx.appcompat.widget.SearchView sevSearch;
+    private SearchQueryDataModel searchQueryDataModel;
     TrendingFoodFragment trendingFoodFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_search);
         this.setSearchView();
+
+        searchQueryDataModel = new SearchQueryDataModel();
 
         initBackButton();
         initSearchView();
@@ -71,9 +87,43 @@ public class SearchActivity extends AppCompatActivity {
                 if(newText.isEmpty())
                     showTrendingFood();
                 else {
-                    // show suggestion
+                    searchQueryDataModel.setQuery(newText);
+                    callApiSuggestions(searchQueryDataModel);
                 }
                 return false;
+            }
+        });
+    }
+
+    private void callApiSuggestions(SearchQueryDataModel searchQueryDataModel) {
+        SearchApi searchApi = ApiUtilityClass.Companion.getApiClient(this).create(SearchApi.class);
+        Call<SearchQueryResponse> call = searchApi.searchFood(
+            searchQueryDataModel.getQuery(),
+            searchQueryDataModel.getLimit(),
+            searchQueryDataModel.getOffset(),
+            searchQueryDataModel.getLat(),
+            searchQueryDataModel.getLong(),
+            searchQueryDataModel.getDis()
+        );
+        call.enqueue(new Callback<SearchQueryResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchQueryResponse> call, @NonNull Response<SearchQueryResponse> response) {
+                if(response.isSuccessful()) {
+                    SearchQueryResponse foodDataModels = response.body();
+//                    trendingFoodFragment.setSuggestions(foodDataModels);
+                    // debug here
+                    System.out.println("foodDataModels: " + foodDataModels);
+                    throw new RuntimeException("foodDataModels: " + foodDataModels);
+                } else {
+                    System.err.println("Something is not ok? Please check quick");
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SearchQueryResponse> call, @NonNull Throwable t) {
+                System.out.println("OMG");
+                System.out.println(t.getMessage());
             }
         });
     }

@@ -77,7 +77,6 @@ public class FoodScanFragment extends MainPageFragment {
 
             startActivity(intent);
 
-
             Toast.makeText(requireContext(), "Saved to gallery", Toast.LENGTH_SHORT).show();
 
         } catch (Exception e) {
