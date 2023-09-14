@@ -19,6 +19,7 @@ import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.models.FeedInfo;
 import com.example.cs426_final_project.models.data.PostDataModel;
+import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.ArrayList;
@@ -44,15 +45,15 @@ public class FeedsFragment extends Fragment {
 
     private void getFeedRequest() {
         FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
-        Call<String> call = feedApi.getTimelineFeeds();
-        call.enqueue(new Callback<String>() {
+        Call<ArrayList<FeedResponse> > call = feedApi.getTimelineFeeds();
+        call.enqueue(new Callback<ArrayList<FeedResponse> >() {
             @Override
             public void onResponse(
-                    @NonNull Call<String> call,
-                    @NonNull Response<String> response
+                    @NonNull Call<ArrayList<FeedResponse> > call,
+                    @NonNull Response<ArrayList<FeedResponse> > response
             ) {
                 if (response.isSuccessful()) {
-                    String feeds = response.body();
+                    ArrayList<FeedResponse> feeds = response.body();
                     if (feeds != null) {
                         System.out.println("Feeds: " + feeds);
                     } else {
@@ -65,7 +66,7 @@ public class FeedsFragment extends Fragment {
 
             @Override
             public void onFailure(
-                    @NonNull Call<String> call,
+                    @NonNull Call<ArrayList<FeedResponse> > call,
                     Throwable t
             ) {
                 t.printStackTrace();

@@ -16,7 +16,7 @@ import java.io.IOException
 class ApiUtilityClass {
 
     companion object {
-        
+
         private const val BASE_URL = "https://3f21-137-132-26-190.ngrok-free.app"
 
         fun parseError(errorBody: ResponseBody?) : StatusResponse {
