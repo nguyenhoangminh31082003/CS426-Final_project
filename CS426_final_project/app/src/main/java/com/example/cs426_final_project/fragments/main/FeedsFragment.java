@@ -106,12 +106,13 @@ public class FeedsFragment extends Fragment {
 
                             listOfFeeds.add(new FeedInfo(
                                 feedResponses[i].id,
-                                "MrBean",
+                                getUserName(feedFields.userId),
                                 feedFields.imageLink,
                                 feedFields.body,
                                 feedFields.createAt
                             ));
 
+                            System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
                         }
                     }
                 } else {
@@ -172,8 +173,12 @@ public class FeedsFragment extends Fragment {
 
         Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
 
-        this.listOfFeeds = new ArrayList<>();
-        this.listOfFeeds.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
+        this.getFeedRequest();
+
+        if (this.listOfFeeds == null || this.listOfFeeds.size() == 1) {
+            this.listOfFeeds = new ArrayList<>();
+            this.listOfFeeds.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
+        }
 
         RecyclerFeedViewPagerAdapter adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
             System.out.println("Clicked on " + position);
