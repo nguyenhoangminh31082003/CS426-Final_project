@@ -8,7 +8,7 @@ import retrofit2.http.Path;
 
 public interface FoodApi {
 
-    @GET("users/profile/{foodID}")
+    @GET("food/{foodID}")
     Call<FoodResponse> getFood(@Path(value="foodID") final int id);
 
 }
