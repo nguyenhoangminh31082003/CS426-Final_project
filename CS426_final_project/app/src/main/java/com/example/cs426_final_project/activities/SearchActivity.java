@@ -67,11 +67,12 @@ public class SearchActivity extends AppCompatActivity {
         call.enqueue(new Callback<FoodResponse>() {
             @Override
             public void onResponse(
-                    Call<FoodResponse> call,
-                    Response<FoodResponse> response
+                    @NonNull Call<FoodResponse> call,
+                    @NonNull Response<FoodResponse> response
             ) {
                 if (response.isSuccessful()) {
                     FoodResponse body = response.body();
+                    assert body != null;
                     FoodDataModel data = body.results;
 
                     System.out.println("Successfully response with food");
@@ -85,7 +86,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(
-                    Call<FoodResponse> call,
+                    @NonNull Call<FoodResponse> call,
                     Throwable t
             ) {
                 t.printStackTrace();

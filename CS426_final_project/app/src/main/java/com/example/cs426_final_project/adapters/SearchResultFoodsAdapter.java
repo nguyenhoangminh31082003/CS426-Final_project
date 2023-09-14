@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs426_final_project.ConceptualListOfFoodsInSearchResult;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.models.data.ReviewDataModel;
+import com.example.cs426_final_project.models.response.FoodSearchResultResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
 
@@ -21,13 +23,13 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
 
     private ConceptualListOfFoodsInSearchResult listOfFoods;
 
-    private List<SearchResultFields> searchResultFieldsList;
+    private List<FoodSearchResultResponse> searchResultFieldsList;
 
     public SearchResultFoodsAdapter() {
         this.listOfFoods = new ConceptualListOfFoodsInSearchResult();
     }
 
-    public SearchResultFoodsAdapter(List<SearchResultFields> results) {
+    public SearchResultFoodsAdapter(List<FoodSearchResultResponse> results) {
         this.searchResultFieldsList = results;
     }
 
@@ -43,12 +45,18 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         if(this.searchResultFieldsList != null) {
-            SearchResultFields searchResultFields = this.searchResultFieldsList.get(position);
-            String url = searchResultFields.getFields().getImageLink();
+            FoodSearchResultResponse foodSearchResultResponse = this.searchResultFieldsList.get(position);
+            String url = foodSearchResultResponse.getFood().getImageLink();
             // load image from url
             ImageUtilityClass.Companion.loadImageFromUrl(holder.ivSearchResultFoodPreview, url);
-            holder.txtSearchResultFoodName.setText(searchResultFields.getFields().getName());
-            holder.txtSearchResultReview.setText("Try to be the first one to review");
+            holder.txtSearchResultFoodName.setText(foodSearchResultResponse.getFood().getName());
+
+            ReviewDataModel review = foodSearchResultResponse.getReview();
+
+            if(review != null)
+                holder.txtSearchResultReview.setText(review.getBody());
+            else
+                holder.txtSearchResultReview.setText("Try to be the first one to review");
             ImageUtilityClass.Companion.cropCenter(holder.ivSearchResultFoodPreview);
             return;
         }
