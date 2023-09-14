@@ -5,5 +5,6 @@ data class CreatePostRequest(
     var body: String,
     var rating: Int,
     var image_name: String,
-    var image_base64: String
+    var image_base64: String,
+    var food_id: Int
 )
