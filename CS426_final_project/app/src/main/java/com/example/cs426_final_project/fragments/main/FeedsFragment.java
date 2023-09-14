@@ -17,8 +17,10 @@ import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.FeedApi;
+import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.FeedInfo;
 import com.example.cs426_final_project.models.data.PostDataModel;
+import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
@@ -42,6 +44,38 @@ public class FeedsFragment extends Fragment {
 
     public interface OnFeedsFragmentListener {
         void onRequestToScanFood();
+    }
+
+    private String getUserName(final int userID) {
+        UsersApi usersApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(UsersApi.class);
+        Call<UserDataModel> call = usersApi.getUser(userID);
+        final String[] result = {null};
+
+        call.enqueue(new Callback<UserDataModel>() {
+            @Override
+            public void onResponse(
+                    Call<UserDataModel> call,
+                    Response<UserDataModel> response
+            ) {
+                if (response.isSuccessful()) {
+                    UserDataModel body = response.body();
+                    if (body != null)
+                        result[0] = body.full_name;
+                } else {
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<UserDataModel> call,
+                    Throwable t
+            ) {
+                System.err.println("Can not get information of user!!!");
+            }
+        });
+
+        return result[0];
     }
 
     @Override
@@ -69,11 +103,15 @@ public class FeedsFragment extends Fragment {
                         listOfFeeds.clear();
                         for (int i = 0; i < feedResponses.length; ++i) {
                             FeedFields feedFields = feedResponses[i].fields;
-                            /*
+
                             listOfFeeds.add(new FeedInfo(
-                                    feedFields.
+                                feedResponses[i].id,
+                                "MrBean",
+                                feedFields.imageLink,
+                                feedFields.body,
+                                feedFields.createAt
                             ));
-                            */
+
                         }
                     }
                 } else {
