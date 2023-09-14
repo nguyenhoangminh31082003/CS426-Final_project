@@ -19,6 +19,7 @@ import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.models.FeedInfo;
 import com.example.cs426_final_project.models.data.PostDataModel;
+import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
@@ -33,6 +34,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FeedsFragment extends Fragment {
 
+    private ArrayList<FeedInfo> listOfFeeds;
+
+    public FeedsFragment() {
+        this.listOfFeeds = null;
+    }
+
     public interface OnFeedsFragmentListener {
         void onRequestToScanFood();
     }
@@ -40,8 +47,6 @@ public class FeedsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        this.getFeedRequest();
     }
 
     private void getFeedRequest() {
@@ -60,8 +65,16 @@ public class FeedsFragment extends Fragment {
                         Gson gson = new Gson();
                         FeedResponse[] feedResponses = gson.fromJson(body, FeedResponse[].class);;
                         System.out.println("Number of feeds: " + feedResponses.length);
-                    } else {
 
+                        listOfFeeds.clear();
+                        for (int i = 0; i < feedResponses.length; ++i) {
+                            FeedFields feedFields = feedResponses[i].fields;
+                            /*
+                            listOfFeeds.add(new FeedInfo(
+                                    feedFields.
+                            ));
+                            */
+                        }
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -119,17 +132,12 @@ public class FeedsFragment extends Fragment {
             startActivity(intent);
         });
 
-
-
         Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
 
+        this.listOfFeeds = new ArrayList<>();
+        this.listOfFeeds.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
 
-        ArrayList<FeedInfo> feedList = new ArrayList<>();
-        feedList.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
-        feedList.add( new FeedInfo(2,"Mr. Bean",uri.toString(),"This is a very good food","15/10/2021"));
-
-
-        RecyclerFeedViewPagerAdapter adapter = new RecyclerFeedViewPagerAdapter(feedList, position -> {
+        RecyclerFeedViewPagerAdapter adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
             System.out.println("Clicked on " + position);
         });
 
