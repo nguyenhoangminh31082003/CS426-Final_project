@@ -110,8 +110,20 @@ public class FoodScanFragment extends MainPageFragment {
     }
 
     private void requestStoragePermissions() {
-        ActivityCompat.requestPermissions(this.requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        ActivityCompat.requestPermissions(this.requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        ActivityCompat.requestPermissions(
+                this.requireActivity(),
+                new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                },
+                1
+        );
+        ActivityCompat.requestPermissions(
+                this.requireActivity(),
+                new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                },
+                1
+        );
     }
 
     private void setUpCamera() {
@@ -156,7 +168,7 @@ public class FoodScanFragment extends MainPageFragment {
             outputStream.flush();
             outputStream.close();
 
-            } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
