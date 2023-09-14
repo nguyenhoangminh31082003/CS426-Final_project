@@ -5,8 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class ProfileDataModel(
     @SerializedName("full_name")
     var name: String,
-    @Transient
-    var email: String,
-    val avatar: String,
-    val bio : String,
+    var avatar: String,
+    var bio : String,
+    @SerializedName("avatar_base64")
+    var avatarBase64 : String,
+    @SerializedName("avatar_filename")
+    var avatarFilename : String,
 )

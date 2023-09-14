@@ -47,12 +47,12 @@
             android:layout_height="0dp"
             android:layout_weight="7">
 
-            <FrameLayout
-                android:id = "@+id/camera_control_part"
+            <androidx.fragment.app.FragmentContainerView
+                android:id = "@+id/fcvCamera"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </FrameLayout>
+            </androidx.fragment.app.FragmentContainerView>
 
         </LinearLayout>
 

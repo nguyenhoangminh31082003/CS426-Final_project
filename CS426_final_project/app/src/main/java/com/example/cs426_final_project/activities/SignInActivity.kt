@@ -18,6 +18,7 @@ import com.example.cs426_final_project.fragments.access.WelcomeFragment.WelcomeC
 import com.example.cs426_final_project.fragments.access.newInstance
 import com.example.cs426_final_project.models.data.LoginDataModel
 import com.example.cs426_final_project.models.data.ProfileDataModel
+import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import retrofit2.Retrofit
@@ -149,15 +150,14 @@ internal class SignInActivity : AppCompatActivity() {
     private fun processLoginRequest() {
         val usersApi = ApiUtilityClass.getApiClient(this).create(UsersApi::class.java)
         val call = usersApi.getLoggedProfile()
-        call.enqueue(object : retrofit2.Callback<ProfileDataModel> {
+        call.enqueue(object : retrofit2.Callback<ProfileResponse> {
             override fun onResponse(
-                call: retrofit2.Call<ProfileDataModel>,
-                response: retrofit2.Response<ProfileDataModel>
+                call: retrofit2.Call<ProfileResponse>,
+                response: retrofit2.Response<ProfileResponse>
             ) {
                 if (response.isSuccessful ) {
                     val profile = response.body()
                     if (profile != null) {
-
                         storeResponseProfile(profile)
                         onLogged()
                     }
@@ -168,22 +168,22 @@ internal class SignInActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<ProfileDataModel>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<ProfileResponse>, t: Throwable) {
                 println("failed to get profile")
             }
         })
     }
 
     @SuppressLint("ApplySharedPref")
-    private fun storeResponseProfile(profile: ProfileDataModel) {
+    private fun storeResponseProfile(profile: ProfileResponse) {
         val sharedPreferences = getSharedPreferences(
             USER_PREFERENCES_NAME,
             MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
         editor.putString("avatar", profile.avatar)
-        editor.putString("email", profile.email)
-        editor.putString("name", profile.name)
+        editor.putString("name", profile.fullName)
+        editor.putString("bio", profile.bio)
         editor.commit()
     }
 

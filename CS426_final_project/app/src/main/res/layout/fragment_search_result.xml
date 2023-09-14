@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
     tools:context=".fragments.search.SearchResultFragment">
-
-
+    
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

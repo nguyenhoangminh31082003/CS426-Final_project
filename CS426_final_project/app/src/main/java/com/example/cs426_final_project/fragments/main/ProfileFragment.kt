@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.ContextMenu
@@ -27,6 +28,7 @@ import com.example.cs426_final_project.R
 import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.models.data.ProfileDataModel
+import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 //import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
 import com.example.cs426_final_project.notifications.CustomDialog
@@ -45,7 +47,7 @@ import kotlin.math.abs
 class ProfileFragment : MainPageFragment() {
 
     private lateinit var profileFragmentContract: ProfileFragmentContract
-    private var profileDataModel  = ProfileDataModel("", "", "", "")
+    private var profileDataModel  = ProfileDataModel("", "", "", "", "")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startPickImageResult =
@@ -63,7 +65,7 @@ class ProfileFragment : MainPageFragment() {
                         ibAvatar.setImageBitmap(bitmap)
                         ImageUtilityClass.cropCenter(ibAvatar)
 
-                        storeImage(uri.toString())
+                        updateImageProfileDataModel(bitmap)
                     }
                 }
                 isChooseImage = false
@@ -78,6 +80,13 @@ class ProfileFragment : MainPageFragment() {
                 intent.type = "image/*"
                 startPickImageResult.launch(intent)
             }
+        }
+    }
+
+    private fun updateImageProfileDataModel(bitmap: Bitmap?) {
+        if (bitmap != null) {
+            profileDataModel.avatarBase64 = ImageUtilityClass.bitmapToBase64(bitmap)
+            profileDataModel.avatarFilename = profileDataModel.name + ".png"
         }
     }
 
@@ -194,16 +203,15 @@ class ProfileFragment : MainPageFragment() {
     private fun loadFromServer() {
         val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
         val call = usersApi.getLoggedProfile()
-        call.enqueue(object : retrofit2.Callback<ProfileDataModel> {
+        call.enqueue(object : retrofit2.Callback<ProfileResponse> {
             override fun onResponse(
-                call: retrofit2.Call<ProfileDataModel>,
-                response: retrofit2.Response<ProfileDataModel>
+                call: retrofit2.Call<ProfileResponse>,
+                response: retrofit2.Response<ProfileResponse>
             ) {
                 if (response.isSuccessful) {
                     println("loadFromServer: ${response.body()}")
                     val profile = response.body()
                     if (profile != null) {
-
                         syncData(profile)
                     }
                 } else {
@@ -212,23 +220,36 @@ class ProfileFragment : MainPageFragment() {
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<ProfileDataModel>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<ProfileResponse>, t: Throwable) {
                 print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })
 
     }
 
-    private fun syncData(profile: ProfileDataModel) {
-        etUsername.setText(profile.name)
-        currentEmail.value = profile.email
-        profileDataModel = profile
+    private fun syncData(profile: ProfileResponse) {
+        etUsername.setText(profile.fullName)
+        currentEmail.value = ""
+        profileDataModel.name = profile.fullName
+        val url = profile.avatar
+        profileDataModel.bio = profile.bio
+        profileDataModel.avatar = url
+        // use regex to get the last part of the url avatar
+        val regex = Regex("([^/]+$)")
+        val match = regex.find(url)
+        if (match != null) {
+            profileDataModel.avatarFilename = match.value
+            profileDataModel.avatarBase64 = ImageUtilityClass.loadBase64FromUrl(url).toString()
+        }
         // debug
     }
 
     // when pause or stop, we store the data
     override fun onPause() {
         super.onPause()
+        if(isChooseImage) {
+            return
+        }
         storeData()
     }
 
@@ -239,7 +260,7 @@ class ProfileFragment : MainPageFragment() {
     private fun storeToServer() {
 
         profileDataModel.name = etUsername.text.toString()
-
+        profileDataModel.avatarFilename = profileDataModel.name + ".png"
 
         val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
         val call = usersApi.updateProfile(profileDataModel)
@@ -248,7 +269,7 @@ class ProfileFragment : MainPageFragment() {
                 call: retrofit2.Call<StatusResponse>,
                 response: retrofit2.Response<StatusResponse>
             ) {
-                if (response.isSuccessful ) {
+                if (response.isSuccessful) {
                     println("storeToServer: ${response.body()}")
                 } else {
                     ApiUtilityClass.debug(response)
@@ -369,10 +390,6 @@ class ProfileFragment : MainPageFragment() {
 
     }
 
-
-    private fun storeImage(avatar: String) {
-
-    }
 
     companion object {
         @JvmStatic

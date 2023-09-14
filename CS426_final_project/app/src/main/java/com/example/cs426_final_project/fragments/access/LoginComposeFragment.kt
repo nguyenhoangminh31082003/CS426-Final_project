@@ -64,8 +64,7 @@ class LoginComposeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         fetchSavedValue()
-
-        print("onResume: ${mutableStateUsername.value}, ${mutableStatePassword.value}")
+        println("onResume: ${mutableStateUsername.value}, ${mutableStatePassword.value}")
 
 
     }

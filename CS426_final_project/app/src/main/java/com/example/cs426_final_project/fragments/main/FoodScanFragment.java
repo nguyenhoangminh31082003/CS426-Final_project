@@ -134,9 +134,12 @@ public class FoodScanFragment extends MainPageFragment {
 
         cameraFragment.setCameraContract(this::onImageCaptured);
 
-        this.requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.camera_control_part, cameraFragment)
+        // add fragment to fcvCamera
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fcvCamera, cameraFragment)
                 .commit();
+
     }
 
     private Uri saveImage(Uri images, ContentValues contentValues, Bitmap bitmap) throws IOException {

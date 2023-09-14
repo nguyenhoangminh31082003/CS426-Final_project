@@ -8,9 +8,14 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Shader
+import android.util.Base64
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Transformation
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.net.URL
+
 
 class ImageUtilityClass {
 
@@ -102,5 +107,23 @@ class ImageUtilityClass {
                  .into(imageView)
         }
 
+        fun bitmapToBase64(bitmap: Bitmap): String {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        }
+
+        fun loadBase64FromUrl(url: String): String? {
+//            try {
+//                val url = URL(url)
+//                val image = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+//                return bitmapToBase64(image)
+//            } catch (e: IOException) {
+//                println(e)
+//            }
+            return null
+        }
     }
 }
+

@@ -6,6 +6,7 @@ import com.example.cs426_final_project.models.data.LoginDataModel
 import com.example.cs426_final_project.models.data.ProfileDataModel
 import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.data.UserDataModel
+import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -26,7 +27,7 @@ interface UsersApi {
     ): Call<RegisterResponse>
 
     @GET("users/profile")
-    fun getLoggedProfile(): Call<ProfileDataModel>
+    fun getLoggedProfile(): Call<ProfileResponse>
 
     @PUT("users/profile")
     fun updateProfile(
