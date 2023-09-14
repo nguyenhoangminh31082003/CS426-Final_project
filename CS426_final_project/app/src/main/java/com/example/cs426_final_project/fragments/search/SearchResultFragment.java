@@ -25,7 +25,6 @@ import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,20 +35,24 @@ public class SearchResultFragment extends Fragment {
     private SearchResultFoodsAdapter adapter;
     private SearchQueryDataModel searchQueryDataModel;
 
+    private WaitingFragment waitingFragment;
+
     private void showWaitingFragment() {
+        if(waitingFragment == null)
+            waitingFragment = new WaitingFragment();
         requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fcvWaitingSearchResult, new WaitingFragment())
+                .add(R.id.fcvWaitingSearchResult, waitingFragment)
                 .commit();
     }
 
     private void hideWaitingFragment() {
         requireActivity().getSupportFragmentManager().beginTransaction()
-                .remove(Objects.requireNonNull(requireActivity().getSupportFragmentManager().findFragmentById(R.id.fcvWaitingSearchResult)))
+                .replace(R.id.fcvWaitingSearchResult, new Fragment())
                 .commit();
     }
 
 
-    private void setUpListOfFoods(@NonNull View view) {
+    private void setUpTestingListOfFoods(@NonNull View view) {
         RecyclerView viewOfListOfFoods = view.findViewById(R.id.list_of_foods_in_search_result);
 
         this.adapter = new SearchResultFoodsAdapter();
@@ -69,9 +72,11 @@ public class SearchResultFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //TextView tvNoResult = view.findViewById(R.id.tvNoResult);
         //tvNoResult.setText(String.format("No result for %s", searchQuery));
-        this.setUpListOfFoods(view);
+        this.setUpTestingListOfFoods(view);
         this.enableChoosingSortMode(view);
         this.showSearchResult();
+
+        this.waitingFragment = new WaitingFragment();
     }
 
     private void showSearchResult() {
@@ -81,6 +86,7 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        showWaitingFragment();
         TextView sortModeView = requireView().findViewById(R.id.sort_mode_in_search_result);
         sortModeView.setText((new SortModeData(requireActivity())).getReadableMode());
         this.showSearchResult();
@@ -97,7 +103,6 @@ public class SearchResultFragment extends Fragment {
     }
 
     private void callApiSearchResult(SearchQueryDataModel searchQueryDataModel) {
-        showWaitingFragment();
         SearchApi searchApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(SearchApi.class);
         Call<SearchQueryResponse> call = searchApi.searchFood(
                 searchQueryDataModel.getQuery(),
@@ -113,7 +118,9 @@ public class SearchResultFragment extends Fragment {
                 if(response.isSuccessful()) {
                     SearchQueryResponse foodDataModels = response.body();
                     if (foodDataModels != null) {
-                        showSuggestions(foodDataModels.getResults());
+//                        showSuggestions(foodDataModels.getResults());
+
+                        // show suggestions
                     }
                     hideWaitingFragment();
                 } else {

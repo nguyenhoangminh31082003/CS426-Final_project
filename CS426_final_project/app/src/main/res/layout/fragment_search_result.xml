@@ -9,12 +9,6 @@
     tools:context=".fragments.search.SearchResultFragment">
 
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcvWaitingSearchResult"
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -52,5 +46,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
     </androidx.recyclerview.widget.RecyclerView>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcvWaitingSearchResult"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
