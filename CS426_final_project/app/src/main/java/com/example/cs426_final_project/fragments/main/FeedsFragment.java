@@ -36,7 +36,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FeedsFragment extends Fragment {
 
+    private ViewPager2 vpFeed;
     private ArrayList<FeedInfo> listOfFeeds;
+    private RecyclerFeedViewPagerAdapter adapter;
 
     public FeedsFragment() {
         this.listOfFeeds = null;
@@ -131,6 +133,27 @@ public class FeedsFragment extends Fragment {
         });
     }
 
+    private void resetFeedsToDefault() {
+        Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
+        this.listOfFeeds = new ArrayList<>();
+        this.listOfFeeds.add(
+                new FeedInfo(
+                        1,
+                        "Mr. Bean",
+                        uri.toString(),
+                        "This is a very good food",
+                        "10/10/2021"
+                )
+        );
+        this.vpFeed.setAdapter(null);
+
+        this.adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
+            System.out.println("Clicked on " + position);
+        });
+
+        this.vpFeed.setAdapter(this.adapter);
+    }
+
     public OnFeedsFragmentListener listener;
 
     @Nullable
@@ -151,6 +174,9 @@ public class FeedsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ImageButton ibToScan = view.findViewById(R.id.ibToScan);
+
+        this.vpFeed = view.findViewById(R.id.vpFeed);
+
         ibToScan.setOnClickListener(v -> {
             if (listener != null)
                 listener.onRequestToScanFood();
@@ -171,22 +197,6 @@ public class FeedsFragment extends Fragment {
             startActivity(intent);
         });
 
-        Uri uri = Uri.parse("android.resource://com.example.cs426_final_project/drawable/food_comment_page_demo_food_image");
-
-        this.getFeedRequest();
-
-        if (this.listOfFeeds == null || this.listOfFeeds.size() == 1) {
-            this.listOfFeeds = new ArrayList<>();
-            this.listOfFeeds.add( new FeedInfo(1,"Ms. Bean",uri.toString(),"This is a very good food","10/10/2021"));
-        }
-
-        RecyclerFeedViewPagerAdapter adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
-            System.out.println("Clicked on " + position);
-        });
-
-        ViewPager2 vpFeed = view.findViewById(R.id.vpFeed);
-        vpFeed.setAdapter(adapter);
-
-
+        this.resetFeedsToDefault();
     }
 }
