@@ -85,6 +85,7 @@ public class FeedsFragment extends Fragment {
                             ));
 
                             System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
+                            System.out.println("Image link: " + listOfFeeds.get(i).getFeedImageUri());
                         }
 
                         adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
