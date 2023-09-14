@@ -1,6 +1,6 @@
-package com.example.cs426_final_project.models.posts
+package com.example.cs426_final_project.models.response
 
-data class CreatePostRequest(
+data class CreatePostResponse(
     var title: String,
     var body: String,
     var rating: Int,

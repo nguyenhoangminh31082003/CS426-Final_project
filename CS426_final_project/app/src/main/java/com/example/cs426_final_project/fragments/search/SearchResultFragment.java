@@ -18,6 +18,8 @@ import com.example.cs426_final_project.adapters.SearchResultFoodsAdapter;
 import com.example.cs426_final_project.SortModeData;
 import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 
+import java.util.Objects;
+
 public class SearchResultFragment extends Fragment {
 
     private SearchResultFoodsAdapter adapter;
@@ -25,6 +27,8 @@ public class SearchResultFragment extends Fragment {
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery = searchQuery;
+
+
     }
 
     private void setUpListOfFoods(@NonNull View view) {
@@ -54,7 +58,7 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        TextView sortModeView = getView().findViewById(R.id.sort_mode_in_search_result);
+        TextView sortModeView = requireView().findViewById(R.id.sort_mode_in_search_result);
         sortModeView.setText((new SortModeData(requireActivity())).getReadableMode());
     }
 
@@ -62,12 +66,9 @@ public class SearchResultFragment extends Fragment {
         TextView sortModeView = view.findViewById(R.id.sort_mode_in_search_result);
 
         sortModeView.setText((new SortModeData(requireActivity())).getModeAsString());
-        sortModeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(requireActivity(), ChoosingSortModeActivity.class);
-                startActivity(intent);
-            }
+        sortModeView.setOnClickListener(view1 -> {
+            Intent intent = new Intent(requireActivity(), ChoosingSortModeActivity.class);
+            startActivity(intent);
         });
 
     }

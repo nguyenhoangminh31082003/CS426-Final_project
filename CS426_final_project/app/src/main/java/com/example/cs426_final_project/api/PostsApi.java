@@ -1,7 +1,7 @@
 package com.example.cs426_final_project.api;
 
 import com.example.cs426_final_project.models.posts.CreatePostRequest;
-import com.example.cs426_final_project.models.posts.CreatePostResponse;
+import com.example.cs426_final_project.models.posts.StatusResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -10,7 +10,7 @@ import retrofit2.http.POST;
 public interface PostsApi {
 
     @POST("posts/")
-    public Call<CreatePostResponse> createPost(
+    Call<StatusResponse> createPost(
         @Body CreatePostRequest request
     );
 
