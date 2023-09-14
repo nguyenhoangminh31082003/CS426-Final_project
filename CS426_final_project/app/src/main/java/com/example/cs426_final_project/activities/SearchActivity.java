@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -15,23 +13,25 @@ import android.widget.ImageView;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.api.SearchApi;
 import com.example.cs426_final_project.fragments.search.SearchResultFragment;
+import com.example.cs426_final_project.fragments.search.SearchSuggestionFragment;
 import com.example.cs426_final_project.fragments.search.TrendingFoodFragment;
-import com.example.cs426_final_project.models.data.FoodDataModel;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
+import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class SearchActivity extends AppCompatActivity {
     private androidx.appcompat.widget.SearchView sevSearch;
     private SearchQueryDataModel searchQueryDataModel;
     TrendingFoodFragment trendingFoodFragment;
+    SearchSuggestionFragment searchSuggestionFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +63,18 @@ public class SearchActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private void showSuggestions(List<SearchResultFields> results){
+        List<String> suggestions = new ArrayList<>();
+        for (SearchResultFields result : results) {
+            suggestions.add(result.getFields().getName());
+        }
+        searchSuggestionFragment = SearchSuggestionFragment.Companion.newInstance(suggestions);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fcvSearch, searchSuggestionFragment)
+                .commit();
+    }
+
 
     private void initSearchView() {
         sevSearch = this.findViewById(R.id.sevSearch);
@@ -73,11 +85,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // show search result fragment
-                searchResultFragment.setSearchQuery(sevSearch.getQuery().toString());
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fcvSearch, searchResultFragment)
                         .addToBackStack(null)
                         .commit();
+
+                searchResultFragment.setSearchQueryDataModel(searchQueryDataModel);
 
                 return false;
             }
@@ -87,46 +100,15 @@ public class SearchActivity extends AppCompatActivity {
                 if(newText.isEmpty())
                     showTrendingFood();
                 else {
+                    // show suggestion fragment
                     searchQueryDataModel.setQuery(newText);
-                    callApiSuggestions(searchQueryDataModel);
                 }
                 return false;
             }
         });
     }
 
-    private void callApiSuggestions(SearchQueryDataModel searchQueryDataModel) {
-        SearchApi searchApi = ApiUtilityClass.Companion.getApiClient(this).create(SearchApi.class);
-        Call<SearchQueryResponse> call = searchApi.searchFood(
-            searchQueryDataModel.getQuery(),
-            searchQueryDataModel.getLimit(),
-            searchQueryDataModel.getOffset(),
-            searchQueryDataModel.getLat(),
-            searchQueryDataModel.getLong(),
-            searchQueryDataModel.getDis()
-        );
-        call.enqueue(new Callback<SearchQueryResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<SearchQueryResponse> call, @NonNull Response<SearchQueryResponse> response) {
-                if(response.isSuccessful()) {
-                    SearchQueryResponse foodDataModels = response.body();
-//                    trendingFoodFragment.setSuggestions(foodDataModels);
-                    // debug here
-                    System.out.println("foodDataModels: " + foodDataModels);
-                    throw new RuntimeException("foodDataModels: " + foodDataModels);
-                } else {
-                    System.err.println("Something is not ok? Please check quick");
-                    ApiUtilityClass.Companion.debug(response);
-                }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<SearchQueryResponse> call, @NonNull Throwable t) {
-                System.out.println("OMG");
-                System.out.println(t.getMessage());
-            }
-        });
-    }
 
     private void initBackButton() {
         AppCompatImageView btnSearchBack = this.findViewById(R.id.acivSearchBack);
