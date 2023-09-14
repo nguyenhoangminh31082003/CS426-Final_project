@@ -72,16 +72,15 @@ public class FoodCommentActivity extends AppCompatActivity {
                 getImageBase64()
         )).enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(Call<StatusResponse> call, Response<StatusResponse> response) {
+            public void onResponse(@NonNull Call<StatusResponse> call, @NonNull Response<StatusResponse> response) {
                 if(response.isSuccessful()) {
                     System.out.println("response: " + response.body());
                 } else {
                     System.out.println("response: " + response.errorBody());
                 }
             }
-
             @Override
-            public void onFailure(Call<StatusResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<StatusResponse> call, @NonNull Throwable t) {
                 System.out.println("response: " + t.getMessage());
             }
         });

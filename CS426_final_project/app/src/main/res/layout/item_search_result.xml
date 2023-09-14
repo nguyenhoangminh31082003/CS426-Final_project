@@ -18,7 +18,7 @@
 
         <ImageView
             android:src = "@drawable/review_page_default_food_image"
-            android:id = "@+id/demo_image_of_food"
+            android:id = "@+id/ivSearchResultFoodPreview"
             android:layout_width="wrap_content"
             android:scaleType="fitXY"
             android:foreground="@drawable/clipping_image_mask"
@@ -27,7 +27,7 @@
 
         <TextView
             android:layout_marginTop="8dp"
-            android:id = "@+id/food_name"
+            android:id = "@+id/txtSearchResultFoodName"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textSize="14sp"
@@ -43,7 +43,7 @@
         </TextView>
 
         <TextView
-            android:id = "@+id/a_random_food_review"
+            android:id = "@+id/txtSearchResultReview"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textSize="12sp"

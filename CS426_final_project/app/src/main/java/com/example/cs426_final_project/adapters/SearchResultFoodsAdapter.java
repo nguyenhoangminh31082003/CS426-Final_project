@@ -1,6 +1,6 @@
 package com.example.cs426_final_project.adapters;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,49 +12,67 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs426_final_project.ConceptualListOfFoodsInSearchResult;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
+
+import java.util.List;
 
 public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultFoodsAdapter.ViewHolder> {
 
     private ConceptualListOfFoodsInSearchResult listOfFoods;
 
+    private List<SearchResultFields> searchResultFieldsList;
+
     public SearchResultFoodsAdapter() {
         this.listOfFoods = new ConceptualListOfFoodsInSearchResult();
+    }
+
+    public SearchResultFoodsAdapter(List<SearchResultFields> results) {
+        this.searchResultFieldsList = results;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, final int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-
-        View view = inflater.inflate(R.layout.layout_of_food_in_search_result, parent, false);
-
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_result, parent, false);
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.foodName.setText(this.listOfFoods.getFoodName(position));
-        holder.aRandomReview.setText(this.listOfFoods.getARandomReview(position));
-        ImageUtilityClass.Companion.cropCenter(holder.foodDemoImage);
+
+        if(this.searchResultFieldsList != null) {
+            SearchResultFields searchResultFields = this.searchResultFieldsList.get(position);
+
+            holder.txtSearchResultFoodName.setText(searchResultFields.getFields().getName());
+            holder.txtSearchResultReview.setText("Try to be the first one to review");
+            ImageUtilityClass.Companion.cropCenter(holder.ivSearchResultFoodPreview);
+            return;
+        }
+
+        holder.txtSearchResultFoodName.setText(this.listOfFoods.getFoodName(position));
+        holder.txtSearchResultReview.setText(this.listOfFoods.getARandomReview(position));
+        ImageUtilityClass.Companion.cropCenter(holder.ivSearchResultFoodPreview);
     }
 
     @Override
     public int getItemCount() {
+        if(this.searchResultFieldsList != null)
+            return this.searchResultFieldsList.size();
+
         return this.listOfFoods.getSize();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public ImageView foodDemoImage;
-        public TextView foodName, aRandomReview;
+        public ImageView ivSearchResultFoodPreview;
+        public TextView txtSearchResultFoodName, txtSearchResultReview;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.foodDemoImage = itemView.findViewById(R.id.demo_image_of_food);
-            this.foodName = itemView.findViewById(R.id.food_name);
-            this.aRandomReview = itemView.findViewById(R.id.a_random_food_review);
+            this.ivSearchResultFoodPreview = itemView.findViewById(R.id.ivSearchResultFoodPreview);
+            this.txtSearchResultFoodName = itemView.findViewById(R.id.txtSearchResultFoodName);
+            this.txtSearchResultReview = itemView.findViewById(R.id.txtSearchResultReview);
         }
 
     }
