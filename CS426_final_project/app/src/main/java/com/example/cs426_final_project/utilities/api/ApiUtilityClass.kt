@@ -17,7 +17,7 @@ class ApiUtilityClass {
 
     companion object {
 
-        private const val BASE_URL = "https://64fe-137-132-26-47.ngrok-free.app"
+        private const val BASE_URL = "https://72eb-137-132-26-47.ngrok-free.app"
         fun parseError(errorBody: ResponseBody?) : StatusResponse {
             val gson = Gson()
             val type = object : TypeToken<StatusResponse>() {}.type

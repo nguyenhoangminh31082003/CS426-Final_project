@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 public class FeedFields {
     @SerializedName("user")
     public int userId = -1;
+    @SerializedName("username")
+    public String username = "";
     @SerializedName("title")
     public String title = "";
     @SerializedName("body")

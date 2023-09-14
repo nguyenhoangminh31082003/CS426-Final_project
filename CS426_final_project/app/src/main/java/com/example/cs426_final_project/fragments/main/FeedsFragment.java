@@ -48,41 +48,11 @@ public class FeedsFragment extends Fragment {
         void onRequestToScanFood();
     }
 
-    private String getUserName(final int userID) {
-        UsersApi usersApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(UsersApi.class);
-        Call<UserDataModel> call = usersApi.getUser(userID);
-        final String[] result = {null};
-
-        call.enqueue(new Callback<UserDataModel>() {
-            @Override
-            public void onResponse(
-                    Call<UserDataModel> call,
-                    Response<UserDataModel> response
-            ) {
-                if (response.isSuccessful()) {
-                    UserDataModel body = response.body();
-                    if (body != null)
-                        result[0] = body.full_name;
-                } else {
-                    ApiUtilityClass.Companion.debug(response);
-                }
-            }
-
-            @Override
-            public void onFailure(
-                    Call<UserDataModel> call,
-                    Throwable t
-            ) {
-                System.err.println("Can not get information of user!!!");
-            }
-        });
-
-        return result[0];
-    }
-
     @Override
     public void onResume() {
         super.onResume();
+
+        this.getFeedRequest();
     }
 
     private void getFeedRequest() {
@@ -108,7 +78,7 @@ public class FeedsFragment extends Fragment {
 
                             listOfFeeds.add(new FeedInfo(
                                 feedResponses[i].id,
-                                getUserName(feedFields.userId),
+                                feedFields.username,
                                 feedFields.imageLink,
                                 feedFields.body,
                                 feedFields.createAt
@@ -116,6 +86,12 @@ public class FeedsFragment extends Fragment {
 
                             System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
                         }
+
+                        adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
+                            System.out.println("Clicked on " + position);
+                        });
+
+                        vpFeed.setAdapter(adapter);
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -163,7 +139,11 @@ public class FeedsFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        return inflater.inflate(
+                R.layout.fragment_feed,
+                container,
+                false
+        );
     }
 
     @Override
@@ -198,5 +178,7 @@ public class FeedsFragment extends Fragment {
         });
 
         this.resetFeedsToDefault();
+
+        this.getFeedRequest();
     }
 }
