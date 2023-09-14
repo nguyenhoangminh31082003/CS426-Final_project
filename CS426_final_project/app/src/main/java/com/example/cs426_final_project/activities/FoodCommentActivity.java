@@ -74,7 +74,7 @@ public class FoodCommentActivity extends AppCompatActivity {
                 Helper.getRandomIntegerInRange(1, 5),
                 Helper.getRandomStringOfAlphabets(12),
                 this.getImageBase64(),
-                Helper.getRandomIntegerInRange(0, 31082003)
+                Helper.getRandomIntegerInRange(1, 310823)
         )).enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(

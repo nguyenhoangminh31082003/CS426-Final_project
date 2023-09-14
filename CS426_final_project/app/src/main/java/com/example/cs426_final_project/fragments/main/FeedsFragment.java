@@ -55,6 +55,10 @@ public class FeedsFragment extends Fragment {
         this.getFeedRequest();
     }
 
+    private String getDateWithDefaultFormat(final String dateFromServer) {
+        return dateFromServer.substring(8, 10) + "/" + dateFromServer.substring(5, 7) + "/" + dateFromServer.substring(0, 4);
+    }
+
     private void getFeedRequest() {
         FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
         Call<String> call = feedApi.getTimelineFeeds();
@@ -81,11 +85,11 @@ public class FeedsFragment extends Fragment {
                                 feedFields.username,
                                 feedFields.imageLink,
                                 feedFields.body,
-                                feedFields.createAt
+                                getDateWithDefaultFormat(feedFields.createAt)
                             ));
 
-                            System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
-                            System.out.println("Image link: " + listOfFeeds.get(i).getFeedImageUri());
+                            //System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
+                            //System.out.println("Image link: " + listOfFeeds.get(i).getFeedImageUri());
                         }
 
                         adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
