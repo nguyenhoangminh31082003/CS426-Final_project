@@ -77,15 +77,14 @@ public class FeedsFragment extends Fragment {
                         System.out.println("Number of feeds: " + feedResponses.length);
 
                         listOfFeeds.clear();
-                        for (int i = 0; i < feedResponses.length; ++i) {
-                            FeedFields feedFields = feedResponses[i].fields;
-
+                        for (FeedResponse feedResponse : feedResponses) {
+                            FeedFields feedFields = feedResponse.fields;
                             listOfFeeds.add(new FeedInfo(
-                                feedResponses[i].id,
-                                feedFields.username,
-                                feedFields.imageLink,
-                                feedFields.body,
-                                getDateWithDefaultFormat(feedFields.createAt)
+                                    feedResponse.id,
+                                    feedFields.username,
+                                    feedFields.imageLink,
+                                    feedFields.body,
+                                    getDateWithDefaultFormat(feedFields.createAt)
                             ));
 
                             //System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());

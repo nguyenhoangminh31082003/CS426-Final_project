@@ -64,7 +64,7 @@ class RecyclerFeedViewPagerAdapter(
         }
             // convert string to uri
         if (feedInfo.feedImageUri.startsWith("http")) {
-            ImageUtilityClass.Companion.loadImageFromUrl(holder.ivPreviewImageFeed, feedInfo.feedImageUri)
+            ImageUtilityClass.Companion.loadBase64FromUrl(holder.ivPreviewImageFeed, feedInfo.feedImageUri)
         } else {
             val uri: Uri = Uri.parse(feedInfo.feedImageUri)
             //println("This is URI: $uri")

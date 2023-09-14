@@ -4,12 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import android.Manifest;
 
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
@@ -28,6 +35,12 @@ import com.example.cs426_final_project.models.response.FoodResponse;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -40,12 +53,28 @@ import retrofit2.Response;
 public class SearchActivity extends AppCompatActivity {
     private androidx.appcompat.widget.SearchView sevSearch;
     private SearchQueryDataModel searchQueryDataModel;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
     TrendingFoodFragment trendingFoodFragment;
     SearchSuggestionFragment searchSuggestionFragment;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_search);
+
+
+        // ask for ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION permissions
+
+
+        trackUserLastLocation();
+
         this.setSearchView();
 
         this.searchQueryDataModel = new SearchQueryDataModel();
@@ -59,6 +88,41 @@ public class SearchActivity extends AppCompatActivity {
         if (extras != null)
             this.queryFoodNameWithGivenID(extras.getInt("food_id"));
     }
+
+    private void trackUserLastLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                Location lastLocation = locationResult.getLastLocation();
+                searchQueryDataModel.setLat(lastLocation.getLatitude());
+                searchQueryDataModel.setLong(lastLocation.getLongitude());
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationRequest locationRequest = new LocationRequest.Builder(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                60 * 1000
+        ).build();
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+
+        // use onMapReady() to get location
+
+    }
+
+
 
     private void queryFoodNameWithGivenID(final int id) {
         FoodApi foodApi = ApiUtilityClass.Companion.getApiClient(this).create(FoodApi.class);;

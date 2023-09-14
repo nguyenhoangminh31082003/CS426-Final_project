@@ -14,7 +14,6 @@ import com.example.cs426_final_project.ConceptualListOfFoodsInSearchResult;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.models.data.ReviewDataModel;
 import com.example.cs426_final_project.models.response.FoodSearchResultResponse;
-import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
 
 import java.util.List;
@@ -48,7 +47,7 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
             FoodSearchResultResponse foodSearchResultResponse = this.searchResultFieldsList.get(position);
             String url = foodSearchResultResponse.getFood().getImageLink();
             // load image from url
-            ImageUtilityClass.Companion.loadImageFromUrl(holder.ivSearchResultFoodPreview, url);
+            ImageUtilityClass.Companion.loadBase64FromUrl(holder.ivSearchResultFoodPreview, url);
             holder.txtSearchResultFoodName.setText(foodSearchResultResponse.getFood().getName());
 
             ReviewDataModel review = foodSearchResultResponse.getReview();

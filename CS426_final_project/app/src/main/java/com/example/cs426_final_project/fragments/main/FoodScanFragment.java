@@ -101,7 +101,7 @@ public class FoodScanFragment extends MainPageFragment {
         else
             System.err.println("NOT OK!!!, CAMERA HARDWARE!!!");
 
-        requestStoragePermissions();
+//        requestStoragePermissions();
 
         setUpCamera();
 

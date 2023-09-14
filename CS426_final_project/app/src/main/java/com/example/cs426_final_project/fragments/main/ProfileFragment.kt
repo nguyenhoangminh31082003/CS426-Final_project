@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,9 +38,6 @@ import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cro
 import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropSquareBitmap
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.math.abs
 
 class ProfileFragment : MainPageFragment() {
@@ -115,11 +111,12 @@ class ProfileFragment : MainPageFragment() {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var profilePreferences: SharedPreferences
 
+    private lateinit var currentProfile : ProfileResponse
 
-    override fun onResume() {
-        super.onResume()
 
-        loadFromServer()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        loadFromServer(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,7 +133,7 @@ class ProfileFragment : MainPageFragment() {
         ibClose = view.findViewById(R.id.ibClose)
         btnAddWidget = view.findViewById(R.id.btnAddWidget)
         btnLogout = view.findViewById(R.id.btnLogout)
-        loadFromServer()
+//        loadFromServer()
 
 //        composeView = view.findViewById(R.id.comvProfile)
 //
@@ -200,7 +197,7 @@ class ProfileFragment : MainPageFragment() {
         }
     }
 
-    private fun loadFromServer() {
+    private fun loadFromServer(context: Context) {
         val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
         val call = usersApi.getLoggedProfile()
         call.enqueue(object : retrofit2.Callback<ProfileResponse> {
@@ -212,7 +209,8 @@ class ProfileFragment : MainPageFragment() {
                     println("loadFromServer: ${response.body()}")
                     val profile = response.body()
                     if (profile != null) {
-                        syncData(profile)
+                        currentProfile = profile
+                        syncData(context, profile)
                     }
                 } else {
                     ApiUtilityClass.debug(response)
@@ -227,7 +225,7 @@ class ProfileFragment : MainPageFragment() {
 
     }
 
-    private fun syncData(profile: ProfileResponse) {
+    private fun syncData(context: Context, profile: ProfileResponse) {
         etUsername.setText(profile.fullName)
         currentEmail.value = ""
         profileDataModel.name = profile.fullName
@@ -239,9 +237,12 @@ class ProfileFragment : MainPageFragment() {
         val match = regex.find(url)
         if (match != null) {
             profileDataModel.avatarFilename = match.value
-            profileDataModel.avatarBase64 = ImageUtilityClass.loadBase64FromUrl(url).toString()
+            ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
+                val bitmap = it
+                profileDataModel.avatarBase64 = ImageUtilityClass.bitmapToBase64(bitmap)
+                ibAvatar.setImageBitmap(bitmap)
+            })
         }
-        // debug
     }
 
     // when pause or stop, we store the data
@@ -318,7 +319,6 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun initChangeEmail() {
-
 
 //        btnChangeEmail.setOnClickListener {
 //            showDialog.value = true
