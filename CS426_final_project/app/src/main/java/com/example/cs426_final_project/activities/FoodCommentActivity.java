@@ -20,11 +20,12 @@ import android.widget.LinearLayout;
 
 import com.example.cs426_final_project.Helper;
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.api.PostsApi;
 import com.example.cs426_final_project.fragments.SurveyDetailFragment;
+import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.posts.CreatePostRequest;
 import com.example.cs426_final_project.models.posts.StatusResponse;
-import com.example.cs426_final_project.models.response.CreatePostResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.android.material.button.MaterialButton;
@@ -40,6 +41,8 @@ public class FoodCommentActivity extends AppCompatActivity {
 
     private EditText etFoodComment;
     private Button btnFoodCommentDone;
+
+    private EditText foodNameText;
     FragmentContainerView fcvSurvey;
     SurveyDetailFragment surveyDetailFragment;
     ImageView ivPreviewImage;
@@ -48,6 +51,7 @@ public class FoodCommentActivity extends AppCompatActivity {
     MaterialButton mbAddInfo;
 
     private void enableComment(final boolean enable) {
+        this.foodNameText.setEnabled(enable);
         this.etFoodComment.setEnabled(enable);
         this.btnFoodCommentDone.setEnabled(enable);
         this.llFoodComment.setVisibility(enable ? LinearLayout.VISIBLE : LinearLayout.GONE);
@@ -65,23 +69,31 @@ public class FoodCommentActivity extends AppCompatActivity {
     private void sendPost() {
         PostsApi postsApi = ApiUtilityClass.Companion.getApiClient(this).create(PostsApi.class);
         postsApi.createPost(new CreatePostRequest(
-                Helper.getRandomStringOfAlphabets(12),
-                Helper.getRandomStringOfAlphabets(12),
+                this.foodNameText.getText().toString(),
+                this.etFoodComment.getText().toString(),
                 Helper.getRandomIntegerInRange(1, 5),
                 Helper.getRandomStringOfAlphabets(12),
-                getImageBase64()
+                this.getImageBase64(),
+                Helper.getRandomIntegerInRange(1, 310823)
         )).enqueue(new Callback<StatusResponse>() {
             @Override
-            public void onResponse(@NonNull Call<StatusResponse> call, @NonNull Response<StatusResponse> response) {
-                if(response.isSuccessful()) {
-                    System.out.println("response: " + response.body());
+            public void onResponse(
+                    Call<StatusResponse> call,
+                    Response<StatusResponse> response) {
+                if (response.isSuccessful()) {
+                    System.out.println("Send successfully");
                 } else {
-                    System.out.println("response: " + response.errorBody());
+                    System.err.println("Something is not ok? Please check quick");
+                    ApiUtilityClass.Companion.debug(response);
                 }
             }
+
             @Override
-            public void onFailure(@NonNull Call<StatusResponse> call, @NonNull Throwable t) {
-                System.out.println("response: " + t.getMessage());
+            public void onFailure(
+                    Call<StatusResponse> call,
+                    Throwable t
+            ) {
+                System.err.println("OMG");
             }
         });
     }
@@ -91,34 +103,35 @@ public class FoodCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.fragment_food_comment);
 
-        this.mbAddInfo = findViewById(R.id.mbAddInfo);
+        this.mbAddInfo = this.findViewById(R.id.mbAddInfo);
         this.mbAddInfo.setOnClickListener(v -> {
             surveyLocation();
         });
 
-        this.ibToScan = findViewById(R.id.ibToScan);
+        this.ibToScan = this.findViewById(R.id.ibToScan);
         this.ibToScan.setOnClickListener(v -> finish());
 
-        this.llFoodComment = findViewById(R.id.llFoodComment);
+        this.foodNameText = this.findViewById(R.id.food_comment_food_name);
 
-        this.ivPreviewImage = findViewById(R.id.ivPreviewImage);
+        this.llFoodComment = this.findViewById(R.id.llFoodComment);
 
-        this.etFoodComment = findViewById(R.id.etFoodComment);
-        this.btnFoodCommentDone = findViewById(R.id.btnFoodCommentDone);
+        this.ivPreviewImage = this.findViewById(R.id.ivPreviewImage);
+
+        this.etFoodComment = this.findViewById(R.id.etFoodComment);
+        this.btnFoodCommentDone = this.findViewById(R.id.btnFoodCommentDone);
 
         this.btnFoodCommentDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendPost();
+                finish();
             }
         });
 
-        Intent intent = getIntent();
+        this.showPreviewImage(getIntent());
 
-        showPreviewImage(intent);
-
-        fcvSurvey = findViewById(R.id.fcvSurvey);
-        surveyLocation();
+        this.fcvSurvey = this.findViewById(R.id.fcvSurvey);
+        this.surveyLocation();
         testBitmap();
     }
 
@@ -129,7 +142,7 @@ public class FoodCommentActivity extends AppCompatActivity {
 
     private void surveyLocation() {
         this.enableComment(false);
-        doSurvey("The tag of the location", new SurveyDetailFragment.SurveyDetailFragmentListener() {
+        this.doSurvey("The tag of the location", new SurveyDetailFragment.SurveyDetailFragmentListener() {
             @Override
             public void onClose() {
                 getSupportFragmentManager().beginTransaction()
@@ -147,10 +160,9 @@ public class FoodCommentActivity extends AppCompatActivity {
     }
 
     private void doSurvey(
-            String question,
+            final String question,
             SurveyDetailFragment.SurveyDetailFragmentListener listener
     ) {
-
 
         surveyDetailFragment = new SurveyDetailFragment();
 
@@ -161,7 +173,9 @@ public class FoodCommentActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void showPreviewImage(Intent intent) {
+    private void showPreviewImage(
+            Intent intent
+    ) {
         Uri previewImageUri = Uri.parse(intent.getStringExtra("imageUri"));
 //        Bitmap previewImageBitmap = BitmapFactory.decodeFile(previewImageUri.getPath());
         // print width and height of bitmap

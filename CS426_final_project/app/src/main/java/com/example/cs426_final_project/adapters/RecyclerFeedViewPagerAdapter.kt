@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs426_final_project.R
 import com.example.cs426_final_project.models.FeedInfo
+import com.example.cs426_final_project.utilities.ImageUtilityClass
 
 
 class RecyclerFeedViewPagerAdapter(
@@ -43,7 +44,10 @@ class RecyclerFeedViewPagerAdapter(
         return feedList.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewPagerViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerViewPagerViewHolder,
+        position: Int
+    ) {
         val feedInfo = feedList[position]
         holder.txtUsernameFeed.text = feedInfo.feedUsername
         holder.txtCommentFeed.text = feedInfo.feedDescription
@@ -52,9 +56,14 @@ class RecyclerFeedViewPagerAdapter(
             listener.onItemClick(position)
         }
             // convert string to uri
-        val uri : Uri = Uri.parse(feedInfo.feedImageUri)
-        holder.ivPreviewImageFeed.setImageURI(uri)
+        if (feedInfo.feedImageUri.startsWith("http")) {
+            ImageUtilityClass.Companion.loadImageFromUrl(holder.ivPreviewImageFeed, feedInfo.feedImageUri)
+        } else {
+            val uri: Uri = Uri.parse(feedInfo.feedImageUri)
+            //println("This is URI: $uri")
+            holder.ivPreviewImageFeed.setImageURI(uri)
 //        holder.ivPreviewImageFeed.layoutParams.height = holder.ivPreviewImageFeed.measuredWidth
+        }
 
         // ensure ratio of image is 1:1
         holder.ivPreviewImageFeed.layoutParams.height = holder.ivPreviewImageFeed.measuredWidth
