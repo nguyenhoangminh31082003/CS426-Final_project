@@ -12,5 +12,5 @@ data class PostDataModel(
     @SerializedName("image_link")
     var imageLink: String = "",
     @SerializedName("created_at")
-    var createAt: Date = Date()
+    var createAt: String = ""
 )
