@@ -93,7 +93,16 @@ public class FeedsFragment extends Fragment {
                         }
 
                         adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
+                            Intent intent = new Intent(
+                                    requireActivity(),
+                                    SearchActivity.class
+                            );
                             System.out.println("Clicked on " + position);
+                            intent.putExtra(
+                                    "food_id",
+                                    adapter.getFoodID(position)
+                            );
+                            startActivity(intent);
                         });
 
                         vpFeed.setAdapter(adapter);
@@ -129,7 +138,27 @@ public class FeedsFragment extends Fragment {
         this.vpFeed.setAdapter(null);
 
         this.adapter = new RecyclerFeedViewPagerAdapter(this.listOfFeeds, position -> {
-            System.out.println("Clicked on " + position);
+            System.out.println("Clicked on " + position + "!!!");
+            /*
+            System.out.println("Clicked on " + position + "!!!");
+            Intent intent = null;
+            try {
+                intent = new Intent(
+                        requireActivity(),
+                        SearchActivity.class
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("Create intent");
+            intent.putExtra(
+                    "food_id",
+                    this.adapter.getFoodID(position)
+            );
+            System.out.println("Give data to intent");
+            startActivity(intent);
+            System.out.println("Start activity " + String.valueOf(this.adapter.getFoodID(position)));
+             */
         });
 
         this.vpFeed.setAdapter(this.adapter);

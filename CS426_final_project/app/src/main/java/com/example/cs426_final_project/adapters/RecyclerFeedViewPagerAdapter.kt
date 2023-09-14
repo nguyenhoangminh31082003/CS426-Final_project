@@ -44,11 +44,18 @@ class RecyclerFeedViewPagerAdapter(
         return feedList.size
     }
 
+    public fun getFoodID(position: Int): Int {
+        if (position < 0 || position >= feedList.size)
+            return -1;
+        return feedList[position].feedId;
+    }
+
     override fun onBindViewHolder(
         holder: RecyclerViewPagerViewHolder,
         position: Int
     ) {
         val feedInfo = feedList[position]
+
         holder.txtUsernameFeed.text = feedInfo.feedUsername
         holder.txtCommentFeed.text = feedInfo.feedDescription
         holder.txtDateFeed.text = feedInfo.feedDate
