@@ -3,6 +3,7 @@ package com.example.cs426_final_project;
 import android.app.Activity;
 import android.content.Context;
 import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,38 +12,58 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cs426_final_project.api.UsersApi;
+import com.example.cs426_final_project.models.data.ProfileDataModel;
+import com.example.cs426_final_project.models.data.UserDataModel;
+import com.example.cs426_final_project.models.response.SuggestionResponse;
+import com.example.cs426_final_project.utilities.ImageUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountsListAdapter extends BaseExpandableListAdapter {
 
     final private static int LIMIT_NUMBER_OF_SUGGESTIONS = 5;
     final private static int LIMIT_NUMBER_OF_FRIENDS = 30;
 
-    final private static String SUGGESTIONS_HEADER = "Suggestion";
+    final private static String SUGGESTIONS_HEADER = "Suggestions";
     final private static String FRIENDS_HEADER = "Friends";
-    final private static String[] headers = {SUGGESTIONS_HEADER, FRIENDS_HEADER};
+    final private static String[] headers = {
+            SUGGESTIONS_HEADER,
+            FRIENDS_HEADER
+    };
     private Activity activity;
     private HashMap<String, ListOfAccountRows> accounts;
 
-    private static ListOfAccountRows getListOfSuggestions() {
-        return new ListOfAccountRows();
-    }
-
-    private static ListOfAccountRows getListOfFriends() {
-        return new ListOfAccountRows();
-    }
-
-    private static HashMap<String, ListOfAccountRows> getListOfAccounts() {
-        HashMap<String, ListOfAccountRows> accounts = new HashMap<String, ListOfAccountRows>();
-        accounts.put(SUGGESTIONS_HEADER, getListOfSuggestions());
-        accounts.put(FRIENDS_HEADER, getListOfFriends());
-        return accounts;
-    }
-
-
-    public AccountsListAdapter(Activity activity) {
+    public AccountsListAdapter(
+            Activity activity
+    ) {
         this.activity = activity;
-        this.accounts = getListOfAccounts();
+        this.accounts = new HashMap<String, ListOfAccountRows>();
+        this.accounts.put(SUGGESTIONS_HEADER, new ListOfAccountRows());
+        this.accounts.put(FRIENDS_HEADER, new ListOfAccountRows());
+    }
+
+    public AccountsListAdapter(
+            Activity activity,
+            ListOfAccountRows suggestions,
+            ListOfAccountRows friends
+    ) {
+        this.activity = activity;
+        this.accounts = new HashMap<String, ListOfAccountRows>();
+        this.accounts.put(SUGGESTIONS_HEADER, suggestions);
+        this.accounts.put(FRIENDS_HEADER, friends);
+    }
+
+    public void setListOfSuggestions(
+            ListOfAccountRows suggestions
+    ) {
+        this.accounts.put(SUGGESTIONS_HEADER, suggestions);
     }
 
     @Override
@@ -52,28 +73,45 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public int getChildrenCount(final int i) {
+    public int getChildrenCount(
+            final int i
+    ) {
         System.out.println("The number of children of the " + i + "-th group is " + this.accounts.get(headers[i]).getNumberOfRows());
-        return this.accounts.get(headers[i]).getNumberOfRows();
+        return this
+                .accounts
+                .get(headers[i])
+                .getNumberOfRows();
     }
 
     @Override
-    public Object getGroup(final int i) {
+    public Object getGroup(
+            final int i
+    ) {
         return headers[i];
     }
 
     @Override
-    public Object getChild(final int x, final int y) {
-        return this.accounts.get(headers[x]).getAccountRow(y);
+    public Object getChild(
+            final int x,
+            final int y
+    ) {
+        return this
+                .accounts
+                .get(headers[x])
+                .getAccountRow(y);
     }
 
     @Override
-    public long getGroupId(final int i) {
+    public long getGroupId(
+            final int i
+    ) {
         return i;
     }
 
     @Override
-    public long getChildId(final int x, final int y) {
+    public long getChildId(
+            final int x,
+            final int y) {
         return y;
     }
 
@@ -117,24 +155,119 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = LayoutInflater.from(context);
             view = inflater.inflate(R.layout.layout_of_account_row, null);
         }
+
         final AccountRow accountRow = this.accounts.get(headers[x]).getAccountRow(y);
+
         TextView accountName = view.findViewById(R.id.account_name);
         TextView relationship = view.findViewById(R.id.relationship_with_account);
         ImageView accountProfilePicture = view.findViewById(R.id.account_profile_picture);
         ImageView updateIcon = view.findViewById(R.id.update_icon);
-        accountName.setText(accountRow.getName());
+        accountName.setText(accountRow.getUsername());
+
+        /*
+        this.setUserProfilePicture(
+                accountProfilePicture,
+                accountRow.getUserID()
+        );
+
+         */
+
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
             relationship.setText("Suggestion");
+            updateIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UsersApi usersApi = ApiUtilityClass
+                            .Companion
+                            .getApiClient(activity)
+                            .create(UsersApi.class);
+                    Call<String> call = usersApi.changeFriend(accountRow.getUserID());
+
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(
+                                Call<String> call,
+                                Response<String> response) {
+                            if (response.isSuccessful()) {
+                                System.err.println("Remove!!!");
+                                accounts.get(FRIENDS_HEADER).addAccountRow(accountRow);
+                                accounts.get(SUGGESTIONS_HEADER).removeAccountRowWithTheGivenID(accountRow.getUserID());
+                                System.err.println("One!!!");
+                                notifyDataSetChanged();
+                                System.err.println("Two!!!");
+                            } else {
+                                ApiUtilityClass.Companion.debug(response);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                                Call<String> call,
+                                Throwable t
+                        ) {
+                            System.err.println("Can not make friend");
+                        }
+                    });
+                }
+            });
         } else {
             updateIcon.setImageResource(R.drawable.my_friends_page_unfriend_icon);
             relationship.setText("Friend");
+
+            updateIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
+
         return view;
     }
 
+    private void setUserProfilePicture(
+            ImageView view,
+            final int id
+    ) {
+        UsersApi usersApi = ApiUtilityClass
+                .Companion
+                .getApiClient(activity)
+                .create(UsersApi.class);
+        Call<UserDataModel> call = usersApi.getUser(id);
+
+        call.enqueue(new Callback<UserDataModel>() {
+            @Override
+            public void onResponse(
+                    Call<UserDataModel> call,
+                    Response<UserDataModel> response
+            ) {
+                if (response.isSuccessful()) {
+                    final UserDataModel data = response.body();
+                    final String link = data.avatar;
+                    if (link.startsWith("http")) {
+                        ImageUtilityClass.Companion.loadImageViewFromUrl(view, link);
+                    } else {
+                        Uri uri = Uri.parse(link);
+                        view.setImageURI(uri);
+                    }
+                } else {
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDataModel> call, Throwable t) {
+                System.err.println("Error in getting user data");
+            }
+        });
+    }
+
     @Override
-    public boolean isChildSelectable(final int x, final int y) {
+    public boolean isChildSelectable(
+            final int x,
+            final int y
+    ) {
         return false;
     }
 }

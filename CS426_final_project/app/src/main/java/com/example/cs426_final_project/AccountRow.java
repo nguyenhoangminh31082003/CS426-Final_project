@@ -5,39 +5,39 @@ import org.json.JSONObject;
 
 public class AccountRow {
 
-    private String email;
-    private String name;
+    private int userID;
+    private String username;
 
     public AccountRow(final JSONObject record) {
         try {
-            this.email = record.getString("email");
+            this.userID = record.getInt("user_id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         try {
-            this.name = record.getString("name");
+            this.username = record.getString("username");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public AccountRow(final String email, final String name) {
-        this.email = email;
-        this.name = name;
+    public AccountRow(final int userID, final String usename) {
+        this.userID = userID;
+        this.username = usename;
     }
 
-    public String getEmail() {
-        return this.email;
+    public int getUserID() {
+        return this.userID;
     }
 
-    public String getName() {
-        return this.name;
+    public String getUsername() {
+        return this.username;
     }
 
     public JSONObject toJSONObject() {
         JSONObject row = new JSONObject();
         try {
-            row.put("email", this.email);
-            row.put("name", this.name);
+            row.put("user_id", this.userID);
+            row.put("username", this.username);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

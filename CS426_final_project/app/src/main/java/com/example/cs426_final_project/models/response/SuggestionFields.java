@@ -13,7 +13,7 @@ public class SuggestionFields {
     @SerializedName("is_superuser")
     private boolean isSuperuser;
     @SerializedName("username")
-    public String username;
+    private String username;
     @SerializedName("first_name")
     private String firstName;
     @SerializedName("last_name")
@@ -35,5 +35,8 @@ public class SuggestionFields {
     @SerializedName("user_permissions")
     private List<String> userPermissions;
 
+    public String getUSername() {
+        return this.username;
+    }
 
 }

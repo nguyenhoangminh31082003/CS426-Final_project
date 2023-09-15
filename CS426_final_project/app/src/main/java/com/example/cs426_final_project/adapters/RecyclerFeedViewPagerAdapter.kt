@@ -56,6 +56,8 @@ class RecyclerFeedViewPagerAdapter(
     ) {
         val feedInfo = feedList[position]
 
+        holder.ivPreviewImageFeed.setBackgroundResource(R.drawable.loading_image);
+
         holder.txtUsernameFeed.text = feedInfo.feedUsername
         holder.txtCommentFeed.text = feedInfo.feedDescription
         holder.txtDateFeed.text = feedInfo.feedDate
