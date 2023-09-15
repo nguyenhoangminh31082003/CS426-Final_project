@@ -54,4 +54,16 @@ public class ListOfAccountRows {
         return result;
     }
 
+    public boolean removeAccountRowWithTheGivenID(final int id) {
+        final int size = this.listOfUserIDs.size();
+        final Integer value = Integer.valueOf(id);
+        for (int i = 0; i < size; ++i)
+            if (this.listOfUserIDs.get(i).equals(value)) {
+                this.records.remove(String.valueOf(id));
+                this.listOfUserIDs.remove(i);
+                return true;
+            }
+        return false;
+    }
+
 }

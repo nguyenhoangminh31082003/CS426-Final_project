@@ -109,6 +109,7 @@ public class MyFriendsFragment extends MainPageFragment {
                         }
                         adapter.setListOfSuggestions(rows);
                         listView.setAdapter(adapter);
+                        expandListView();
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -147,12 +148,7 @@ public class MyFriendsFragment extends MainPageFragment {
         this.findSomeSuggestions();
     }
 
-    void setUpListView() {
-        Activity activity = getActivity();
-        this.listView = getView().findViewById(R.id.account_list_view);
-        this.adapter = new AccountsListAdapter(activity);
-        this.listView.setAdapter(this.adapter);
-
+    private void expandListView() {
         for (int i = 0; i < this.adapter.getGroupCount(); ++i)
             this.listView.expandGroup(i);
 
@@ -173,6 +169,14 @@ public class MyFriendsFragment extends MainPageFragment {
                 return true;
             }
         });
+    }
+
+    private void setUpListView() {
+        Activity activity = getActivity();
+        this.listView = getView().findViewById(R.id.account_list_view);
+        this.adapter = new AccountsListAdapter(activity);
+        this.listView.setAdapter(this.adapter);
+        this.expandListView();
     }
 
     @Nullable

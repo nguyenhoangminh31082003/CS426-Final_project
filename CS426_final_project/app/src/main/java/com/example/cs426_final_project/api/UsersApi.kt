@@ -51,4 +51,7 @@ interface UsersApi {
 
     @GET("users/friends/suggestions")
     fun getSomeSuggestions(): Call<List<SuggestionResponse> >
+
+    @POST("users/friends/{friendID}")
+    fun changeFriend(@Path(value="friendID") id : Int): Call<String>
 }

@@ -11,7 +11,16 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cs426_final_project.api.UsersApi;
+import com.example.cs426_final_project.models.response.SuggestionResponse;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+
 import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountsListAdapter extends BaseExpandableListAdapter {
 
@@ -20,11 +29,16 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
 
     final private static String SUGGESTIONS_HEADER = "Suggestions";
     final private static String FRIENDS_HEADER = "Friends";
-    final private static String[] headers = {SUGGESTIONS_HEADER, FRIENDS_HEADER};
+    final private static String[] headers = {
+            SUGGESTIONS_HEADER,
+            FRIENDS_HEADER
+    };
     private Activity activity;
     private HashMap<String, ListOfAccountRows> accounts;
 
-    public AccountsListAdapter(Activity activity) {
+    public AccountsListAdapter(
+            Activity activity
+    ) {
         this.activity = activity;
         this.accounts = new HashMap<String, ListOfAccountRows>();
         this.accounts.put(SUGGESTIONS_HEADER, new ListOfAccountRows());
@@ -55,7 +69,9 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public int getChildrenCount(final int i) {
+    public int getChildrenCount(
+            final int i
+    ) {
         System.out.println("The number of children of the " + i + "-th group is " + this.accounts.get(headers[i]).getNumberOfRows());
         return this
                 .accounts
@@ -64,7 +80,9 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getGroup(final int i) {
+    public Object getGroup(
+            final int i
+    ) {
         return headers[i];
     }
 
@@ -73,7 +91,10 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             final int x,
             final int y
     ) {
-        return this.accounts.get(headers[x]).getAccountRow(y);
+        return this
+                .accounts
+                .get(headers[x])
+                .getAccountRow(y);
     }
 
     @Override
@@ -130,19 +151,57 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = LayoutInflater.from(context);
             view = inflater.inflate(R.layout.layout_of_account_row, null);
         }
+
         final AccountRow accountRow = this.accounts.get(headers[x]).getAccountRow(y);
+
         TextView accountName = view.findViewById(R.id.account_name);
         TextView relationship = view.findViewById(R.id.relationship_with_account);
         ImageView accountProfilePicture = view.findViewById(R.id.account_profile_picture);
         ImageView updateIcon = view.findViewById(R.id.update_icon);
         accountName.setText(accountRow.getUsername());
+
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
             relationship.setText("Suggestion");
+            updateIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UsersApi usersApi = ApiUtilityClass
+                            .Companion
+                            .getApiClient(activity)
+                            .create(UsersApi.class);
+                    Call<String> call = usersApi.changeFriend(accountRow.getUserID());
+
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(
+                                Call<String> call,
+                                Response<String> response) {
+                            if (response.isSuccessful()) {
+
+                                accounts.get(headers[x]).removeAccountRowWithTheGivenID(accountRow.getUserID());
+
+                                notifyDataSetChanged();
+                            } else {
+                                ApiUtilityClass.Companion.debug(response);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                                Call<String> call,
+                                Throwable t
+                        ) {
+                            System.err.println("Can not make friend");
+                        }
+                    });
+                }
+            });
         } else {
             updateIcon.setImageResource(R.drawable.my_friends_page_unfriend_icon);
             relationship.setText("Friend");
         }
+
         return view;
     }
 
