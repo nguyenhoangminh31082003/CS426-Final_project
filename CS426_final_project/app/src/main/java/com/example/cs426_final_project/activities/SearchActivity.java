@@ -33,6 +33,7 @@ import com.example.cs426_final_project.models.data.SearchQueryDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.response.FoodResponse;
+import com.example.cs426_final_project.models.response.SearchCompleteResponse;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
@@ -45,17 +46,28 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
+
+    enum SearchType {
+        TRENDING,
+        SUGGESTION,
+        RESULT
+    }
+
+    private SearchType currentSearchType = SearchType.TRENDING;
     private androidx.appcompat.widget.SearchView sevSearch;
     private SearchQueryDataModel searchQueryDataModel;
-    private LocationCallback locationCallback;
+    private boolean isLoadingSearchComplete = false;
+    private boolean isChangedWithoutNotify = false;
     TrendingFoodFragment trendingFoodFragment;
     SearchSuggestionFragment searchSuggestionFragment;
+    SearchResultFragment searchResultFragment;
 
     @Override
     protected void onStop() {
@@ -70,17 +82,25 @@ public class SearchActivity extends AppCompatActivity {
         this.setSearchView();
 
         this.searchQueryDataModel = new SearchQueryDataModel();
+        searchQueryDataModel.setLimit(10);
 
         this.initBackButton();
         this.initSearchView();
         this.showTrendingFood();
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null)
-            this.queryFoodNameWithGivenID(extras.getInt("food_id"));
+        checkInitialQuery();
     }
 
+    private void checkInitialQuery() {
+        try {
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+            if (extras != null)
+                this.queryFoodNameWithGivenID(extras.getInt("food_id"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void queryFoodNameWithGivenID(final int id) {
         FoodApi foodApi = ApiUtilityClass.Companion.getApiClient(this).create(FoodApi.class);;
@@ -98,8 +118,7 @@ public class SearchActivity extends AppCompatActivity {
                     FoodDataModel data = body.results;
 
                     System.out.println("Successfully response with food");
-
-                    sevSearch.setQuery(data.getName(), true);
+                    changeQuerySearch(data.getName(), true, false);
 
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -118,6 +137,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void showTrendingFood() {
+        if(currentSearchType == SearchType.TRENDING)
+            return;
+        currentSearchType = SearchType.TRENDING;
+
         trendingFoodFragment = new TrendingFoodFragment();
 
         trendingFoodFragment.setOnFragmentInteractionListener(option -> {
@@ -127,7 +150,7 @@ public class SearchActivity extends AppCompatActivity {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            sevSearch.setQuery(option, true);
+            changeQuerySearch(option, true, false);
         });
 
         getSupportFragmentManager().beginTransaction()
@@ -135,28 +158,58 @@ public class SearchActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void showSuggestions(List<SearchResultFields> results){
-        List<String> suggestions = new ArrayList<>();
-        for (SearchResultFields result : results) {
-            suggestions.add(result.getFields().getName());
-        }
-        searchSuggestionFragment = SearchSuggestionFragment.Companion.newInstance(suggestions);
-
+    private void showSuggestions(List<String> results){
+        currentSearchType = SearchType.SUGGESTION;
+        searchSuggestionFragment = SearchSuggestionFragment.Companion.newInstance(results);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fcvSearch, searchSuggestionFragment)
                 .commit();
     }
 
+    private void callSearchCompleteApi(){
+        SearchApi searchApi = ApiUtilityClass.Companion.getApiClient(this).create(SearchApi.class);
+        Call<SearchCompleteResponse> call = searchApi.searchAutoComplete(
+                searchQueryDataModel.getQuery(),
+                searchQueryDataModel.getLimit()
+        );
+        call.enqueue(new Callback<SearchCompleteResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchCompleteResponse> call, @NonNull Response<SearchCompleteResponse> response) {
+                if(response.isSuccessful()) {
+                    SearchCompleteResponse searchCompleteResponse = response.body();
+                    List<String> foodNames = Objects.requireNonNull(searchCompleteResponse).getResults();
+                    System.out.println("Successfully response with food names");
+                    System.out.println(foodNames);
+                    showSuggestions(foodNames);
+                } else {
+                    System.err.println("Something is not ok? Please check quick");
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SearchCompleteResponse> call, @NonNull Throwable t) {
+                System.out.println("OMG");
+                System.out.println(t.getMessage());
+            }
+        });
+    }
+    void changeQuerySearch(String query, boolean submit, boolean notify) {
+        isChangedWithoutNotify = !notify;
+        searchQueryDataModel.setQuery(query);
+        sevSearch.setQuery(query, submit);
+    }
 
     private void initSearchView() {
         sevSearch = this.findViewById(R.id.sevSearch);
         sevSearch.setQueryHint("Type here to search");
-        SearchResultFragment searchResultFragment = new SearchResultFragment();
 
         sevSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // show search result fragment
+                currentSearchType = SearchType.RESULT;
+                searchResultFragment = new SearchResultFragment();
+
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fcvSearch, searchResultFragment)
                         .addToBackStack(null)
@@ -166,24 +219,38 @@ public class SearchActivity extends AppCompatActivity {
                 searchQueryDataModel.setLong(UserLocation.INSTANCE.getLongitude());
 
                 searchResultFragment.setSearchQueryDataModel(searchQueryDataModel);
+                searchResultFragment.setGetNewResult(true);
 
                 return false;
             }
 
+
+
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.isEmpty())
+
+                if(isChangedWithoutNotify) {
+                    isChangedWithoutNotify = false;
+                    return false;
+                }
+
+                System.out.println("Query: " + newText);
+
+                if(newText.length() <= 3){
+                    if(newText.isEmpty()){
+                        System.out.println("Empty query");
+                    }
                     showTrendingFood();
+                }
                 else {
-                    // show suggestion fragment
+
                     searchQueryDataModel.setQuery(newText);
+                    callSearchCompleteApi();
                 }
                 return false;
             }
         });
     }
-
-
 
     private void initBackButton() {
         AppCompatImageView btnSearchBack = this.findViewById(R.id.acivSearchBack);

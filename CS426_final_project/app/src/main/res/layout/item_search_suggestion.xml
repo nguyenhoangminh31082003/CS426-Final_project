@@ -8,14 +8,16 @@
 
     >
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:src="@drawable/search_page_search_icon"
-        app:tint="@color/light_grey"
+        app:tint="@color/white"
         android:gravity="left"
         tools:ignore="HardcodedText,RtlHardcoded"
         android:contentDescription="search icon" />
     <TextView
+
         android:id="@+id/tvSearchSuggestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +27,7 @@
         android:layout_marginEnd="16dp"
         android:text="Cơm mẹ nấu"
         android:layout_marginRight="16dp"
-        android:textColor="@color/light_grey"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:ignore="HardcodedText" />

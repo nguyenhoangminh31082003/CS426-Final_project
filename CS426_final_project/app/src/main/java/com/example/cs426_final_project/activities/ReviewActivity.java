@@ -8,17 +8,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.ReviewsAdapter;
 import com.example.cs426_final_project.Singleton.UserLocation;
+import com.example.cs426_final_project.api.PostsApi;
 import com.example.cs426_final_project.api.StoreApi;
+import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.StoreDataModel;
 import com.example.cs426_final_project.models.response.StoreResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+
+import java.util.List;
+
+import retrofit2.Call;
 
 public class ReviewActivity extends AppCompatActivity {
 
@@ -29,6 +36,8 @@ public class ReviewActivity extends AppCompatActivity {
     private TextView tvFoodReviewStoreDistance;
     private TextView tvFoodReviewFoodName;
     private ImageView ivFoodReviewPreview;
+
+    List<PostDataModel> reviewsList;
     private Integer foodId;
     private String foodName;
     private Integer storeId;
@@ -51,9 +60,17 @@ public class ReviewActivity extends AppCompatActivity {
 
         loadPreviewImage(intent);
         callGetStoreReviewsApi();
+        callGetReviewApi();
+
+        ImageButton ibReviewPageBackButton = findViewById(R.id.ibReviewPageBackButton);
+        ibReviewPageBackButton.setOnClickListener(v -> finish());
+
+        ImageButton ibFoodReviewShowMap = findViewById(R.id.ibFoodReviewShowMap);
+        // show google map at a store location using google map api
 
 
-        this.setUpListOfReviewsView();
+
+
     }
 
     private void loadPreviewImage(Intent intent) {
@@ -96,6 +113,31 @@ public class ReviewActivity extends AppCompatActivity {
         });
     }
 
+    private void callGetReviewApi(){
+        PostsApi postsApi = ApiUtilityClass.Companion.getApiClient(this).create(PostsApi.class);
+        Call<List<PostDataModel>> call = postsApi.getFoodReviews(foodId);
+        call.enqueue(new retrofit2.Callback<List<PostDataModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<PostDataModel>> call, @NonNull retrofit2.Response<List<PostDataModel>> response) {
+                if(response.isSuccessful()) {
+                    List<PostDataModel> postDataModels = response.body();
+                    if(postDataModels != null) {
+                        reviewsList = postDataModels;
+                        setUpListOfReviewsView();
+                    }
+                } else {
+                    System.out.println("Failed to get food reviews with message: " + response.message());
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<PostDataModel>> call, @NonNull Throwable t) {
+                System.out.println("Failed to get food reviews with message: " + t.getMessage());
+            }
+        });
+    }
+
     @SuppressLint("DefaultLocale")
     private String getFormattedUserStoreDistance(double lat, double aLong) {
         double deltaLat = lat - UserLocation.INSTANCE.getLatitude();
@@ -110,7 +152,7 @@ public class ReviewActivity extends AppCompatActivity {
 
         this.listOfReviewsView = this.findViewById(R.id.review_food_reviews_list);
 
-        this.adapter = new ReviewsAdapter();
+        this.adapter = new ReviewsAdapter(reviewsList);
 
         this.listOfReviewsView.setAdapter(this.adapter);
 

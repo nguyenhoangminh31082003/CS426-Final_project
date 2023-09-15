@@ -13,7 +13,7 @@ import com.example.cs426_final_project.adapters.RecyclerSearchSuggestionAdapter
 
 class SearchSuggestionFragment : Fragment() {
 
-    var searchSuggestions = listOf("Please wait")
+    private var searchSuggestions = listOf("Please wait")
 
     private lateinit var rvSearchSuggestion: RecyclerView
     override fun onCreateView(
@@ -29,18 +29,29 @@ class SearchSuggestionFragment : Fragment() {
         rvSearchSuggestion = view.findViewById(R.id.rvSearchSuggestion)
 
         val adapter = RecyclerSearchSuggestionAdapter(searchSuggestions)
-
         rvSearchSuggestion.adapter = adapter
 
-//        val doubleBounce: Sprite = DoubleBounce()
+        // set linear manager for recycler view
+        rvSearchSuggestion.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
+            requireActivity(),
+            androidx.recyclerview.widget.LinearLayoutManager.VERTICAL,
+            false
+        )
+        // add divider
+        rvSearchSuggestion.addItemDecoration(
+            androidx.recyclerview.widget.DividerItemDecoration(
+                requireActivity(),
+                androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+            )
+        )
 
     }
 
     companion object {
         fun newInstance(suggestionList: List<String>): SearchSuggestionFragment {
-            return SearchSuggestionFragment().apply {
-                updateSearchSuggestions(suggestionList)
-            }
+            val searchSuggestionFragment = SearchSuggestionFragment()
+            searchSuggestionFragment.updateSearchSuggestions(suggestionList)
+            return searchSuggestionFragment
         }
 
 
@@ -48,6 +59,6 @@ class SearchSuggestionFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     fun updateSearchSuggestions(suggestionList: List<String>) {
         searchSuggestions = suggestionList
-        rvSearchSuggestion.adapter?.notifyDataSetChanged()
+
     }
 }

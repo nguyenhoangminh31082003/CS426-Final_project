@@ -1,17 +1,27 @@
 package com.example.cs426_final_project.api;
 
+import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.posts.CreatePostRequest;
 import com.example.cs426_final_project.models.posts.StatusResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface PostsApi {
 
     @POST("posts/")
     Call<StatusResponse> createPost(
         @Body CreatePostRequest request
+    );
+
+    @GET("posts/{food_id}")
+    Call<List<PostDataModel>> getFoodReviews(
+        @Path("food_id") int foodId
     );
 
 }
