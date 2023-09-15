@@ -16,7 +16,9 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.example.cs426_final_project.AccountRow;
 import com.example.cs426_final_project.AccountsListAdapter;
+import com.example.cs426_final_project.ListOfAccountRows;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
@@ -26,6 +28,7 @@ import com.example.cs426_final_project.models.data.FriendDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.response.FindFriendResponse;
+import com.example.cs426_final_project.models.response.SuggestionFields;
 import com.example.cs426_final_project.models.response.SuggestionResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
@@ -93,10 +96,19 @@ public class MyFriendsFragment extends MainPageFragment {
             ) {
                 if (response.isSuccessful()) {
                     List<SuggestionResponse> body = response.body();
-                    System.out.println("Successfully find friends");
+                    System.out.println("Successfully find suggestions");
                     if (body != null) {
-                        //List<FriendDataModel> listOfFriends = body.results;
-                        //System.out.println("The number of friends: " + listOfFriends.size());
+                        final int size = body.size();
+                        ListOfAccountRows rows = new ListOfAccountRows();
+                        for (int i = 0; i < size; ++i) {
+                            SuggestionFields fields = body.get(i).fields;
+                            rows.addAccountRow(new AccountRow(
+                                    body.get(i).userID,
+                                    fields.getUSername()
+                            ));
+                        }
+                        adapter.setListOfSuggestions(rows);
+                        listView.setAdapter(adapter);
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -109,7 +121,7 @@ public class MyFriendsFragment extends MainPageFragment {
                     Throwable t
             ) {
                 t.printStackTrace();
-                System.err.println("Can not find friends :'((");
+                System.err.println("Can not find any suggestions");
             }
         });
     }

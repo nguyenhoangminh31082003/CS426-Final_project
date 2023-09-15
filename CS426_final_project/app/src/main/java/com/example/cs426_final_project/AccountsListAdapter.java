@@ -18,31 +18,34 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     final private static int LIMIT_NUMBER_OF_SUGGESTIONS = 5;
     final private static int LIMIT_NUMBER_OF_FRIENDS = 30;
 
-    final private static String SUGGESTIONS_HEADER = "Suggestion";
+    final private static String SUGGESTIONS_HEADER = "Suggestions";
     final private static String FRIENDS_HEADER = "Friends";
     final private static String[] headers = {SUGGESTIONS_HEADER, FRIENDS_HEADER};
     private Activity activity;
     private HashMap<String, ListOfAccountRows> accounts;
 
-    private static ListOfAccountRows getListOfSuggestions() {
-        return new ListOfAccountRows();
-    }
-
-    private static ListOfAccountRows getListOfFriends() {
-        return new ListOfAccountRows();
-    }
-
-    private static HashMap<String, ListOfAccountRows> getListOfAccounts() {
-        HashMap<String, ListOfAccountRows> accounts = new HashMap<String, ListOfAccountRows>();
-        accounts.put(SUGGESTIONS_HEADER, getListOfSuggestions());
-        accounts.put(FRIENDS_HEADER, getListOfFriends());
-        return accounts;
-    }
-
-
     public AccountsListAdapter(Activity activity) {
         this.activity = activity;
-        this.accounts = getListOfAccounts();
+        this.accounts = new HashMap<String, ListOfAccountRows>();
+        this.accounts.put(SUGGESTIONS_HEADER, new ListOfAccountRows());
+        this.accounts.put(FRIENDS_HEADER, new ListOfAccountRows());
+    }
+
+    public AccountsListAdapter(
+            Activity activity,
+            ListOfAccountRows suggestions,
+            ListOfAccountRows friends
+    ) {
+        this.activity = activity;
+        this.accounts = new HashMap<String, ListOfAccountRows>();
+        this.accounts.put(SUGGESTIONS_HEADER, suggestions);
+        this.accounts.put(FRIENDS_HEADER, friends);
+    }
+
+    public void setListOfSuggestions(
+            ListOfAccountRows suggestions
+    ) {
+        this.accounts.put(SUGGESTIONS_HEADER, suggestions);
     }
 
     @Override
@@ -54,7 +57,10 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(final int i) {
         System.out.println("The number of children of the " + i + "-th group is " + this.accounts.get(headers[i]).getNumberOfRows());
-        return this.accounts.get(headers[i]).getNumberOfRows();
+        return this
+                .accounts
+                .get(headers[i])
+                .getNumberOfRows();
     }
 
     @Override
@@ -63,17 +69,24 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(final int x, final int y) {
+    public Object getChild(
+            final int x,
+            final int y
+    ) {
         return this.accounts.get(headers[x]).getAccountRow(y);
     }
 
     @Override
-    public long getGroupId(final int i) {
+    public long getGroupId(
+            final int i
+    ) {
         return i;
     }
 
     @Override
-    public long getChildId(final int x, final int y) {
+    public long getChildId(
+            final int x,
+            final int y) {
         return y;
     }
 
@@ -122,7 +135,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         TextView relationship = view.findViewById(R.id.relationship_with_account);
         ImageView accountProfilePicture = view.findViewById(R.id.account_profile_picture);
         ImageView updateIcon = view.findViewById(R.id.update_icon);
-        accountName.setText(accountRow.getName());
+        accountName.setText(accountRow.getUsername());
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
             relationship.setText("Suggestion");
@@ -134,7 +147,10 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public boolean isChildSelectable(final int x, final int y) {
+    public boolean isChildSelectable(
+            final int x,
+            final int y
+    ) {
         return false;
     }
 }
