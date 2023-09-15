@@ -26,6 +26,7 @@ import com.example.cs426_final_project.models.data.FriendDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.response.FindFriendResponse;
+import com.example.cs426_final_project.models.response.SuggestionResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
@@ -82,16 +83,16 @@ public class MyFriendsFragment extends MainPageFragment {
                 .Companion
                 .getApiClient(getContext())
                 .create(UsersApi.class);
-        Call<String> call = usersApi.getSomeSuggestions();
+        Call<List<SuggestionResponse> > call = usersApi.getSomeSuggestions();
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<List<SuggestionResponse> >() {
             @Override
             public void onResponse(
-                    Call<String> call,
-                    Response<String> response
+                    Call<List<SuggestionResponse> > call,
+                    Response<List<SuggestionResponse> > response
             ) {
                 if (response.isSuccessful()) {
-                    String body = response.body();
+                    List<SuggestionResponse> body = response.body();
                     System.out.println("Successfully find friends");
                     if (body != null) {
                         //List<FriendDataModel> listOfFriends = body.results;
@@ -104,7 +105,7 @@ public class MyFriendsFragment extends MainPageFragment {
 
             @Override
             public void onFailure(
-                    Call<String> call,
+                    Call<List<SuggestionResponse>> call,
                     Throwable t
             ) {
                 t.printStackTrace();
