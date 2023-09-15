@@ -1,11 +1,14 @@
 package com.example.cs426_final_project.fragments.search;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,6 +41,16 @@ public class SearchResultFragment extends Fragment {
     private SearchQueryDataModel searchQueryDataModel;
     private WaitingFragment waitingFragment;
 
+    RecyclerView viewOfListOfFoods;
+
+    private boolean getNewResult = false;
+
+    public void setGetNewResult(boolean getNewResult) {
+        this.getNewResult = getNewResult;
+    }
+    // create result register launcher
+//    private ActivityResultLauncher<Intent> reviewsResultLauncher;
+
     private void showWaitingFragment() {
         if(waitingFragment == null)
             waitingFragment = new WaitingFragment();
@@ -62,6 +75,20 @@ public class SearchResultFragment extends Fragment {
         viewOfListOfFoods.setLayoutManager(new GridLayoutManager(requireContext(), 2));
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        reviewsResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+//            if(result.getResultCode() == ReviewActivity.RESULT_OK) {
+//                System.out.println("OK");
+//            }
+//        });
+
+
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,9 +102,9 @@ public class SearchResultFragment extends Fragment {
         //tvNoResult.setText(String.format("No result for %s", searchQuery));
         this.setUpTestingListOfFoods(view);
         this.enableChoosingSortMode(view);
-        this.showSearchResult();
 
         this.waitingFragment = new WaitingFragment();
+        viewOfListOfFoods = view.findViewById(R.id.list_of_foods_in_search_result);
     }
 
     private void showSearchResult() {
@@ -87,11 +114,17 @@ public class SearchResultFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        showWaitingFragment();
         TextView sortModeView = requireView().findViewById(R.id.sort_mode_in_search_result);
         sortModeView.setText((new SortModeData(requireActivity())).getReadableMode());
-        this.showSearchResult();
+
+        if(getNewResult) {
+            showWaitingFragment();
+            showSearchResult();
+            getNewResult = false;
+        }
+
     }
+
 
     private void enableChoosingSortMode(@NonNull View view) {
         TextView sortModeView = view.findViewById(R.id.sort_mode_in_search_result);
@@ -141,7 +174,6 @@ public class SearchResultFragment extends Fragment {
                 Intent intent = new Intent(requireActivity(), ReviewActivity.class);
 
                 FoodSearchResultResponse item = FoodSearchResultResponseList.get(position);
-                assert item != null;
                 FoodDataModel foodDataModel = item.getFood();
 
                 intent.putExtra("foodId", foodDataModel.getId());
@@ -152,7 +184,6 @@ public class SearchResultFragment extends Fragment {
                 startActivity(intent);
 
         });
-        RecyclerView viewOfListOfFoods = requireView().findViewById(R.id.list_of_foods_in_search_result);
         viewOfListOfFoods.setAdapter(adapter);
         viewOfListOfFoods.setLayoutManager(new GridLayoutManager(requireContext(), 2));
     }

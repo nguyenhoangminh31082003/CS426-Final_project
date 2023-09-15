@@ -2,6 +2,7 @@ package com.example.cs426_final_project.api
 
 import com.example.cs426_final_project.models.data.FoodDataModel
 import com.example.cs426_final_project.models.data.SearchQueryDataModel
+import com.example.cs426_final_project.models.response.SearchCompleteResponse
 import com.example.cs426_final_project.models.response.SearchQueryResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -18,4 +19,10 @@ interface SearchApi {
         @Query("longitude") long: Double,
         @Query("distance") dis: Double,
     ) : Call<SearchQueryResponse>
+
+    @GET("food/search-autocomplete")
+    fun searchAutoComplete(
+        @Query("query") query: String,
+        @Query("limit") limit: Int,
+    ) : Call<SearchCompleteResponse>
 }

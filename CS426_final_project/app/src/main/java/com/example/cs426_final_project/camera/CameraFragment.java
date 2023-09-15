@@ -484,7 +484,7 @@ public class CameraFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.take_photo_icon).setOnClickListener(this);
         view.findViewById(R.id.switch_camera_icon).setOnClickListener(this);
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        mTextureView = view.findViewById(R.id.texture);
         checkCameraAvailability();
 
     }
@@ -806,7 +806,6 @@ public class CameraFragment extends Fragment
                                 // Auto focus should be continuous for camera preview.
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-
 
 
                                 // Flash is automatically enabled when necessary.

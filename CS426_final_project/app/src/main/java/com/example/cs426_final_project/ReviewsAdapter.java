@@ -1,5 +1,6 @@
 package com.example.cs426_final_project;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -11,13 +12,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cs426_final_project.models.data.PostDataModel;
+
+import java.util.List;
+
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
 
     private ConceptualListOfReviewsAboutOneSpecificFood listOfReviews;
 
+    List<PostDataModel> reviewsList;
+
     public ReviewsAdapter() {
         listOfReviews = new ConceptualListOfReviewsAboutOneSpecificFood();
     }
+
+    public ReviewsAdapter(List<PostDataModel> reviewsList) {
+        this.reviewsList = reviewsList;
+    }
+
+
 
     @NonNull
     @Override
@@ -25,39 +38,58 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.review_layout, parent, false);
+        View view = inflater.inflate(R.layout.item_reviews, parent, false);
 
-        ReviewsAdapter.ViewHolder viewHolder = new ReviewsAdapter.ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final int colorPoint = this.listOfReviews.getColorPoint(position);
 
+        if(reviewsList != null){
+            PostDataModel review = reviewsList.get(position);
+            holder.authorUserName.setText(review.getUsername());
+            holder.fullReview.setText(review.getBody());
+            int rating = review.getRating();
+            holder.colorPoint.setText(String.valueOf(rating));
+            holder.colorPoint.setTextColor(chooseTextColor(rating));
+            return;
+        }
+
+        final int colorPoint = this.listOfReviews.getColorPoint(position);
         holder.greyPoint.setText(this.listOfReviews.getGreyPoint(position) + "d");
         holder.colorPoint.setText(String.valueOf(colorPoint));
         holder.authorUserName.setText(this.listOfReviews.getUserName(position));
         holder.fullReview.setText(this.listOfReviews.getFullReview(position));
+        int textColor = chooseTextColor(colorPoint);
+        holder.colorPoint.setTextColor(textColor);
+    }
 
+    private int chooseTextColor(int colorPoint) {
         if (colorPoint == 1)
-            holder.colorPoint.setTextColor(Color.parseColor("#ff0500"));
+            return Color.parseColor("#ff0500");
         else if (colorPoint == 2)
-            holder.colorPoint.setTextColor(Color.parseColor("#ffa500"));
+            return Color.parseColor("#ffa500");
         else if (colorPoint == 3)
-            holder.colorPoint.setTextColor(Color.parseColor("#ffff00"));
+            return Color.parseColor("#ffff00");
         else if (colorPoint == 4)
-            holder.colorPoint.setTextColor(Color.parseColor("#9acd32"));
+            return Color.parseColor("#9acd32");
         else if (colorPoint == 5)
-            holder.colorPoint.setTextColor(Color.parseColor("#90ee90"));
+            return Color.parseColor("#90ee90");
+        else
+            return Color.parseColor("#000000");
     }
 
     @Override
     public int getItemCount() {
+        if(reviewsList != null)
+            return reviewsList.size();
+
         return this.listOfReviews.getSize();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageOfFoodOfAuthor;
         public TextView authorUserName, colorPoint, greyPoint, fullReview;

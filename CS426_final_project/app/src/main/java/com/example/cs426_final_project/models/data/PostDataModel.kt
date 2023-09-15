@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class PostDataModel(
-    var id: Int = -1,
+    var id: Int = 0,
     var user: String = "",
     var title: String = "",
     var body: String = "",
@@ -12,5 +12,7 @@ data class PostDataModel(
     @SerializedName("image_link")
     var imageLink: String = "",
     @SerializedName("created_at")
-    var createAt: String = ""
+    var createAt: String = "",
+    var username: String = "",
+
 )
