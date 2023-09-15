@@ -77,6 +77,42 @@ public class MyFriendsFragment extends MainPageFragment {
         });
     }
 
+    private void findSomeSuggestions() {
+        UsersApi usersApi = ApiUtilityClass
+                .Companion
+                .getApiClient(getContext())
+                .create(UsersApi.class);
+        Call<String> call = usersApi.getSomeSuggestions();
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(
+                    Call<String> call,
+                    Response<String> response
+            ) {
+                if (response.isSuccessful()) {
+                    String body = response.body();
+                    System.out.println("Successfully find friends");
+                    if (body != null) {
+                        //List<FriendDataModel> listOfFriends = body.results;
+                        //System.out.println("The number of friends: " + listOfFriends.size());
+                    }
+                } else {
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<String> call,
+                    Throwable t
+            ) {
+                t.printStackTrace();
+                System.err.println("Can not find friends :'((");
+            }
+        });
+    }
+
     @Override
     public void onViewCreated(
             @NonNull View view,
@@ -87,6 +123,7 @@ public class MyFriendsFragment extends MainPageFragment {
         this.setUpListView();
 
         this.findFriends();
+        this.findSomeSuggestions();
     }
 
     @Override
@@ -94,6 +131,7 @@ public class MyFriendsFragment extends MainPageFragment {
         super.onResume();
 
         this.findFriends();
+        this.findSomeSuggestions();
     }
 
     void setUpListView() {

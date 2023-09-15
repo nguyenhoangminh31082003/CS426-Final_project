@@ -46,4 +46,7 @@ interface UsersApi {
 
     @GET("users/friends")
     fun getFriendsOfCurrentUser(): Call<FindFriendResponse>
+
+    @GET("users/friends/suggestions")
+    fun getSomeSuggestions(): Call<String>
 }
