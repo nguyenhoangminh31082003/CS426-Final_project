@@ -164,10 +164,13 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         ImageView updateIcon = view.findViewById(R.id.update_icon);
         accountName.setText(accountRow.getUsername());
 
+        /*
         this.setUserProfilePicture(
                 accountProfilePicture,
                 accountRow.getUserID()
         );
+
+         */
 
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
@@ -188,7 +191,8 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                                 Response<String> response) {
                             if (response.isSuccessful()) {
                                 System.err.println("Remove!!!");
-                                accounts.get(headers[x]).removeAccountRowWithTheGivenID(accountRow.getUserID());
+                                accounts.get(FRIENDS_HEADER).addAccountRow(accountRow);
+                                accounts.get(SUGGESTIONS_HEADER).removeAccountRowWithTheGivenID(accountRow.getUserID());
                                 System.err.println("One!!!");
                                 notifyDataSetChanged();
                                 System.err.println("Two!!!");
