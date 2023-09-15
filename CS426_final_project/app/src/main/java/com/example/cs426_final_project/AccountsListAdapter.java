@@ -204,7 +204,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             updateIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    
+
                 }
             });
         }
