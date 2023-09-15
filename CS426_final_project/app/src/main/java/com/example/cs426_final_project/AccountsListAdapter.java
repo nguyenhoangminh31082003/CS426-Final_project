@@ -66,6 +66,12 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         this.accounts.put(SUGGESTIONS_HEADER, suggestions);
     }
 
+    public void setListOfFriends(
+            ListOfAccountRows suggestions
+    ) {
+        this.accounts.put(FRIENDS_HEADER, suggestions);
+    }
+
     @Override
     public int getGroupCount() {
         System.out.println("The number of groups is " + headers.length);
@@ -169,8 +175,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                 accountProfilePicture,
                 accountRow.getUserID()
         );
-
-         */
+        */
 
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);

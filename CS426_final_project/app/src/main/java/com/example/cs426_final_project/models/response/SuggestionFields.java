@@ -35,7 +35,7 @@ public class SuggestionFields {
     @SerializedName("user_permissions")
     private List<String> userPermissions;
 
-    public String getUSername() {
+    public String getUsername() {
         return this.username;
     }
 

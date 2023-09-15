@@ -28,6 +28,7 @@ import com.example.cs426_final_project.models.data.FriendDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.response.FindFriendResponse;
+import com.example.cs426_final_project.models.response.FriendsResponse;
 import com.example.cs426_final_project.models.response.SuggestionFields;
 import com.example.cs426_final_project.models.response.SuggestionResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
@@ -50,20 +51,30 @@ public class MyFriendsFragment extends MainPageFragment {
                 .Companion
                 .getApiClient(getContext())
                 .create(UsersApi.class);
-        Call<FindFriendResponse> call = usersApi.getFriendsOfCurrentUser();
+        Call<List<FriendsResponse> > call = usersApi.getFriendsOfCurrentUser();
 
-        call.enqueue(new Callback<FindFriendResponse>() {
+        call.enqueue(new Callback<List<FriendsResponse>  >() {
             @Override
             public void onResponse(
-                    Call<FindFriendResponse> call,
-                    Response<FindFriendResponse> response
+                    Call<List<FriendsResponse>  > call,
+                    Response<List<FriendsResponse>  > response
             ) {
                 if (response.isSuccessful()) {
-                    FindFriendResponse body = response.body();
+                    List<FriendsResponse>  body = response.body();
                     System.out.println("Successfully find friends");
                     if (body != null) {
-                        //List<FriendDataModel> listOfFriends = body.results;
-                        //System.out.println("The number of friends: " + listOfFriends.size());
+                        System.out.println("The number of friends: " + body.size());
+                        final int size = body.size();
+                        ListOfAccountRows rows = new ListOfAccountRows();
+                        for (int i = 0; i < size; ++i) {
+                            rows.addAccountRow(new AccountRow(
+                                    body.get(i).id,
+                                    body.get(i).username
+                            ));
+                        }
+                        adapter.setListOfFriends(rows);
+                        listView.setAdapter(adapter);
+                        expandListView();
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -72,7 +83,7 @@ public class MyFriendsFragment extends MainPageFragment {
 
             @Override
             public void onFailure(
-                    Call<FindFriendResponse> call,
+                    Call<List<FriendsResponse>  > call,
                     Throwable t
             ) {
                 t.printStackTrace();
@@ -104,7 +115,7 @@ public class MyFriendsFragment extends MainPageFragment {
                             SuggestionFields fields = body.get(i).fields;
                             rows.addAccountRow(new AccountRow(
                                     body.get(i).userID,
-                                    fields.getUSername()
+                                    fields.getUsername()
                             ));
                         }
                         adapter.setListOfSuggestions(rows);

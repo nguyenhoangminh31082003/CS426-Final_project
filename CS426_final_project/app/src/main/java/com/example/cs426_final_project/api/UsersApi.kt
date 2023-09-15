@@ -7,6 +7,7 @@ import com.example.cs426_final_project.models.data.ProfileDataModel
 import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.data.UserDataModel
 import com.example.cs426_final_project.models.response.FindFriendResponse
+import com.example.cs426_final_project.models.response.FriendsResponse
 import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 import com.example.cs426_final_project.models.response.SuggestionFields
@@ -49,7 +50,7 @@ interface UsersApi {
     fun getFriendsOfUser(@Path(value="userID") id : Int): Call<FindFriendResponse>
 
     @GET("users/friends")
-    fun getFriendsOfCurrentUser(): Call<FindFriendResponse>
+    fun getFriendsOfCurrentUser(): Call<List<FriendsResponse> >
 
     @GET("users/friends/suggestions")
     fun getSomeSuggestions(): Call<List<SuggestionResponse> >
