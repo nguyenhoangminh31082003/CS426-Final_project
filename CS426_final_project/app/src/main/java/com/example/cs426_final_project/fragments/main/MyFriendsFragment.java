@@ -26,6 +26,7 @@ import com.example.cs426_final_project.models.data.FriendDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.response.FindFriendResponse;
+import com.example.cs426_final_project.models.response.SuggestionResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
@@ -58,8 +59,8 @@ public class MyFriendsFragment extends MainPageFragment {
                     FindFriendResponse body = response.body();
                     System.out.println("Successfully find friends");
                     if (body != null) {
-                        List<FriendDataModel> listOfFriends = body.results;
-                        System.out.println("The number of friends: " + listOfFriends.size());
+                        //List<FriendDataModel> listOfFriends = body.results;
+                        //System.out.println("The number of friends: " + listOfFriends.size());
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
@@ -69,6 +70,42 @@ public class MyFriendsFragment extends MainPageFragment {
             @Override
             public void onFailure(
                     Call<FindFriendResponse> call,
+                    Throwable t
+            ) {
+                t.printStackTrace();
+                System.err.println("Can not find friends :'((");
+            }
+        });
+    }
+
+    private void findSomeSuggestions() {
+        UsersApi usersApi = ApiUtilityClass
+                .Companion
+                .getApiClient(getContext())
+                .create(UsersApi.class);
+        Call<List<SuggestionResponse> > call = usersApi.getSomeSuggestions();
+
+        call.enqueue(new Callback<List<SuggestionResponse> >() {
+            @Override
+            public void onResponse(
+                    Call<List<SuggestionResponse> > call,
+                    Response<List<SuggestionResponse> > response
+            ) {
+                if (response.isSuccessful()) {
+                    List<SuggestionResponse> body = response.body();
+                    System.out.println("Successfully find friends");
+                    if (body != null) {
+                        //List<FriendDataModel> listOfFriends = body.results;
+                        //System.out.println("The number of friends: " + listOfFriends.size());
+                    }
+                } else {
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<List<SuggestionResponse>> call,
                     Throwable t
             ) {
                 t.printStackTrace();
@@ -87,6 +124,7 @@ public class MyFriendsFragment extends MainPageFragment {
         this.setUpListView();
 
         this.findFriends();
+        this.findSomeSuggestions();
     }
 
     @Override
@@ -94,6 +132,7 @@ public class MyFriendsFragment extends MainPageFragment {
         super.onResume();
 
         this.findFriends();
+        this.findSomeSuggestions();
     }
 
     void setUpListView() {
