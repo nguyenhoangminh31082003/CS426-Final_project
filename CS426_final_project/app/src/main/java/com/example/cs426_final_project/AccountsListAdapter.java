@@ -200,6 +200,13 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         } else {
             updateIcon.setImageResource(R.drawable.my_friends_page_unfriend_icon);
             relationship.setText("Friend");
+
+            updateIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    
+                }
+            });
         }
 
         return view;
