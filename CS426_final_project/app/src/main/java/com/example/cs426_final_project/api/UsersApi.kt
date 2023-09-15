@@ -42,7 +42,7 @@ interface UsersApi {
     fun getUser(@Path(value="userID") id : Int): Call<UserDataModel>
 
     @GET("users/friends/{userID}")
-    fun getFriendsOfUser(@Path(value="userID") id : Int): Call<String>
+    fun getFriendsOfUser(@Path(value="userID") id : Int): Call<FindFriendResponse>
 
     @GET("users/friends")
     fun getFriendsOfCurrentUser(): Call<FindFriendResponse>

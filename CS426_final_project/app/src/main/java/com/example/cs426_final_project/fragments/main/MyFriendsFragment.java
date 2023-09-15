@@ -58,8 +58,8 @@ public class MyFriendsFragment extends MainPageFragment {
                     FindFriendResponse body = response.body();
                     System.out.println("Successfully find friends");
                     if (body != null) {
-                        List<FriendDataModel> listOfFriends = body.results;
-                        System.out.println("The number of friends: " + listOfFriends.size());
+                        //List<FriendDataModel> listOfFriends = body.results;
+                        //System.out.println("The number of friends: " + listOfFriends.size());
                     }
                 } else {
                     ApiUtilityClass.Companion.debug(response);
