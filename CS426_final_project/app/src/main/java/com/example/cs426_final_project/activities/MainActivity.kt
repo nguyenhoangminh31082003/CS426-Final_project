@@ -9,14 +9,19 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.cs426_final_project.R
+import com.example.cs426_final_project.Singleton.UserLocation
 import com.example.cs426_final_project.adapters.ViewPagerAdapter
 import com.example.cs426_final_project.contracts.MainPageContract
 import com.example.cs426_final_project.contracts.PageTransformerContract
@@ -26,18 +31,26 @@ import com.example.cs426_final_project.fragments.main.FeedsFragment
 import com.example.cs426_final_project.fragments.main.HorizontalMainPageHolderFragment
 import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
 import com.example.cs426_final_project.worker.UpdateWorker
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import java.util.concurrent.TimeUnit
-
-import androidx.work.PeriodicWorkRequestBuilder;
-import androidx.work.WorkManager
 
 
 class MainActivity : AppCompatActivity(), MainPageContract {
 
     private lateinit var vpVerticalMain: ViewPager2
     private lateinit var registerForActivityResult: ActivityResultLauncher<Intent>
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
 
-    // Register intent result
+    override fun onStop() {
+        super.onStop()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
 
 
     private fun requestPermissions() {
@@ -59,9 +72,46 @@ class MainActivity : AppCompatActivity(), MainPageContract {
             )
         }
 
-        // ask list of permission
-
+        // ask list of permissions
     }
+
+    private fun initTrackingUserLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                val lastLocation = locationResult.lastLocation
+                if (lastLocation != null) {
+                    UserLocation.latitude = lastLocation.latitude
+                    UserLocation.longitude = lastLocation.longitude
+                }
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            (
+                    60 * 1000
+                    ).toLong()
+        ).build()
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +119,7 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         requestPermissions()
 
         periodicCacheImages()
+        initTrackingUserLocation()
 
         // fix vertical orientation
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.activities.ReviewActivity;
 import com.example.cs426_final_project.adapters.SearchResultFoodsAdapter;
 import com.example.cs426_final_project.SortModeData;
 import com.example.cs426_final_project.activities.ChoosingSortModeActivity;
 import com.example.cs426_final_project.api.SearchApi;
 import com.example.cs426_final_project.fragments.decoration.WaitingFragment;
+import com.example.cs426_final_project.models.data.FoodDataModel;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
 import com.example.cs426_final_project.models.response.FoodSearchResultResponse;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
@@ -118,7 +120,6 @@ public class SearchResultFragment extends Fragment {
                     SearchQueryResponse foodDataModels = response.body();
                     if (foodDataModels != null) {
                         showSuggestions(foodDataModels.getResults());
-
                     }
                     hideWaitingFragment();
                 } else {
@@ -135,8 +136,22 @@ public class SearchResultFragment extends Fragment {
         });
     }
 
-    private void showSuggestions(List<FoodSearchResultResponse> results) {
-        adapter = new SearchResultFoodsAdapter(results);
+    private void showSuggestions(List<FoodSearchResultResponse> FoodSearchResultResponseList) {
+        adapter = new SearchResultFoodsAdapter(FoodSearchResultResponseList, (position, view) -> {
+                Intent intent = new Intent(requireActivity(), ReviewActivity.class);
+
+                FoodSearchResultResponse item = FoodSearchResultResponseList.get(position);
+                assert item != null;
+                FoodDataModel foodDataModel = item.getFood();
+
+                intent.putExtra("foodId", foodDataModel.getId());
+                intent.putExtra("storeId", foodDataModel.getStore());
+                intent.putExtra("imageLink", foodDataModel.getImageLink());
+                intent.putExtra("foodName", foodDataModel.getName());
+
+                startActivity(intent);
+
+        });
         RecyclerView viewOfListOfFoods = requireView().findViewById(R.id.list_of_foods_in_search_result);
         viewOfListOfFoods.setAdapter(adapter);
         viewOfListOfFoods.setLayoutManager(new GridLayoutManager(requireContext(), 2));

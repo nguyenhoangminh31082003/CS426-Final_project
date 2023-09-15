@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs426_final_project.ConceptualListOfFoodsInSearchResult;
@@ -24,12 +25,19 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
 
     private List<FoodSearchResultResponse> searchResultFieldsList;
 
+    public interface OnItemClickListener {
+        void onItemClick(int position, View view);
+    }
+
+    private OnItemClickListener listener;
+
     public SearchResultFoodsAdapter() {
         this.listOfFoods = new ConceptualListOfFoodsInSearchResult();
     }
 
-    public SearchResultFoodsAdapter(List<FoodSearchResultResponse> results) {
+    public SearchResultFoodsAdapter(List<FoodSearchResultResponse> results, OnItemClickListener listener) {
         this.searchResultFieldsList = results;
+        this.listener = listener;
     }
 
     @NonNull
@@ -47,7 +55,7 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
             FoodSearchResultResponse foodSearchResultResponse = this.searchResultFieldsList.get(position);
             String url = foodSearchResultResponse.getFood().getImageLink();
             // load image from url
-            ImageUtilityClass.Companion.loadBase64FromUrl(holder.ivSearchResultFoodPreview, url);
+            ImageUtilityClass.Companion.loadImageViewFromUrl(holder.ivSearchResultFoodPreview, url);
             holder.txtSearchResultFoodName.setText(foodSearchResultResponse.getFood().getName());
 
             ReviewDataModel review = foodSearchResultResponse.getReview();
@@ -57,6 +65,13 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
             else
                 holder.txtSearchResultReview.setText("Try to be the first one to review");
             ImageUtilityClass.Companion.cropCenter(holder.ivSearchResultFoodPreview);
+
+
+            holder.cvSearchResultItem.setOnClickListener(v -> {
+                if(listener != null)
+                    listener.onItemClick(position, v);
+            });
+
             return;
         }
 
@@ -77,11 +92,14 @@ public class SearchResultFoodsAdapter extends RecyclerView.Adapter<SearchResultF
         public ImageView ivSearchResultFoodPreview;
         public TextView txtSearchResultFoodName, txtSearchResultReview;
 
+        public CardView cvSearchResultItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
             this.ivSearchResultFoodPreview = itemView.findViewById(R.id.ivSearchResultFoodPreview);
             this.txtSearchResultFoodName = itemView.findViewById(R.id.txtSearchResultFoodName);
             this.txtSearchResultReview = itemView.findViewById(R.id.txtSearchResultReview);
+            this.cvSearchResultItem = itemView.findViewById(R.id.cvSearchResultItem);
         }
 
     }
