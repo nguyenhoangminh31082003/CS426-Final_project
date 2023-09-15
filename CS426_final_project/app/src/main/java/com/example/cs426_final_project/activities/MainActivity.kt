@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), MainPageContract {
 
 
     private fun requestPermissions() {
+        
         if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
             || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED

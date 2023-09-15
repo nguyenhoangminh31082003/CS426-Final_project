@@ -7,19 +7,20 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.SizeF
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import androidx.work.impl.utils.SynchronousExecutor
 import com.example.cs426_final_project.R
-import com.example.cs426_final_project.api.FeedApi
-import com.example.cs426_final_project.models.posts.FeedResponse
 import com.example.cs426_final_project.utilities.ImageUtilityClass
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.cs426_final_project.worker.WidgetUpdateWorker
+import java.util.concurrent.TimeUnit
+// import test driver from work testing
+
 
 
 /**
@@ -31,12 +32,22 @@ class AppWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        // There may be multiple widgets active, so update all of them
+
+
+//        val widgetUpdateWorkRequest = PeriodicWorkRequest.Builder(
+//            WidgetUpdateWorker::class.java,
+//            15, TimeUnit.MINUTES // Adjust the update interval as needed
+//        ).build()
+//
+//        val enqueue = WorkManager.getInstance(context).enqueue(widgetUpdateWorkRequest)
+
+
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onAppWidgetOptionsChanged(
         context: Context?,
         appWidgetManager: AppWidgetManager?,
@@ -95,11 +106,10 @@ internal fun updateAppWidget(
     val remoteViews = RemoteViews(context.packageName, R.layout.app_widget_provider)
 
     val url = getCachedUrl(context)
-    println("the url is $url")
-//    ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
-//        remoteViews.setImageViewBitmap(R.id.imageView, it)
-//        appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
-//    })
+    ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
+        remoteViews.setImageViewBitmap(R.id.ivWidgetPicture, it)
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+    })
 
 }
 
@@ -123,5 +133,7 @@ fun getCachedUrl(context: Context): String {
     }
     return ""
 }
+
+
 
 
