@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity {
         RESULT
     }
 
-    private SearchType currentSearchType = SearchType.TRENDING;
+    private SearchType currentSearchType;
     private androidx.appcompat.widget.SearchView sevSearch;
     private SearchQueryDataModel searchQueryDataModel;
     private boolean isLoadingSearchComplete = false;
@@ -168,8 +168,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private void callSearchCompleteApi(){
         SearchApi searchApi = ApiUtilityClass.Companion.getApiClient(this).create(SearchApi.class);
+
         Call<SearchCompleteResponse> call = searchApi.searchAutoComplete(
-                searchQueryDataModel.getQuery(),
+                searchQueryDataModel.getQuery().toLowerCase(),
                 searchQueryDataModel.getLimit()
         );
         call.enqueue(new Callback<SearchCompleteResponse>() {
@@ -180,7 +181,9 @@ public class SearchActivity extends AppCompatActivity {
                     List<String> foodNames = Objects.requireNonNull(searchCompleteResponse).getResults();
                     System.out.println("Successfully response with food names");
                     System.out.println(foodNames);
-                    showSuggestions(foodNames);
+                    System.out.println(searchQueryDataModel.getQuery());
+                    if(searchQueryDataModel.getQuery().length() > 3)
+                        showSuggestions(foodNames);
                 } else {
                     System.err.println("Something is not ok? Please check quick");
                     ApiUtilityClass.Companion.debug(response);
@@ -235,7 +238,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 System.out.println("Query: " + newText);
-
+                searchQueryDataModel.setQuery(newText);
                 if(newText.length() <= 3){
                     if(newText.isEmpty()){
                         System.out.println("Empty query");
@@ -243,8 +246,6 @@ public class SearchActivity extends AppCompatActivity {
                     showTrendingFood();
                 }
                 else {
-
-                    searchQueryDataModel.setQuery(newText);
                     callSearchCompleteApi();
                 }
                 return false;
