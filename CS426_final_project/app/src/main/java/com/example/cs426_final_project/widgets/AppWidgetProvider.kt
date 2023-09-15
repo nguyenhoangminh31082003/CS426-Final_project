@@ -7,12 +7,19 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.util.SizeF
 import android.widget.RemoteViews
 import com.example.cs426_final_project.R
+import com.example.cs426_final_project.api.FeedApi
+import com.example.cs426_final_project.models.posts.FeedResponse
+import com.example.cs426_final_project.utilities.ImageUtilityClass
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 /**
@@ -29,8 +36,6 @@ class AppWidgetProvider : AppWidgetProvider() {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
-
-
 
     override fun onAppWidgetOptionsChanged(
         context: Context?,
@@ -84,17 +89,39 @@ internal fun updateAppWidget(
     appWidgetId: Int
 ) {
 
-
-
-
     val intent = Intent(context, AppWidgetProvider::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
     val remoteViews = RemoteViews(context.packageName, R.layout.app_widget_provider)
 
-
-
-    appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
-
+    val url = getCachedUrl(context)
+    println("the url is $url")
+//    ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
+//        remoteViews.setImageViewBitmap(R.id.imageView, it)
+//        appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+//    })
 
 }
+
+fun getCachedUrl(context: Context): String {
+    val sharedPreferences = context.getSharedPreferences(
+        "IMAGE_URLS",
+        Context.MODE_PRIVATE
+    )
+    // get urls from string set of shared preferences
+    val urls = sharedPreferences.getStringSet("urls", null)
+    if (urls != null) {
+        val newUrls = urls.toMutableSet()
+        if (newUrls.isNotEmpty()) {
+            val url = newUrls.first()
+            newUrls.remove(url)
+            val editor = sharedPreferences.edit()
+            editor.putStringSet("urls", newUrls)
+            editor.apply()
+            return url
+        }
+    }
+    return ""
+}
+
+

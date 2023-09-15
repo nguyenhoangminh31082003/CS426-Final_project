@@ -1,6 +1,7 @@
 package com.example.cs426_final_project.activities
 
 // import view pager adapter
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -14,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import androidx.work.PeriodicWorkRequest
 import com.example.cs426_final_project.R
 import com.example.cs426_final_project.adapters.ViewPagerAdapter
 import com.example.cs426_final_project.contracts.MainPageContract
@@ -23,6 +25,12 @@ import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.fragments.main.FeedsFragment
 import com.example.cs426_final_project.fragments.main.HorizontalMainPageHolderFragment
 import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
+import com.example.cs426_final_project.worker.UpdateWorker
+import java.util.concurrent.TimeUnit
+
+import androidx.work.PeriodicWorkRequestBuilder;
+import androidx.work.WorkManager
+
 
 class MainActivity : AppCompatActivity(), MainPageContract {
 
@@ -59,6 +67,8 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         setContentView(R.layout.activity_main)
         requestPermissions()
 
+        periodicCacheImages()
+
         // fix vertical orientation
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
@@ -75,6 +85,14 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         if(needSignIn()) {
             signIn()
         }
+    }
+
+    private fun periodicCacheImages() {
+        val updateWorkRequest: PeriodicWorkRequest =
+            PeriodicWorkRequestBuilder<UpdateWorker>(1, TimeUnit.MINUTES)
+                .build()
+
+        WorkManager.getInstance(this).enqueue(updateWorkRequest);
     }
 
     private fun initHorizontalViewPager() {

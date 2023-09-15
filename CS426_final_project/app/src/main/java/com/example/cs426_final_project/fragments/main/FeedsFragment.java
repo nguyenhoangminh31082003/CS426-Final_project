@@ -27,6 +27,7 @@ import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,23 +67,21 @@ public class FeedsFragment extends Fragment {
                 .Companion
                 .getApiClient(requireContext())
                 .create(FeedApi.class);
-        Call<String> call = feedApi.getTimelineFeeds();
-        call.enqueue(new Callback<String>() {
+        Call<List<FeedResponse>> call = feedApi.getTimelineWidget();
+        call.enqueue(new Callback<List<FeedResponse>>() {
             @Override
             public void onResponse(
-                    @NonNull Call<String> call,
-                    @NonNull Response<String> response
+                    @NonNull Call<List<FeedResponse>> call,
+                    @NonNull Response<List<FeedResponse>> response
             ) {
                 if (response.isSuccessful()) {
-                    String body = response.body();
-                    System.out.println("Body of response: " + body);
-                    if (body != null) {
-                        Gson gson = new Gson();
-                        FeedResponse[] feedResponses = gson.fromJson(body, FeedResponse[].class);;
-                        System.out.println("Number of feeds: " + feedResponses.length);
+                    List<FeedResponse> feedResponseList = response.body();
+                    if (feedResponseList != null) {
+
+                        System.out.println("Number of feeds: " + feedResponseList.size());
 
                         listOfFeeds.clear();
-                        for (FeedResponse feedResponse : feedResponses) {
+                        for (FeedResponse feedResponse : feedResponseList) {
                             FeedFields feedFields = feedResponse.fields;
                             listOfFeeds.add(new FeedInfo(
                                     feedResponse.id,
@@ -118,7 +117,7 @@ public class FeedsFragment extends Fragment {
 
             @Override
             public void onFailure(
-                    @NonNull Call<String> call,
+                    @NonNull Call<List<FeedResponse>> call,
                     Throwable t
             ) {
                 t.printStackTrace();

@@ -96,19 +96,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 Location lastLocation = locationResult.getLastLocation();
-                searchQueryDataModel.setLat(lastLocation.getLatitude());
-                searchQueryDataModel.setLong(lastLocation.getLongitude());
+                if (lastLocation != null) {
+                    searchQueryDataModel.setLat(lastLocation.getLatitude());
+                    searchQueryDataModel.setLong(lastLocation.getLongitude());
+                }
             }
         };
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         LocationRequest locationRequest = new LocationRequest.Builder(
@@ -117,8 +113,6 @@ public class SearchActivity extends AppCompatActivity {
         ).build();
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-
-        // use onMapReady() to get location
 
     }
 
