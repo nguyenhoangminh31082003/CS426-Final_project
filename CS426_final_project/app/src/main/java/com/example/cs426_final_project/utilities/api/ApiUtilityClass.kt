@@ -17,7 +17,7 @@ class ApiUtilityClass {
 
     companion object {
 
-        private const val BASE_URL = "https://6aea-137-132-26-243.ngrok-free.app"
+        private const val BASE_URL = "https://03a2-137-132-26-223.ngrok-free.app"
 
         fun parseError(errorBody: ResponseBody?) : StatusResponse {
             val gson = Gson()
@@ -51,7 +51,6 @@ class ApiUtilityClass {
                 println("charStream: ${response.errorBody()?.charStream()}")
                 println("Cannot parse Error: ${e.message}")
             }
-
         }
 
         @SuppressLint("ApplySharedPref")

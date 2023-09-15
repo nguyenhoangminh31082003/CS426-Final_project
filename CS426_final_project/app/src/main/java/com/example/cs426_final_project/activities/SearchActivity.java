@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.Manifest;
 
 import com.example.cs426_final_project.R;
+import com.example.cs426_final_project.Singleton.UserLocation;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.api.FoodApi;
@@ -35,7 +36,6 @@ import com.example.cs426_final_project.models.response.FoodResponse;
 import com.example.cs426_final_project.models.response.SearchQueryResponse;
 import com.example.cs426_final_project.models.response.SearchResultFields;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -53,7 +53,6 @@ import retrofit2.Response;
 public class SearchActivity extends AppCompatActivity {
     private androidx.appcompat.widget.SearchView sevSearch;
     private SearchQueryDataModel searchQueryDataModel;
-    private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     TrendingFoodFragment trendingFoodFragment;
     SearchSuggestionFragment searchSuggestionFragment;
@@ -61,19 +60,12 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_search);
-
-
-        // ask for ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION permissions
-
-
-        trackUserLastLocation();
 
         this.setSearchView();
 
@@ -88,34 +80,6 @@ public class SearchActivity extends AppCompatActivity {
         if (extras != null)
             this.queryFoodNameWithGivenID(extras.getInt("food_id"));
     }
-
-    private void trackUserLastLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                Location lastLocation = locationResult.getLastLocation();
-                if (lastLocation != null) {
-                    searchQueryDataModel.setLat(lastLocation.getLatitude());
-                    searchQueryDataModel.setLong(lastLocation.getLongitude());
-                }
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-        LocationRequest locationRequest = new LocationRequest.Builder(
-                Priority.PRIORITY_HIGH_ACCURACY,
-                60 * 1000
-        ).build();
-
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-
-    }
-
 
 
     private void queryFoodNameWithGivenID(final int id) {
@@ -197,6 +161,9 @@ public class SearchActivity extends AppCompatActivity {
                         .replace(R.id.fcvSearch, searchResultFragment)
                         .addToBackStack(null)
                         .commit();
+
+                searchQueryDataModel.setLat(UserLocation.INSTANCE.getLatitude());
+                searchQueryDataModel.setLong(UserLocation.INSTANCE.getLongitude());
 
                 searchResultFragment.setSearchQueryDataModel(searchQueryDataModel);
 

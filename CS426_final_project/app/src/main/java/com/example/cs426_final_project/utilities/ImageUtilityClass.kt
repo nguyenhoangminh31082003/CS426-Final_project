@@ -15,7 +15,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.SimpleTarget
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Transformation
 import java.io.ByteArrayOutputStream
@@ -71,6 +70,27 @@ class ImageUtilityClass {
             return circularBitmap
         }
 
+        fun cropRadiusBorderBitmap(originalBitmap: Bitmap?, radius: Float): Bitmap? {
+            val circularBitmap = Bitmap.createBitmap(
+                originalBitmap!!.width,
+                originalBitmap.height,
+                Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(circularBitmap)
+
+            val paint = Paint()
+            paint.shader = BitmapShader(
+                originalBitmap,
+                Shader.TileMode.CLAMP,
+                Shader.TileMode.CLAMP
+            )
+
+            canvas.drawRoundRect(0f, 0f, originalBitmap.width.toFloat(), originalBitmap.height.toFloat(), radius, radius, paint)
+
+            return circularBitmap
+        }
+
 
 
         fun cropSquareBitmap(originalBitmap: Bitmap?): Bitmap? {
@@ -93,15 +113,23 @@ class ImageUtilityClass {
             return squareBitmap
         }
 
-        fun loadBase64FromUrl(imageView: ImageView, url: String) {
+        // square and rounded are optional
+        @JvmOverloads
+        fun loadImageViewFromUrl(imageView: ImageView, url: String, square: Boolean = true, rounded: Boolean = false){
              Picasso.get()
                  .load(url)
                  .transform(object : Transformation {
                      override fun transform(source: Bitmap?): Bitmap {
-                         val result = cropSquareBitmap(source)
-                         val scaledResult = Bitmap.createScaledBitmap(result!!, 400, 400, false)
+                         var result = cropSquareBitmap(source)
+                         if(square){
+                                result = cropSquareBitmap(source)
+                         }
+                         result = Bitmap.createScaledBitmap(result!!, 400, 400, false)
+                         if(rounded){
+                             result = cropCircleBitmap(result)
+                         }
                          source?.recycle()
-                         return scaledResult
+                         return result!!
                      }
 
                      override fun key(): String {
@@ -109,6 +137,25 @@ class ImageUtilityClass {
                      }
                  })
                  .into(imageView)
+        }
+
+        @JvmOverloads
+        fun loadSquareImageViewFromUrl(imageView: ImageView, url: String,  destDim : Int = 400, radius: Float = 20f){
+            Picasso.get()
+                .load(url)
+                .transform(object : Transformation {
+                    override fun transform(source: Bitmap?): Bitmap {
+                        var result = cropRadiusBorderBitmap(source, radius)
+                        result = Bitmap.createScaledBitmap(result!!, destDim, destDim, false)
+                        source?.recycle()
+                        return result!!
+                    }
+
+                    override fun key(): String {
+                        return "square"
+                    }
+                })
+                .into(imageView)
         }
 
         fun bitmapToBase64(bitmap: Bitmap): String {

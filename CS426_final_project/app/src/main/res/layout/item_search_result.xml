@@ -8,6 +8,8 @@
     app:cardCornerRadius="14dp"
     app:cardBackgroundColor="@color/light_grey"
     android:layout_margin="4dp"
+    android:id="@+id/cvSearchResultItem"
+    android:background="?selectableItemBackgroundBorderless"
     >
 
     <LinearLayout
