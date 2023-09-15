@@ -14,6 +14,7 @@ import com.example.cs426_final_project.adapters.RecyclerSearchSuggestionAdapter
 class SearchSuggestionFragment : Fragment() {
 
     private var searchSuggestions = listOf("Please wait")
+    private var onItemClickListener: OnItemClickListener? = null
 
     private lateinit var rvSearchSuggestion: RecyclerView
     override fun onCreateView(
@@ -28,7 +29,7 @@ class SearchSuggestionFragment : Fragment() {
 
         rvSearchSuggestion = view.findViewById(R.id.rvSearchSuggestion)
 
-        val adapter = RecyclerSearchSuggestionAdapter(searchSuggestions)
+        val adapter = RecyclerSearchSuggestionAdapter(searchSuggestions, onItemClickListener)
         rvSearchSuggestion.adapter = adapter
 
         // set linear manager for recycler view
@@ -48,11 +49,17 @@ class SearchSuggestionFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(suggestionList: List<String>): SearchSuggestionFragment {
+        fun newInstance(suggestionList: List<String>, onItemClickListener: OnItemClickListener): SearchSuggestionFragment {
             val searchSuggestionFragment = SearchSuggestionFragment()
             searchSuggestionFragment.updateSearchSuggestions(suggestionList)
+            searchSuggestionFragment.onItemClickListener = onItemClickListener
             return searchSuggestionFragment
         }
+
+        interface OnItemClickListener {
+            fun onItemClick(view: View, position: Int, item: String)
+        }
+
 
 
     }

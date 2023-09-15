@@ -13,6 +13,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -43,6 +44,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +163,11 @@ public class SearchActivity extends AppCompatActivity {
 
     private void showSuggestions(List<String> results){
         currentSearchType = SearchType.SUGGESTION;
-        searchSuggestionFragment = SearchSuggestionFragment.Companion.newInstance(results);
+
+        searchSuggestionFragment = SearchSuggestionFragment.Companion.newInstance(results,
+                (view, position, item) -> changeQuerySearch(item, true, false)
+        );
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fcvSearch, searchSuggestionFragment)
                 .commit();
