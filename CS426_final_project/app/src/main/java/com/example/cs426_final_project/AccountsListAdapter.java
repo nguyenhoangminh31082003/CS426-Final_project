@@ -3,6 +3,7 @@ package com.example.cs426_final_project;
 import android.app.Activity;
 import android.content.Context;
 import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cs426_final_project.api.UsersApi;
+import com.example.cs426_final_project.models.data.ProfileDataModel;
+import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.response.SuggestionResponse;
+import com.example.cs426_final_project.utilities.ImageUtilityClass;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.HashMap;
@@ -160,6 +164,11 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         ImageView updateIcon = view.findViewById(R.id.update_icon);
         accountName.setText(accountRow.getUsername());
 
+        this.setUserProfilePicture(
+                accountProfilePicture,
+                accountRow.getUserID()
+        );
+
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
             relationship.setText("Suggestion");
@@ -178,10 +187,11 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                                 Call<String> call,
                                 Response<String> response) {
                             if (response.isSuccessful()) {
-
+                                System.err.println("Remove!!!");
                                 accounts.get(headers[x]).removeAccountRowWithTheGivenID(accountRow.getUserID());
-
+                                System.err.println("One!!!");
                                 notifyDataSetChanged();
+                                System.err.println("Two!!!");
                             } else {
                                 ApiUtilityClass.Companion.debug(response);
                             }
@@ -210,6 +220,43 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         }
 
         return view;
+    }
+
+    private void setUserProfilePicture(
+            ImageView view,
+            final int id
+    ) {
+        UsersApi usersApi = ApiUtilityClass
+                .Companion
+                .getApiClient(activity)
+                .create(UsersApi.class);
+        Call<UserDataModel> call = usersApi.getUser(id);
+
+        call.enqueue(new Callback<UserDataModel>() {
+            @Override
+            public void onResponse(
+                    Call<UserDataModel> call,
+                    Response<UserDataModel> response
+            ) {
+                if (response.isSuccessful()) {
+                    final UserDataModel data = response.body();
+                    final String link = data.avatar;
+                    if (link.startsWith("http")) {
+                        ImageUtilityClass.Companion.loadImageViewFromUrl(view, link);
+                    } else {
+                        Uri uri = Uri.parse(link);
+                        view.setImageURI(uri);
+                    }
+                } else {
+                    ApiUtilityClass.Companion.debug(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDataModel> call, Throwable t) {
+                System.err.println("Error in getting user data");
+            }
+        });
     }
 
     @Override

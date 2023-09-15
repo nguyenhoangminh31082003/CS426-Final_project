@@ -41,7 +41,9 @@ interface UsersApi {
     fun userLogout(): Call<StatusResponse>
 
     @GET("users/profile/{userID}")
-    fun getUser(@Path(value="userID") id : Int): Call<UserDataModel>
+    fun getUser(
+        @Path(value="userID") id : Int
+    ): Call<UserDataModel>
 
     @GET("users/friends/{userID}")
     fun getFriendsOfUser(@Path(value="userID") id : Int): Call<FindFriendResponse>
