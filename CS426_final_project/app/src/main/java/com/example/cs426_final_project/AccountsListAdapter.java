@@ -218,7 +218,36 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             updateIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    UsersApi usersApi = ApiUtilityClass
+                            .Companion
+                            .getApiClient(activity)
+                            .create(UsersApi.class);
+                    Call<String> call = usersApi.changeFriend(accountRow.getUserID());
 
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(
+                                Call<String> call,
+                                Response<String> response) {
+                            if (response.isSuccessful()) {
+                                System.err.println("Remove!!!");
+                                accounts.get(FRIENDS_HEADER).removeAccountRowWithTheGivenID(accountRow.getUserID());
+                                System.err.println("One!!!");
+                                notifyDataSetChanged();
+                                System.err.println("Two!!!");
+                            } else {
+                                ApiUtilityClass.Companion.debug(response);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                                Call<String> call,
+                                Throwable t
+                        ) {
+                            System.err.println("Can not make friend");
+                        }
+                    });
                 }
             });
         }
