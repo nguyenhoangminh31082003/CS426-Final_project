@@ -20,7 +20,7 @@ class ApiUtilityClass {
 
     companion object {
 
-        private fun getBaseUrl(debug : Boolean = false): String {
+        private fun getBaseUrl(debug : Boolean = true): String {
             if(debug){
                 return "https://d71c-137-132-26-93.ngrok-free.app"
             }

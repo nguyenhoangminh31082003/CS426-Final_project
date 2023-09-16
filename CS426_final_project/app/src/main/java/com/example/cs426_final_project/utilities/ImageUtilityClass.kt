@@ -12,7 +12,6 @@ import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.util.Base64
 import android.widget.ImageView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.squareup.picasso.Picasso
@@ -92,8 +91,7 @@ class ImageUtilityClass {
         }
 
 
-
-        fun cropSquareBitmap(originalBitmap: Bitmap?): Bitmap? {
+        fun cropSquareBitmap(originalBitmap: Bitmap?, destDim: Int = 400): Bitmap? {
 
             val size = originalBitmap?.width?.coerceAtMost(originalBitmap.height)
 
@@ -110,7 +108,8 @@ class ImageUtilityClass {
             val destRect = Rect(0, 0, size, size)
             canvas?.drawBitmap(originalBitmap, srcRect, destRect, null)
 
-            return squareBitmap
+
+            return Bitmap.createScaledBitmap(squareBitmap!!, destDim, destDim, false)
         }
 
         // square and rounded are optional
@@ -184,7 +183,8 @@ class ImageUtilityClass {
                     }
 
                     override fun onLoadFailed(errorDrawable: Drawable?) {
-                        Toast.makeText(context, "Failed to load image", Toast.LENGTH_SHORT).show()
+                        println("Failed to load image from url: $url")
+//                        Toast.makeText(context, "Failed to load image", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onLoadCleared(placeholder: Drawable?) {
