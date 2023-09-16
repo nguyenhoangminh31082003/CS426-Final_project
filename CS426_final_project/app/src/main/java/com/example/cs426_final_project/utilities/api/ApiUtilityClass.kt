@@ -15,9 +15,18 @@ import java.io.IOException
 
 class ApiUtilityClass {
 
+
+
+
     companion object {
 
-        private const val BASE_URL = "https://d71c-137-132-26-93.ngrok-free.app"
+        private fun getBaseUrl(debug : Boolean = false): String {
+            if(debug){
+                return "https://d71c-137-132-26-93.ngrok-free.app"
+            }
+            return "http://13.229.250.243/"
+        }
+
 
         fun parseError(errorBody: ResponseBody?) : StatusResponse {
             val gson = Gson()
@@ -33,7 +42,7 @@ class ApiUtilityClass {
 
         fun getApiClient(context:Context): Retrofit {
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(createOkHttpClient(context))
                 .build()
