@@ -20,7 +20,8 @@ class ApiUtilityClass {
 
     companion object {
 
-        private fun getBaseUrl(debug : Boolean = true): String {
+        // change default debug to false to use production server
+        private fun getBaseUrl(debug : Boolean = false): String {
             if(debug){
                 return "https://d71c-137-132-26-93.ngrok-free.app"
             }
