@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -38,6 +41,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class FoodScanFragment extends MainPageFragment {
+
+    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result) {
+                    setUpCamera();
+                } else {
+                    Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -101,9 +115,8 @@ public class FoodScanFragment extends MainPageFragment {
         else
             System.err.println("NOT OK!!!, CAMERA HARDWARE!!!");
 
-//        requestStoragePermissions();
+        requestPermissionLauncher.launch(Manifest.permission.CAMERA);
 
-        setUpCamera();
 
         this.enableViewFriends(view);
 
@@ -129,7 +142,27 @@ public class FoodScanFragment extends MainPageFragment {
         );
     }
 
+
+
     private void setUpCamera() {
+
+        // use request permission launcher to request permission
+
+
+
+
+        // check permission before using camera
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+        ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    new String[]{Manifest.permission.CAMERA},
+                    1
+            );
+        }
+
         CameraFragment cameraFragment = CameraFragment.newInstance();
 
         cameraFragment.setCameraContract(this::onImageCaptured);
