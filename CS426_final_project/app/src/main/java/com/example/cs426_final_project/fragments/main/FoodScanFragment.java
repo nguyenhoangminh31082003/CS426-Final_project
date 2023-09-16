@@ -42,16 +42,21 @@ import java.util.Objects;
 
 public class FoodScanFragment extends MainPageFragment {
 
-    private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            result -> {
-                if (result) {
-                    setUpCamera();
-                } else {
-                    Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-            }
-    );
+    private CameraFragment cameraFragment;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // setUpCamera only permitted when the permission is granted
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            setUpCamera();
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+
+    }
 
     @Nullable
     @Override
@@ -110,13 +115,23 @@ public class FoodScanFragment extends MainPageFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (this.checkCameraHardware(this.requireContext()))
-            System.out.println("OK, camera hardware!!!!");
-        else
-            System.err.println("NOT OK!!!, CAMERA HARDWARE!!!");
+        requestPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        setUpCamera();
+                    }
+                }
+        );
 
-        requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+//        if (this.checkCameraHardware(this.requireContext()))
+//            System.out.println("OK, camera hardware!!!!");
+//        else
+//            System.err.println("NOT OK!!!, CAMERA HARDWARE!!!");
 
+//        askForPermission();
+
+//        setUpCamera();
 
         this.enableViewFriends(view);
 
@@ -125,45 +140,10 @@ public class FoodScanFragment extends MainPageFragment {
         this.enableStartViewFeedsIcon(view);
     }
 
-    private void requestStoragePermissions() {
-        ActivityCompat.requestPermissions(
-                this.requireActivity(),
-                new String[]{
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                },
-                1
-        );
-        ActivityCompat.requestPermissions(
-                this.requireActivity(),
-                new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                },
-                1
-        );
-    }
-
-
-
     private void setUpCamera() {
+        if(cameraFragment != null) return;
 
-        // use request permission launcher to request permission
-
-
-
-
-        // check permission before using camera
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-        ) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    new String[]{Manifest.permission.CAMERA},
-                    1
-            );
-        }
-
-        CameraFragment cameraFragment = CameraFragment.newInstance();
+        cameraFragment = CameraFragment.newInstance();
 
         cameraFragment.setCameraContract(this::onImageCaptured);
 

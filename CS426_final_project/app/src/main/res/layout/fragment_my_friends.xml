@@ -54,6 +54,7 @@
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:paddingTop="16dp"
                     android:paddingBottom="16dp"
                     tools:ignore="HardcodedText"/>
 
