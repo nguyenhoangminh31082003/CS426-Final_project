@@ -69,8 +69,11 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
                     @NonNull Call<StatusResponse> call,
                     @NonNull Throwable t
             ) {
-                call.enqueue(this);
+//                call.enqueue(this);
+                Toast.makeText(WaitingRequestAuthorityActivity.this, "There is an error in the connection", Toast.LENGTH_SHORT).show();
+                finish();
             }
+
         });
     }
 
@@ -101,7 +104,8 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
                     @NonNull Call<ProfileResponse> call,
                     @NonNull Throwable t
             ) {
-                call.enqueue(this);
+                Toast.makeText(WaitingRequestAuthorityActivity.this, "There is an error in the connection", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
