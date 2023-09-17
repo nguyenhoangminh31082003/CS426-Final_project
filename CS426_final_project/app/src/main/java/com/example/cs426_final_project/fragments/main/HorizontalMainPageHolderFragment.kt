@@ -17,6 +17,7 @@ import com.example.cs426_final_project.contracts.PageTransformerContract
 import com.example.cs426_final_project.contracts.ViewPagerContract
 import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
+import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.PagerUtilityClass
 
 class HorizontalMainPageHolderFragment : Fragment() {
@@ -30,6 +31,8 @@ class HorizontalMainPageHolderFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_horizontal_main_page_holder, container, false)
     }
+
+
 
     var changeLockState = { _: Boolean -> }
     var onRequestToFeed = { _: Unit -> }
@@ -49,6 +52,11 @@ class HorizontalMainPageHolderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initHorizontalViewPager(view)
         mainPageContract.setToMainPage(smoothScrolling = false)
+        vpHorizontalMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                KeyboardUtilityClass.hideKeyboard(requireContext(), view)
+            }
+        })
     }
 
     private fun initHorizontalViewPager(view: View) {
@@ -86,6 +94,9 @@ class HorizontalMainPageHolderFragment : Fragment() {
 
             override fun getItemCount(): Int = 3
         })
+
+        // hide keyboard when swiping
+
     }
 
     private fun addTransformation() {

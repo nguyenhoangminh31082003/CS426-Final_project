@@ -3,7 +3,6 @@ package com.example.cs426_final_project.activities
 // import view pager adapter
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -43,7 +42,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(), MainPageContract {
 
     private lateinit var vpVerticalMain: ViewPager2
-    private lateinit var registerForActivityResult: ActivityResultLauncher<Intent>
+    private lateinit var registerForSignInActivityResult: ActivityResultLauncher<Intent>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
 
@@ -51,29 +50,18 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         super.onStop()
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
+    private lateinit var requestPermissionLauncher : ActivityResultLauncher<Array<String>>
 
-
-    private fun requestPermissions() {
-        
-        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            || checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            || checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-            || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ), 1
+    private fun requestPermission() {
+        requestPermissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
             )
-        }
-
-        // ask list of permissions
+        )
     }
+
 
     private fun initTrackingUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -112,32 +100,53 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         )
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        requestPermissions()
+
+        requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { result ->
+            var isAllGranted = true
+            for ((permission, isGranted) in result) {
+                if (!isGranted) {
+                    isAllGranted = false
+                }
+            }
+            if (isAllGranted) {
+
+            } else {
+                finish()
+            }
+        }
+
+        registerForSignInActivityResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                // do nothing
+            } else {
+                finish()
+            }
+        }
 
         periodicCacheImages()
         initTrackingUserLocation()
 
         // fix vertical orientation
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-        registerForActivityResult =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode != RESULT_OK) {
-                    finish()
-                }
-            }
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
 
         initHorizontalViewPager()
 
-        if(needSignIn()) {
+        if (needSignIn()) {
             signIn()
         }
+
+        requestPermission()
     }
+
+
 
     private fun periodicCacheImages() {
         val updateWorkRequest: PeriodicWorkRequest =
@@ -197,10 +206,8 @@ class MainActivity : AppCompatActivity(), MainPageContract {
     }
 
     private fun signIn() {
-
-
         val signInIntent = Intent(this, SignInActivity::class.java)
-        registerForActivityResult.launch(signInIntent)
+        registerForSignInActivityResult.launch(signInIntent)
     }
 
     private fun needSignIn(): Boolean {

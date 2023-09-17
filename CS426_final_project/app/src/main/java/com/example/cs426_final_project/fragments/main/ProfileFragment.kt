@@ -34,8 +34,6 @@ import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import com.example.cs426_final_project.utilities.ImageUtilityClass
-import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropCircleBitmap
-import com.example.cs426_final_project.utilities.ImageUtilityClass.Companion.cropSquareBitmap
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
 import kotlin.math.abs
@@ -55,8 +53,8 @@ class ProfileFragment : MainPageFragment() {
                         val inputStream = requireContext().contentResolver.openInputStream(uri)
                         var bitmap = BitmapFactory.decodeStream(inputStream)
 
-                        bitmap = cropSquareBitmap(bitmap)
-                        bitmap = cropCircleBitmap(bitmap)
+                        bitmap = ImageUtilityClass.cropSquareBitmap(bitmap)
+                        bitmap = ImageUtilityClass.cropCircleBitmap(bitmap)
 
                         ibAvatar.setImageBitmap(bitmap)
                         ImageUtilityClass.cropCenter(ibAvatar)
@@ -142,7 +140,6 @@ class ProfileFragment : MainPageFragment() {
         initWidgetSetUp(view)
         initChangeEmail()
         initClose()
-        loadImage(ibAvatar)
         pickImage(ibAvatar)
         // set unfocused when user click cvProfile
         cvProfile.setOnClickListener {
@@ -386,9 +383,6 @@ class ProfileFragment : MainPageFragment() {
         isChooseImage = true
     }
 
-    private fun loadImage(ibAvatar: ImageButton?) {
-
-    }
 
 
     companion object {

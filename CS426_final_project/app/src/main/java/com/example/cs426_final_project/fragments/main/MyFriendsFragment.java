@@ -7,35 +7,24 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 import com.example.cs426_final_project.AccountRow;
 import com.example.cs426_final_project.AccountsListAdapter;
 import com.example.cs426_final_project.ListOfAccountRows;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.activities.SearchActivity;
-import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.UsersApi;
-import com.example.cs426_final_project.models.FeedInfo;
-import com.example.cs426_final_project.models.data.FriendDataModel;
-import com.example.cs426_final_project.models.posts.FeedFields;
-import com.example.cs426_final_project.models.posts.FeedResponse;
-import com.example.cs426_final_project.models.response.FindFriendResponse;
 import com.example.cs426_final_project.models.response.FriendsResponse;
 import com.example.cs426_final_project.models.response.SuggestionFields;
 import com.example.cs426_final_project.models.response.SuggestionResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
-import com.google.gson.Gson;
 
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,15 +38,15 @@ public class MyFriendsFragment extends MainPageFragment {
     private void findFriends() {
         UsersApi usersApi = ApiUtilityClass
                 .Companion
-                .getApiClient(getContext())
+                .getApiClient(requireContext())
                 .create(UsersApi.class);
         Call<List<FriendsResponse> > call = usersApi.getFriendsOfCurrentUser();
 
         call.enqueue(new Callback<List<FriendsResponse>  >() {
             @Override
             public void onResponse(
-                    Call<List<FriendsResponse>  > call,
-                    Response<List<FriendsResponse>  > response
+                    @NonNull Call<List<FriendsResponse>  > call,
+                    @NonNull Response<List<FriendsResponse>  > response
             ) {
                 if (response.isSuccessful()) {
                     List<FriendsResponse>  body = response.body();
@@ -83,8 +72,8 @@ public class MyFriendsFragment extends MainPageFragment {
 
             @Override
             public void onFailure(
-                    Call<List<FriendsResponse>  > call,
-                    Throwable t
+                    @NonNull Call<List<FriendsResponse>  > call,
+                    @NonNull Throwable t
             ) {
                 t.printStackTrace();
                 System.err.println("Can not find friends :'((");
@@ -95,15 +84,15 @@ public class MyFriendsFragment extends MainPageFragment {
     private void findSomeSuggestions() {
         UsersApi usersApi = ApiUtilityClass
                 .Companion
-                .getApiClient(getContext())
+                .getApiClient(requireContext())
                 .create(UsersApi.class);
         Call<List<SuggestionResponse> > call = usersApi.getSomeSuggestions();
 
         call.enqueue(new Callback<List<SuggestionResponse> >() {
             @Override
             public void onResponse(
-                    Call<List<SuggestionResponse> > call,
-                    Response<List<SuggestionResponse> > response
+                    @NonNull Call<List<SuggestionResponse> > call,
+                    @NonNull Response<List<SuggestionResponse> > response
             ) {
                 if (response.isSuccessful()) {
                     List<SuggestionResponse> body = response.body();
@@ -129,8 +118,8 @@ public class MyFriendsFragment extends MainPageFragment {
 
             @Override
             public void onFailure(
-                    Call<List<SuggestionResponse>> call,
-                    Throwable t
+                    @NonNull Call<List<SuggestionResponse>> call,
+                    @NonNull Throwable t
             ) {
                 t.printStackTrace();
                 System.err.println("Can not find any suggestions");
@@ -184,7 +173,7 @@ public class MyFriendsFragment extends MainPageFragment {
 
     private void setUpListView() {
         Activity activity = getActivity();
-        this.listView = getView().findViewById(R.id.account_list_view);
+        this.listView = requireView().findViewById(R.id.account_list_view);
         this.adapter = new AccountsListAdapter(activity);
         this.listView.setAdapter(this.adapter);
         this.expandListView();
@@ -221,8 +210,8 @@ public class MyFriendsFragment extends MainPageFragment {
 
     public static void updateFragmentTransform(
             View view,
-            final float position,
-            final float direction,
+            final float ignoredPosition,
+            final float ignoredDirection,
             final float relDisplacement
     ) {
         MotionLayout rootViewFriends = view.findViewById(R.id.rootViewFriends);

@@ -775,6 +775,8 @@ public class CameraFragment extends Fragment
      */
     private void createCameraPreviewSession() {
         try {
+            // check camereDevice is closed
+
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
 
@@ -788,6 +790,8 @@ public class CameraFragment extends Fragment
             mPreviewRequestBuilder
                     = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             mPreviewRequestBuilder.addTarget(surface);
+
+
 
             // Here, we create a CameraCaptureSession for camera preview.
             mCameraDevice.createCaptureSession(Arrays.asList(surface, mImageReader.getSurface()),
@@ -829,7 +833,7 @@ public class CameraFragment extends Fragment
                     }, null
             );
         } catch (CameraAccessException e) {
-            e.printStackTrace();
+            System.out.println("CameraAccessException");
         }
     }
 
