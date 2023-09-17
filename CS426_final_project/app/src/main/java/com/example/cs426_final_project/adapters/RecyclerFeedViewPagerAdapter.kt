@@ -21,8 +21,6 @@ class RecyclerFeedViewPagerAdapter(
     private val listener : OnItemClickListener,
 ) : RecyclerView.Adapter<RecyclerFeedViewPagerAdapter.RecyclerViewPagerViewHolder>() {
 
-    private var listOfBitmaps: MutableList<Bitmap?> = mutableListOf<Bitmap?>()
-
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
@@ -97,25 +95,6 @@ class RecyclerFeedViewPagerAdapter(
 
         // ensure ratio of image is 1:1
         holder.ivPreviewImageFeed.layoutParams.height = holder.ivPreviewImageFeed.measuredWidth
-
-        while (listOfBitmaps.size <= position)
-            listOfBitmaps.add(null)
-
-        /*
-        holder.ivPreviewImageFeed.buildDrawingCache()
-
-        listOfBitmaps.set(
-            position,
-            holder.ivPreviewImageFeed.getDrawingCache()
-        )
-        */
-        val drawable = holder.ivPreviewImageFeed.drawable as BitmapDrawable
-
-        listOfBitmaps[position] = drawable.bitmap
-    }
-
-    public fun getBitmap(position: Int): Bitmap? {
-        return listOfBitmaps[position]
     }
 
 }

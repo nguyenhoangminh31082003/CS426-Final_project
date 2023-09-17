@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.NetworkOnMainThreadException;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -230,40 +232,10 @@ public class FeedsFragment extends Fragment {
         ibFeedPhotoShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Bitmap bitmap = adapter.getBitmap(vpFeed.getCurrentItem());
+                final String link = adapter.getImageLink(vpFeed.getCurrentItem());
 
-                    System.err.println("Share 6");
-
-                    String path = MediaStore
-                            .Images
-                            .Media
-                            .insertImage(
-                                    getContext()
-                                            .getContentResolver(),
-                                    bitmap,
-                                    "DownloadedImageNumber" + Helper.getRandomIntegerInRange(3108, 31082003),
-                                    null
-                            );
-
-                    System.err.println("Share 7");
-
-                    Uri uri = Uri.parse(path);
-
-                    System.err.println("Share 8");
-
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-
-                    System.err.println("Share 9");
-
-                    intent.setType("image/png");
-
-                    System.err.println("Share 10");
-
-                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-
-                    System.err.println("Share 11");
-
-                    startActivity(Intent.createChooser(intent, "Share photo"));
+                if (link.startsWith("http"))
+                    new DownloadImageTask().execute(link);
             }
         });
 
@@ -272,6 +244,43 @@ public class FeedsFragment extends Fragment {
         this.getFeedRequest();
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String link = params[0];
+
+            try {
+                URL url = new URL(link);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                return BitmapFactory.decodeStream(input);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                String path = MediaStore.Images.Media.insertImage(
+                        getContext().getContentResolver(),
+                        bitmap,
+                        "DownloadedImageNumber" + Helper.getRandomIntegerInRange(3108, 31082003),
+                        null
+                );
+
+                Uri uri = Uri.parse(path);
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/png");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(Intent.createChooser(intent, "Share photo"));
+            }
+        }
+    }
 
 }
