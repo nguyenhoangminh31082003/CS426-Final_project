@@ -1,5 +1,7 @@
 package com.example.cs426_final_project.fragments.main;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -42,6 +44,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +57,9 @@ public class FeedsFragment extends Fragment {
     private ViewPager2 vpFeed;
     private ArrayList<FeedInfo> listOfFeeds;
     private RecyclerFeedViewPagerAdapter adapter;
+    private boolean getFeedRequestOnResume = true;
+
+    private ActivityResultLauncher<Intent> shareImageLauncher;
 
     public FeedsFragment() {
         this.listOfFeeds = null;
@@ -66,8 +72,10 @@ public class FeedsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        this.getFeedRequest();
+        if (this.getFeedRequestOnResume) {
+            this.getFeedRequest();
+        }
+        this.getFeedRequestOnResume = true;
     }
 
     private String getDateWithDefaultFormat(
@@ -229,19 +237,21 @@ public class FeedsFragment extends Fragment {
         });
 
         ImageButton ibFeedPhotoShare = view.findViewById(R.id.ibFeedPhotoShare);
-        ibFeedPhotoShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String link = adapter.getImageLink(vpFeed.getCurrentItem());
+        ibFeedPhotoShare.setOnClickListener(view1 -> {
+            final String link = adapter.getImageLink(vpFeed.getCurrentItem());
 
-                if (link.startsWith("http"))
-                    new DownloadImageTask().execute(link);
-            }
+            if (link.startsWith("http"))
+                new DownloadImageTask().execute(link);
         });
 
         this.resetFeedsToDefault();
 
         this.getFeedRequest();
+
+        shareImageLauncher = registerForActivityResult( new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    getFeedRequestOnResume = false;
+                });
     }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
@@ -267,7 +277,7 @@ public class FeedsFragment extends Fragment {
         protected void onPostExecute(Bitmap bitmap) {
             if (bitmap != null) {
                 String path = MediaStore.Images.Media.insertImage(
-                        getContext().getContentResolver(),
+                        requireContext().getContentResolver(),
                         bitmap,
                         "DownloadedImageNumber" + Helper.getRandomIntegerInRange(3108, 31082003),
                         null
@@ -278,7 +288,8 @@ public class FeedsFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/png");
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(Intent.createChooser(intent, "Share photo"));
+                shareImageLauncher.launch(Intent.createChooser(intent, "Share photo"));
+//                startActivity(Intent.createChooser(intent, "Share photo"));
             }
         }
     }

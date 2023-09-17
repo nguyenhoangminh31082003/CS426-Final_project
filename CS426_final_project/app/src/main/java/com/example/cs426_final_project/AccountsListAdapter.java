@@ -1,5 +1,6 @@
 package com.example.cs426_final_project;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.media.Image;
@@ -12,6 +13,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.data.ProfileDataModel;
 import com.example.cs426_final_project.models.data.UserDataModel;
@@ -21,6 +24,7 @@ import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,14 +41,14 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             SUGGESTIONS_HEADER,
             FRIENDS_HEADER
     };
-    private Activity activity;
-    private HashMap<String, ListOfAccountRows> accounts;
+    private final Activity activity;
+    private final HashMap<String, ListOfAccountRows> accounts;
 
     public AccountsListAdapter(
             Activity activity
     ) {
         this.activity = activity;
-        this.accounts = new HashMap<String, ListOfAccountRows>();
+        this.accounts = new HashMap<>();
         this.accounts.put(SUGGESTIONS_HEADER, new ListOfAccountRows());
         this.accounts.put(FRIENDS_HEADER, new ListOfAccountRows());
     }
@@ -82,10 +86,10 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(
             final int i
     ) {
-        System.out.println("The number of children of the " + i + "-th group is " + this.accounts.get(headers[i]).getNumberOfRows());
-        return this
-                .accounts
-                .get(headers[i])
+        System.out.println("The number of children of the " + i + "-th group is " + Objects.requireNonNull(this.accounts.get(headers[i])).getNumberOfRows());
+        return Objects.requireNonNull(this
+                        .accounts
+                        .get(headers[i]))
                 .getNumberOfRows();
     }
 
@@ -101,9 +105,9 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             final int x,
             final int y
     ) {
-        return this
-                .accounts
-                .get(headers[x])
+        return Objects.requireNonNull(this
+                        .accounts
+                        .get(headers[x]))
                 .getAccountRow(y);
     }
 
@@ -150,6 +154,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getChildView(final int x,
                              final int y,
@@ -162,7 +167,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             view = inflater.inflate(R.layout.layout_of_account_row, null);
         }
 
-        final AccountRow accountRow = this.accounts.get(headers[x]).getAccountRow(y);
+        final AccountRow accountRow = Objects.requireNonNull(this.accounts.get(headers[x])).getAccountRow(y);
 
         TextView accountName = view.findViewById(R.id.account_name);
         TextView relationship = view.findViewById(R.id.relationship_with_account);
@@ -190,12 +195,12 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                     call.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(
-                                Call<String> call,
-                                Response<String> response) {
+                                @NonNull Call<String> call,
+                                @NonNull Response<String> response) {
                             if (response.isSuccessful()) {
                                 System.err.println("Remove!!!");
-                                accounts.get(FRIENDS_HEADER).addAccountRow(accountRow);
-                                accounts.get(SUGGESTIONS_HEADER).removeAccountRowWithTheGivenID(accountRow.getUserID());
+                                Objects.requireNonNull(accounts.get(FRIENDS_HEADER)).addAccountRow(accountRow);
+                                Objects.requireNonNull(accounts.get(SUGGESTIONS_HEADER)).removeAccountRowWithTheGivenID(accountRow.getUserID());
                                 System.err.println("One!!!");
                                 notifyDataSetChanged();
                                 System.err.println("Two!!!");
@@ -206,8 +211,8 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
 
                         @Override
                         public void onFailure(
-                                Call<String> call,
-                                Throwable t
+                                @NonNull Call<String> call,
+                                @NonNull Throwable t
                         ) {
                             System.err.println("Can not make friend");
                         }
@@ -230,11 +235,11 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                     call.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(
-                                Call<String> call,
-                                Response<String> response) {
+                                @NonNull Call<String> call,
+                                @NonNull Response<String> response) {
                             if (response.isSuccessful()) {
                                 System.err.println("Remove!!!");
-                                accounts.get(FRIENDS_HEADER).removeAccountRowWithTheGivenID(accountRow.getUserID());
+                                Objects.requireNonNull(accounts.get(FRIENDS_HEADER)).removeAccountRowWithTheGivenID(accountRow.getUserID());
                                 System.err.println("One!!!");
                                 notifyDataSetChanged();
                                 System.err.println("Two!!!");
@@ -271,11 +276,12 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         call.enqueue(new Callback<UserDataModel>() {
             @Override
             public void onResponse(
-                    Call<UserDataModel> call,
-                    Response<UserDataModel> response
+                    @NonNull Call<UserDataModel> call,
+                    @NonNull Response<UserDataModel> response
             ) {
                 if (response.isSuccessful()) {
                     final UserDataModel data = response.body();
+                    assert data != null;
                     final String link = data.avatar;
                     if (link.startsWith("http")) {
                         ImageUtilityClass
@@ -297,8 +303,8 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
 
             @Override
             public void onFailure(
-                    Call<UserDataModel> call,
-                    Throwable t
+                    @NonNull Call<UserDataModel> call,
+                    @NonNull Throwable t
             ) {
                 System.err.println("Error in getting user data");
             }
