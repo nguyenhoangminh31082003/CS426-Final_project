@@ -214,6 +214,14 @@ public class FeedsFragment extends Fragment {
             startActivity(intent);
         });
 
+        ImageButton ibFeedPhotoShare = view.findViewById(R.id.ibFeedPhotoShare);
+        ibFeedPhotoShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
         this.resetFeedsToDefault();
 
         this.getFeedRequest();
