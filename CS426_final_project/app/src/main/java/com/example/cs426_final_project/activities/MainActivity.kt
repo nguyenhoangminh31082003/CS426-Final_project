@@ -29,6 +29,8 @@ import com.example.cs426_final_project.fragments.access.USER_PREFERENCES_NAME
 import com.example.cs426_final_project.fragments.main.FeedsFragment
 import com.example.cs426_final_project.fragments.main.HorizontalMainPageHolderFragment
 import com.example.cs426_final_project.transformation.ZoomFadePageTransformer
+import com.example.cs426_final_project.utilities.KeyboardUtilityClass
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import com.example.cs426_final_project.worker.UpdateWorker
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -197,12 +199,21 @@ class MainActivity : AppCompatActivity(), MainPageContract {
             override fun getItemCount(): Int = 2
         })
 
+
+    }
+
+    private fun restart() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+        finish()
     }
 
     private fun clearLocalData() {
         val profilePreferences: SharedPreferences =
             getSharedPreferences(USER_PREFERENCES_NAME, MODE_PRIVATE)
         profilePreferences.edit().clear().apply()
+
     }
 
     private fun signIn() {

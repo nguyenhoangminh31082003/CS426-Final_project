@@ -59,7 +59,19 @@ internal class SignInActivity : AppCompatActivity() {
                 var fragment: Fragment? = null
                 if (position == EnumPage.WELCOME) fragment = createWelcomeFragment()
                 if (position == EnumPage.LOGIN) {
-                    fragment = newInstance(loginContract)
+                    fragment = newInstance(object : LoginContract {
+                        override fun login() {
+                            vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
+                        }
+
+                        override fun returnToWelcome() {
+                            vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
+                        }
+
+                        override fun onConfirm(email : String, password : String) {
+                            callApiLogin(email, password)
+                        }
+                    })
                 }
                 if (position == EnumPage.REGISTER) {
                     fragment = createRegisterFragment()
@@ -100,22 +112,7 @@ internal class SignInActivity : AppCompatActivity() {
         })
     }
 
-    private val loginContract: LoginContract
-        get() = object : LoginContract {
-            override fun login() {
-                vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
-            }
 
-            override fun returnToWelcome() {
-//                println("returnToWelcome")
-                vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
-            }
-
-            override fun onConfirm(email : String, password : String) {
-                // use retrofit to login
-                callApiLogin(email, password)
-            }
-        }
 
     private fun callApiLogin(email: String, password: String) {
         val apiService: UsersApi = ApiUtilityClass.getApiClient(this).create(UsersApi::class.java)
@@ -129,9 +126,8 @@ internal class SignInActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
+                    println("login response: $loginResponse")
                     if (loginResponse != null) {
-                        val cookies = response.headers().values("Set-Cookie")
-                        println("cookies: $cookies")
                         val intent = Intent()
                         setResult(RESULT_OK, intent)
                         finish()

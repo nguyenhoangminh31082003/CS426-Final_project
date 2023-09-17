@@ -83,6 +83,7 @@ class HorizontalMainPageHolderFragment : Fragment() {
                     }
                     2 -> ProfileFragment.newInstance(object : ProfileFragment.Companion.ProfileFragmentContract {
                         override fun logout() {
+                            vpHorizontalMain.setCurrentItem(1, false)
                             onLogout()
                         }
                     })
