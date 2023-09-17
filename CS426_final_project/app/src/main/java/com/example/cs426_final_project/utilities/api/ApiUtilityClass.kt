@@ -20,9 +20,9 @@ class ApiUtilityClass {
         // change default debug to false to use production server
         private fun getBaseUrl(debug : Boolean = true): String {
             if(debug){
-                return "https://54b2-137-132-26-93.ngrok-free.app"
+                return "https://ba0b-137-132-26-93.ngrok-free.app"
             }
-            return "http://13.229.250.243/"
+            return "http://13.229.250.243"
         }
 
 

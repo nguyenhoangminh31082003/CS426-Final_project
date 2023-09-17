@@ -46,6 +46,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -86,6 +87,8 @@ public class CameraFragment extends Fragment
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
+
+    private boolean isFlashOn = false;
 
     /**
      * Tag for the {@link Log}.
@@ -484,15 +487,16 @@ public class CameraFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.take_photo_icon).setOnClickListener(this);
         view.findViewById(R.id.switch_camera_icon).setOnClickListener(this);
+        view.findViewById(R.id.change_flash_mode_icon).setOnClickListener(this);
         mTextureView = view.findViewById(R.id.texture);
         checkCameraAvailability();
-
+        switchCamera();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        mFile = new File(requireActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @Override
@@ -1005,16 +1009,19 @@ public class CameraFragment extends Fragment
     @Override
     public void onClick(View view) {
         final int id = view.getId();
+        System.out.println("The id is " + id + " and the R.id.take_photo_icon is " + R.id.take_photo_icon + " and the R.id.switch_camera_icon is " + R.id.switch_camera_icon + " and the R.id.change_flash_mode_icon is " + R.id.change_flash_mode_icon);
         if (id == R.id.take_photo_icon) {
             takePicture();
             return;
         }
         if (id == R.id.switch_camera_icon) {
             switchCamera();
+//            changeFlashMode();
             return;
         }
         if (id == R.id.change_flash_mode_icon) {
             changeFlashMode();
+//            takePicture();
             return;
         }
     }
@@ -1030,19 +1037,37 @@ public class CameraFragment extends Fragment
 
     private void changeFlashMode() {
         if (mFlashSupported) {
-            Activity activity = requireActivity();
-            ImageView flashModeIconImage = activity.findViewById(R.id.change_flash_mode_icon);
-            CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+            CameraManager manager = (CameraManager) requireActivity().getSystemService(Context.CAMERA_SERVICE);
             try {
-                CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraId);
-                CaptureRequest.Builder requestBuilder = mCaptureSession.getDevice().createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+                isFlashOn = !isFlashOn;
 
-                mCaptureSession.setRepeatingRequest(requestBuilder.build(), null, null);
+                CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraId);
+
+                CaptureRequest.Builder requestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+
+                if(isFlashOn){
+                    requestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH);
+                }else{
+                    requestBuilder.set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_OFF);
+                }
+
+                SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
+
+                Surface surface = new Surface(surfaceTexture);
+
+                requestBuilder.addTarget(surface);
+
+                CaptureRequest captureRequest = requestBuilder.build();
+
+                mCaptureSession.setRepeatingRequest(captureRequest, null, null);
+
             } catch (CameraAccessException e) {
                 e.printStackTrace();
+                // Handle the exception (e.g., show an error message to the user)
             }
         }
     }
+
 
     public void setCameraContract(CameraContract cameraContract) {
         this.cameraContract = cameraContract;
