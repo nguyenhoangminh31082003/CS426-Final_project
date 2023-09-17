@@ -38,12 +38,17 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
                     Call<ProfileResponse> call,
                     Response<ProfileResponse> response) {
                 if (response.isSuccessful()) {
+                    System.err.println("Status CODE: " + response.code());
                     if (response.code() == 200)
                         finish();
-                    else
-                        call.enqueue(this);
-                } else
-                    call.enqueue(this);
+                    else {
+                        System.err.println("Not alright");
+                        requestAuthority();
+                    }
+                } else {
+                    System.err.println("NOT OK");
+                    requestAuthority();
+                }
             }
 
             @Override
@@ -51,7 +56,8 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
                     Call<ProfileResponse> call,
                     Throwable t
             ) {
-                call.enqueue(this);
+                System.err.println("Not ok");
+                requestAuthority();
             }
         };
 
