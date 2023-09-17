@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), MainPageContract {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        this.setContentView(R.layout.activity_main)
 
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -122,11 +122,19 @@ class MainActivity : AppCompatActivity(), MainPageContract {
             }
         }
 
+        var activity = this
+
         registerForSignInActivityResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                println("Sign in successfully");
+                val intent = Intent(
+                    activity,
+                    WaitingRequestAuthorityActivity::class.java
+                )
+                println("Sign in successfully")
+
+                startActivity(intent)
             } else {
                 finish()
             }
