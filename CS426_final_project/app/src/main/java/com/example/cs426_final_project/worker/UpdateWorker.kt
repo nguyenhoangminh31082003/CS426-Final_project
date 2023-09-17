@@ -72,7 +72,6 @@ class UpdateWorker(
 
             override fun onFailure(call: Call<List<FeedResponse>>, t: Throwable) {
                 t.printStackTrace()
-                throw Exception("The url is: $t")
             }
         })
     }

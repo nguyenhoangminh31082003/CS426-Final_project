@@ -3,28 +3,34 @@ package com.example.cs426_final_project.utilities.api
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.datastore.preferences.core.Preferences
 import com.example.cs426_final_project.models.response.StatusResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Interceptor
+import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.net.CookieManager
+
 
 class ApiUtilityClass {
 
     companion object {
 
         // change default debug to false to use production server
-        private fun getBaseUrl(debug : Boolean = true): String {
+        private fun getBaseUrl(debug : Boolean = false): String {
             if(debug){
-                return "https://52ac-137-132-26-190.ngrok-free.app"
+                return "https://ba0b-137-132-26-93.ngrok-free.app"
             }
             return "http://13.229.250.243"
         }
-
 
         fun parseError(errorBody: ResponseBody?) : StatusResponse {
             val gson = Gson()
@@ -40,10 +46,11 @@ class ApiUtilityClass {
 
         @JvmOverloads
         fun getApiClient(context:Context, clearCookie : Boolean = false): Retrofit {
+
             return Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(createOkHttpClient(context, clearCookie))
+                .client(createOkHttpClient(context))
                 .build()
         }
         fun <T> debug(response: retrofit2.Response<T>) {
@@ -62,7 +69,7 @@ class ApiUtilityClass {
         }
 
         @SuppressLint("ApplySharedPref")
-        private fun createOkHttpClient(context: Context, clearCookie: Boolean): OkHttpClient {
+        private fun createOkHttpClient(context: Context): OkHttpClient {
             val clientBuilder = OkHttpClient.Builder()
 
             val cookiePrefs: SharedPreferences =
@@ -80,9 +87,14 @@ class ApiUtilityClass {
                 }
 
                 val request = requestBuilder.build()
+
+                // print cookie of request
+//                println("debug cookie: request headers: ${request.headers("Cookie")}")
+
+
                 val response = chain.proceed(request)
 
-                println("debug cookie: ${storedCookies.toString()}")
+                println("debug cookie: storedCookies: ${storedCookies.toString()}")
 
                 println("debug cookie: response headers: ${response.headers("Set-Cookie")}")
 
@@ -91,6 +103,7 @@ class ApiUtilityClass {
                     for (header in response.headers("Set-Cookie")) {
                         cookies.add(header)
                     }
+                    println("debug cookie: response.headers: cookies: $cookies")
                     val prefsEditor = cookiePrefs.edit()
                     prefsEditor.putStringSet("Set-Cookie", cookies)
                     prefsEditor.commit()
@@ -100,11 +113,15 @@ class ApiUtilityClass {
             }
 
             // Add the cookie interceptor to OkHttpClient
-            clientBuilder.addInterceptor(cookieInterceptor)
+            clientBuilder
+                .addInterceptor(cookieInterceptor)
+//                .addNetworkInterceptor(HttpLoggingInterceptor().apply {
+//                level = HttpLoggingInterceptor.Level.BODY
+//            })
+                .cookieJar(JavaNetCookieJar(CookieManager()))
 
             return clientBuilder.build()
         }
-
 
 
     }
