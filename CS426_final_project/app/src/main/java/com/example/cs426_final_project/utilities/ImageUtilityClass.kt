@@ -37,7 +37,7 @@ class ImageUtilityClass {
             return bitmap
         }
 
-        fun cropCenter(imageView : ImageView){
+        fun cropCenter(imageView : ImageView) {
             imageView.adjustViewBounds = true
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         }
@@ -114,7 +114,12 @@ class ImageUtilityClass {
 
         // square and rounded are optional
         @JvmOverloads
-        fun loadImageViewFromUrl(imageView: ImageView, url: String, square: Boolean = true, rounded: Boolean = false){
+        fun loadImageViewFromUrl(
+            imageView: ImageView,
+            url: String,
+            square: Boolean = true,
+            rounded: Boolean = false
+        ) {
              Picasso.get()
                  .load(url)
                  .transform(object : Transformation {
@@ -139,7 +144,12 @@ class ImageUtilityClass {
         }
 
         @JvmOverloads
-        fun loadSquareImageViewFromUrl(imageView: ImageView, url: String,  destDim : Int = 400, radius: Float = 20f){
+        fun loadSquareImageViewFromUrl(
+            imageView: ImageView,
+            url: String,
+            destDim : Int = 400,
+            radius: Float = 20f
+        ) {
             Picasso.get()
                 .load(url)
                 .transform(object : Transformation {
@@ -157,7 +167,9 @@ class ImageUtilityClass {
                 .into(imageView)
         }
 
-        fun bitmapToBase64(bitmap: Bitmap): String {
+        fun bitmapToBase64(
+            bitmap: Bitmap
+        ): String {
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()
@@ -170,7 +182,11 @@ class ImageUtilityClass {
         }
 
 
-        fun loadBitmapFromUrl(context: Context, url: String, callback : (Bitmap) -> Unit): Unit {
+        fun loadBitmapFromUrl(
+            context: Context,
+            url: String,
+            callback : (Bitmap) -> Unit
+        ): Unit {
             Glide.with(context)
                 .asBitmap()
                 .load(url)
