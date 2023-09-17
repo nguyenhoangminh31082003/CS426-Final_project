@@ -3,16 +3,23 @@ package com.example.cs426_final_project.fragments.main;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.example.cs426_final_project.Helper;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
@@ -26,6 +33,11 @@ import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,12 +230,112 @@ public class FeedsFragment extends Fragment {
         ibFeedPhotoShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                final String link = adapter.getImageLink(vpFeed.getCurrentItem());
+                /*
+                final String bitmapPath = MediaStore
+                        .Images
+                        .Media
+                        .insertImage();
+                */
+                if (link.startsWith("http")) {
+                    URL url = null;
+
+                    System.err.println("Share 1");
+
+                    try {
+                        url = new URL(link);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    System.err.println("Share 2");
+
+                    HttpURLConnection connection = null;
+
+                    try {
+                        connection = (HttpURLConnection) url.openConnection();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    System.err.println("Share 3");
+
+                    connection.setDoInput(true);
+
+                    try {
+                        connection.connect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    System.err.println("Share 4");
+
+                    InputStream input = null;
+                    try {
+                        input = connection.getInputStream();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    System.err.println("Share 5");
+
+                    Bitmap bitmap = BitmapFactory.decodeStream(input);
+
+                    System.err.println("Share 6");
+
+                    String path = MediaStore
+                            .Images
+                            .Media
+                            .insertImage(
+                                    getContext()
+                                            .getContentResolver(),
+                                    bitmap,
+                                    "DownloadedImageNumber" + Helper.getRandomIntegerInRange(3108, 31082003),
+                                    null
+                            );
+
+                    System.err.println("Share 7");
+
+                    Uri uri = Uri.parse(path);
+
+                    System.err.println("Share 8");
+
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+
+                    System.err.println("Share 9");
+
+                    intent.setType("image/png");
+
+                    System.err.println("Share 10");
+
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+
+                    System.err.println("Share 11");
+
+                    startActivity(Intent.createChooser(intent, "Share photo"));
+                }
             }
         });
 
         this.resetFeedsToDefault();
 
         this.getFeedRequest();
+
+        /*
+        this.vpFeed.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(final int position) {
+                super.onPageSelected(position);
+                System.out.println("Current feed page " + position);
+            }
+        });
+        */
     }
+
+
+
 }
