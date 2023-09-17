@@ -383,8 +383,6 @@ class ProfileFragment : MainPageFragment() {
         isChooseImage = true
     }
 
-
-
     companion object {
         @JvmStatic
         fun updateFragmentTransform(view: View, position: Float, direction: Float, relDisplacement: Float) {

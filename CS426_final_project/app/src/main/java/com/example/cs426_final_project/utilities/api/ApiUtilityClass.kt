@@ -15,15 +15,12 @@ import java.io.IOException
 
 class ApiUtilityClass {
 
-
-
-
     companion object {
 
         // change default debug to false to use production server
-        private fun getBaseUrl(debug : Boolean = false): String {
+        private fun getBaseUrl(debug : Boolean = true): String {
             if(debug){
-                return "https://d71c-137-132-26-93.ngrok-free.app"
+                return "https://54b2-137-132-26-93.ngrok-free.app"
             }
             return "http://13.229.250.243/"
         }
@@ -41,11 +38,12 @@ class ApiUtilityClass {
             return errorResponse!!
         }
 
-        fun getApiClient(context:Context): Retrofit {
+        @JvmOverloads
+        fun getApiClient(context:Context, clearCookie : Boolean = false): Retrofit {
             return Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(createOkHttpClient(context))
+                .client(createOkHttpClient(context, clearCookie))
                 .build()
         }
         fun <T> debug(response: retrofit2.Response<T>) {
@@ -64,7 +62,7 @@ class ApiUtilityClass {
         }
 
         @SuppressLint("ApplySharedPref")
-        private fun createOkHttpClient(context: Context): OkHttpClient {
+        private fun createOkHttpClient(context: Context, clearCookie: Boolean): OkHttpClient {
             val clientBuilder = OkHttpClient.Builder()
 
             val cookiePrefs: SharedPreferences =
@@ -84,6 +82,10 @@ class ApiUtilityClass {
                 val request = requestBuilder.build()
                 val response = chain.proceed(request)
 
+                println("debug cookie: ${storedCookies.toString()}")
+
+                println("debug cookie: response headers: ${response.headers("Set-Cookie")}")
+
                 if (response.headers("Set-Cookie").isNotEmpty()) {
                     val cookies = HashSet<String>()
                     for (header in response.headers("Set-Cookie")) {
@@ -102,6 +104,8 @@ class ApiUtilityClass {
 
             return clientBuilder.build()
         }
+
+
 
     }
 
