@@ -230,60 +230,7 @@ public class FeedsFragment extends Fragment {
         ibFeedPhotoShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String link = adapter.getImageLink(vpFeed.getCurrentItem());
-                /*
-                final String bitmapPath = MediaStore
-                        .Images
-                        .Media
-                        .insertImage();
-                */
-                if (link.startsWith("http")) {
-                    URL url = null;
-
-                    System.err.println("Share 1");
-
-                    try {
-                        url = new URL(link);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    System.err.println("Share 2");
-
-                    HttpURLConnection connection = null;
-
-                    try {
-                        connection = (HttpURLConnection) url.openConnection();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    System.err.println("Share 3");
-
-                    connection.setDoInput(true);
-
-                    try {
-                        connection.connect();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    System.err.println("Share 4");
-
-                    InputStream input = null;
-                    try {
-                        input = connection.getInputStream();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    System.err.println("Share 5");
-
-                    Bitmap bitmap = BitmapFactory.decodeStream(input);
+                    Bitmap bitmap = adapter.getBitmap(vpFeed.getCurrentItem());
 
                     System.err.println("Share 6");
 
@@ -317,23 +264,12 @@ public class FeedsFragment extends Fragment {
                     System.err.println("Share 11");
 
                     startActivity(Intent.createChooser(intent, "Share photo"));
-                }
             }
         });
 
         this.resetFeedsToDefault();
 
         this.getFeedRequest();
-
-        /*
-        this.vpFeed.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(final int position) {
-                super.onPageSelected(position);
-                System.out.println("Current feed page " + position);
-            }
-        });
-        */
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.cs426_final_project.adapters
 
+import android.R.drawable
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +18,10 @@ import com.example.cs426_final_project.utilities.ImageUtilityClass
 
 class RecyclerFeedViewPagerAdapter(
     private val feedList : List<FeedInfo>,
-    private val listener : OnItemClickListener
+    private val listener : OnItemClickListener,
 ) : RecyclerView.Adapter<RecyclerFeedViewPagerAdapter.RecyclerViewPagerViewHolder>() {
+
+    private var listOfBitmaps: MutableList<Bitmap?> = mutableListOf<Bitmap?>()
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
@@ -94,7 +98,24 @@ class RecyclerFeedViewPagerAdapter(
         // ensure ratio of image is 1:1
         holder.ivPreviewImageFeed.layoutParams.height = holder.ivPreviewImageFeed.measuredWidth
 
+        while (listOfBitmaps.size <= position)
+            listOfBitmaps.add(null)
 
+        /*
+        holder.ivPreviewImageFeed.buildDrawingCache()
+
+        listOfBitmaps.set(
+            position,
+            holder.ivPreviewImageFeed.getDrawingCache()
+        )
+        */
+        val drawable = holder.ivPreviewImageFeed.drawable as BitmapDrawable
+
+        listOfBitmaps[position] = drawable.bitmap
+    }
+
+    public fun getBitmap(position: Int): Bitmap? {
+        return listOfBitmaps[position]
     }
 
 }
