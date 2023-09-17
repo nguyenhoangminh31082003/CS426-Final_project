@@ -3,6 +3,8 @@ package com.example.cs426_final_project.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -32,6 +34,8 @@ internal class SignInActivity : AppCompatActivity() {
         const val LOGIN = 2
     }
 
+    private  lateinit var registerWaitingAuthorizeActivityResult : ActivityResultLauncher<Intent>
+
 
     var adapter: ViewPagerAdapter? = null
     var vpSignIn: ViewPager2? = null
@@ -40,6 +44,16 @@ internal class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_sign_in_page)
         this.setUpViewPager()
+
+        registerWaitingAuthorizeActivityResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val intent = Intent()
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        }
     }
 
     private fun setUpViewPager() {
@@ -112,8 +126,6 @@ internal class SignInActivity : AppCompatActivity() {
         })
     }
 
-
-
     private fun callApiLogin(
         email: String,
         password: String
@@ -131,9 +143,10 @@ internal class SignInActivity : AppCompatActivity() {
                     val loginResponse = response.body()
                     println("login response: $loginResponse")
                     if (loginResponse != null) {
-                        val intent = Intent()
-                        setResult(RESULT_OK, intent)
-                        finish()
+                        val intent = Intent(this@SignInActivity, WaitingRequestAuthorityActivity::class.java)
+                        intent.putExtra("email", email)
+                        intent.putExtra("password", password)
+                        registerWaitingAuthorizeActivityResult.launch(intent)
                     }
                 } else {
                     ApiUtilityClass.debug(response)

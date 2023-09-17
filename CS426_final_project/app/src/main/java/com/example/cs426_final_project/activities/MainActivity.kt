@@ -110,31 +110,22 @@ class MainActivity : AppCompatActivity(), MainPageContract {
             ActivityResultContracts.RequestMultiplePermissions()
         ) { result ->
             var isAllGranted = true
-            for ((permission, isGranted) in result) {
+            for ((_, isGranted) in result) {
                 if (!isGranted) {
                     isAllGranted = false
                 }
             }
-            if (isAllGranted) {
-
-            } else {
+            if (!isAllGranted) {
                 finish()
             }
         }
 
-        var activity = this
 
         registerForSignInActivityResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                val intent = Intent(
-                    activity,
-                    WaitingRequestAuthorityActivity::class.java
-                )
-                println("Sign in successfully")
-
-                startActivity(intent)
+                //do nothing
             } else {
                 finish()
             }
@@ -145,7 +136,6 @@ class MainActivity : AppCompatActivity(), MainPageContract {
 
         // fix vertical orientation
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
 
         initHorizontalViewPager()
 
