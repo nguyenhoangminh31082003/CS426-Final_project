@@ -32,7 +32,6 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_waiting_request_authority);
 
         FragmentContainerView fcvWaitingScreenAuthority = findViewById(R.id.fcvWaitingScreenAuthority);
-        // add waiting fragment
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(fcvWaitingScreenAuthority.getId(), new WaitingFragment())
