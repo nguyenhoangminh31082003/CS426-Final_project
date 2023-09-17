@@ -55,18 +55,16 @@ class LoginComposeFragment : Fragment() {
     private val mutableStatePassword = mutableStateOf("")
 
     private fun fetchSavedValue(){
-        val (savedEmail: String, savedPassword: String) = getSavedEmailAndPassword()
-        mutableStateUsername.value = savedEmail
-        mutableStatePassword.value = savedPassword
-
-        println("fetchSavedValue: $savedEmail, $savedPassword")
+//        val (savedEmail: String, savedPassword: String) = getSavedEmailAndPassword()
+        mutableStateUsername.value = loginContract?.email?.value ?: ""
+//        mutableStatePassword.value = savedPassword
+//        println("fetchSavedValue: $savedEmail, $savedPassword")
     }
+
     override fun onResume() {
         super.onResume()
         fetchSavedValue()
         println("onResume: ${mutableStateUsername.value}, ${mutableStatePassword.value}")
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

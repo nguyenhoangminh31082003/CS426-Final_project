@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cs426_final_project.api.UsersApi
@@ -19,12 +21,9 @@ import com.example.cs426_final_project.fragments.access.WelcomeFragment
 import com.example.cs426_final_project.fragments.access.WelcomeFragment.WelcomeContract
 import com.example.cs426_final_project.fragments.access.newInstance
 import com.example.cs426_final_project.models.data.LoginDataModel
-import com.example.cs426_final_project.models.data.ProfileDataModel
 import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 internal class SignInActivity : AppCompatActivity() {
@@ -34,6 +33,7 @@ internal class SignInActivity : AppCompatActivity() {
         const val LOGIN = 2
     }
 
+    private var registerEmail: MutableState<String> = mutableStateOf("")
     private  lateinit var registerWaitingAuthorizeActivityResult : ActivityResultLauncher<Intent>
 
 
@@ -85,6 +85,10 @@ internal class SignInActivity : AppCompatActivity() {
                         override fun onConfirm(email : String, password : String) {
                             callApiLogin(email, password)
                         }
+
+                        override fun getEmail(): MutableState<String> {
+                            return registerEmail
+                        }
                     })
                 }
                 if (position == EnumPage.REGISTER) {
@@ -103,7 +107,8 @@ internal class SignInActivity : AppCompatActivity() {
 
     private fun createRegisterFragment(): Fragment {
         return newInstance(object : RegisterContract {
-            override fun onSuccessRegister() {
+            override fun onSuccessRegister(email: String) {
+                registerEmail = mutableStateOf(email)
                 vpSignIn!!.setCurrentItem(EnumPage.LOGIN, true)
             }
 

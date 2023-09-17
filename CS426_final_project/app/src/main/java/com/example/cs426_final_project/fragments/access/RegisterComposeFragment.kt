@@ -56,7 +56,7 @@ import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 class RegisterFragment : Fragment() {
 
     interface RegisterContract {
-        fun onSuccessRegister()
+        fun onSuccessRegister(email: String)
         fun onUnSuccessRegister()
     }
 
@@ -77,8 +77,8 @@ class RegisterFragment : Fragment() {
                             this@RegisterFragment,
                             RegisterViewModelFactory(
                                 object : RegisterViewModelContract {
-                                    override fun onRegisterSuccess() {
-                                        registerContract?.onSuccessRegister()
+                                    override fun onRegisterSuccess(email: String) {
+                                        registerContract?.onSuccessRegister(email)
                                     }
                                 },
                                 requireActivity().getSharedPreferences(
@@ -104,7 +104,7 @@ class RegisterFragment : Fragment() {
                         onBackPressed = { onBackPressed() },
                         onContinueButtonClicked = {
                             registerViewModel.value.confirmRegisterInfo(requireContext())
-                            registerContract?.onSuccessRegister()
+                            registerContract?.onSuccessRegister("")
                                                   },
                         onChangeEmail = {
 //                            registerUiModel.value = registerUiModel.value.copy(email = it)

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.models.data.RegisterDataModel
 import com.example.cs426_final_project.models.response.RegisterResponse
+import com.example.cs426_final_project.models.response.StatusResponse
 //import com.example.cs426_final_project.storage.ProfilePreferences
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 
@@ -18,7 +19,7 @@ import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 
 
 interface RegisterViewModelContract {
-    fun onRegisterSuccess()
+    fun onRegisterSuccess(email : String = "")
 }
 
 class RegisterViewModel(
@@ -30,27 +31,25 @@ class RegisterViewModel(
     private fun callApiRegister(context : Context) {
         val apiService: UsersApi = ApiUtilityClass.getApiClient(context).create(UsersApi::class.java)
         val call = apiService.userRegister(registerUiModel.value)
+        println("register data model: ${registerUiModel.value}")
 
-        // debug json in call
-//        println("call: ${call.request()}")
-
-        call.enqueue(object : retrofit2.Callback<RegisterResponse> {
+        call.enqueue(object : retrofit2.Callback<StatusResponse> {
             override fun onResponse(
-                call: retrofit2.Call<RegisterResponse>,
-                response: retrofit2.Response<RegisterResponse>
+                call: retrofit2.Call<StatusResponse>,
+                response: retrofit2.Response<StatusResponse>
             ) {
                 if (response.isSuccessful) {
-                    response.body()?.also {
-                        saveProfileInfo()
-                        registerViewModelContract.onRegisterSuccess()
-                    }
+                    saveProfileInfo()
+                    // wait a bit for shared preferences to save
+                    Thread.sleep(1000)
+                    registerViewModelContract.onRegisterSuccess(email = registerUiModel.value.email)
                 } else {
                     // parse body by using
                     throw Exception("Oh no, oh no, Error: ${ApiUtilityClass.parseError(response.errorBody())}")
                 }
             }
 
-            override fun onFailure(call: retrofit2.Call<RegisterResponse>, t: Throwable) {
+            override fun onFailure(call: retrofit2.Call<StatusResponse>, t: Throwable) {
                // throw message from server return
                 print("Oh no! Something went wrong in register view model")
                 throw Exception("Error: ${t.message}")
@@ -62,12 +61,13 @@ class RegisterViewModel(
     fun saveProfileInfo() {
         val editor = profilePreferences.edit()
         editor.putString("username", registerUiModel.value.username)
-        editor.putString("password", registerUiModel.value.password)
+//        editor.putString("password", registerUiModel.value.password)
         editor.putString("email", registerUiModel.value.email)
-        editor.putString("phoneNumber", registerUiModel.value.phoneNumber)
-        editor.putString("fullName", registerUiModel.value.fullName)
+//        editor.putString("phoneNumber", registerUiModel.value.phoneNumber)
+//        editor.putString("fullName", registerUiModel.value.fullName)
         editor.commit()
-        println("saved username: ${profilePreferences.getString("username", "")}")
+        // shared preferences callback
+//        println("saved username: ${profilePreferences.getString("username", "")}")
     }
 
     fun confirmRegisterInfo(context: Context) {

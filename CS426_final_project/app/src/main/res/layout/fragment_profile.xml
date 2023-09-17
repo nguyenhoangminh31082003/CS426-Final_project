@@ -9,6 +9,8 @@
     app:layoutDescription="@xml/fragment_profile_xml_constraintlayout_scene"
     tools:context=".fragments.main.ProfileFragment">
 
+
+
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/comvProfile"
         android:layout_width="match_parent"
@@ -54,6 +56,7 @@
 
             <EditText
                 android:id="@+id/etUsername"
+                android:hint="empty"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +74,7 @@
                 android:textCursorDrawable="@null"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                tools:ignore="HardcodedText" />
+                tools:ignore="Autofill,HardcodedText" />
 
 
             <TextView
@@ -97,7 +100,6 @@
                 android:ems="10"
                 android:inputType="text"
                 android:paddingTop="12dp"
-
                 android:paddingBottom="12dp"
                 android:text="Add the Widget"
                 android:textSize="16sp"
@@ -155,6 +157,8 @@
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+
 
     <ImageButton
         android:id="@+id/ibClose"

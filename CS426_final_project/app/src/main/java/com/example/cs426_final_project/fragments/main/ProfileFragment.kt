@@ -42,6 +42,7 @@ class ProfileFragment : MainPageFragment() {
 
     private lateinit var profileFragmentContract: ProfileFragmentContract
     private var profileDataModel  = ProfileDataModel("", "", "", "", "")
+    private var loadDataFromServerOnResume = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startPickImageResult =
@@ -53,16 +54,17 @@ class ProfileFragment : MainPageFragment() {
                         val inputStream = requireContext().contentResolver.openInputStream(uri)
                         var bitmap = BitmapFactory.decodeStream(inputStream)
 
-                        bitmap = ImageUtilityClass.cropSquareBitmap(bitmap)
-                        bitmap = ImageUtilityClass.cropCircleBitmap(bitmap)
+                        bitmap = transformBitmapForAvatar(bitmap)
 
                         ibAvatar.setImageBitmap(bitmap)
                         ImageUtilityClass.cropCenter(ibAvatar)
 
                         updateImageProfileDataModel(bitmap)
                     }
+
                 }
                 isChooseImage = false
+                loadDataFromServerOnResume = false
             }
 
         requestPermissionLauncher = registerForActivityResult(
@@ -75,6 +77,16 @@ class ProfileFragment : MainPageFragment() {
                 startPickImageResult.launch(intent)
             }
         }
+
+
+    }
+
+
+    private fun transformBitmapForAvatar(bitmap: Bitmap?): Bitmap? {
+        var bitmap1 = bitmap
+        bitmap1 = ImageUtilityClass.cropSquareBitmap(bitmap1)
+        bitmap1 = ImageUtilityClass.cropCircleBitmap(bitmap1)
+        return bitmap1
     }
 
     private fun updateImageProfileDataModel(bitmap: Bitmap?) {
@@ -150,6 +162,8 @@ class ProfileFragment : MainPageFragment() {
             logout()
         }
 
+        lockUserInput(true)
+        loadFromServer(requireContext())
     }
 
     private fun logout() {
@@ -195,6 +209,9 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun loadFromServer(context: Context) {
+
+
+
         val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
         val call = usersApi.getLoggedProfile()
         call.enqueue(object : retrofit2.Callback<ProfileResponse> {
@@ -213,12 +230,31 @@ class ProfileFragment : MainPageFragment() {
                     ApiUtilityClass.debug(response)
 //                    loadLocalData()
                 }
+
             }
 
             override fun onFailure(call: retrofit2.Call<ProfileResponse>, t: Throwable) {
                 print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun lockUserInput(b: Boolean) {
+        etUsername.isEnabled = !b
+        btnChangeEmail.isEnabled = !b
+        btnAddWidget.isEnabled = !b
+        btnLogout.isEnabled = !b
+        // set text color
+        if (b) {
+            etUsername.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            etUsername.clearFocus()
+            etUsername.setText("Loading")
+
+        } else {
+            etUsername.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        }
 
     }
 
@@ -235,11 +271,14 @@ class ProfileFragment : MainPageFragment() {
         if (match != null) {
             profileDataModel.avatarFilename = match.value
             ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
-                val bitmap = it
-                profileDataModel.avatarBase64 = ImageUtilityClass.bitmapToBase64(bitmap)
-                ibAvatar.setImageBitmap(bitmap)
+                val bitmap = transformBitmapForAvatar(it)
+                if(bitmap != null) {
+                    profileDataModel.avatarBase64 = ImageUtilityClass.bitmapToBase64(bitmap)
+                    ibAvatar.setImageBitmap(bitmap)
+                }
             })
         }
+        lockUserInput(false)
     }
 
     // when pause or stop, we store the data
@@ -278,6 +317,15 @@ class ProfileFragment : MainPageFragment() {
                 print("Oh no! Something went wrong in register view model ${t.message}")
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(loadDataFromServerOnResume) {
+            lockUserInput(true)
+            loadFromServer(requireContext())
+        }
+        loadDataFromServerOnResume = true
     }
 
     private fun storeLocalData(username: String) {

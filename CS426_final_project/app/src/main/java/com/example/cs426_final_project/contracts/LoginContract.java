@@ -6,4 +6,5 @@ public interface LoginContract {
     void login();
     void returnToWelcome();
     void onConfirm(String username, String password);
+    MutableState<String> getEmail();
 }

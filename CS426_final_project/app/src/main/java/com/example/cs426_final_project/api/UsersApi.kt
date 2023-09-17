@@ -28,7 +28,7 @@ interface UsersApi {
     @POST("users/register")
     fun userRegister(
         @Body registerDataModel: RegisterDataModel
-    ): Call<RegisterResponse>
+    ): Call<StatusResponse>
 
     @GET("users/profile")
     fun getLoggedProfile(): Call<ProfileResponse>
