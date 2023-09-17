@@ -39,13 +39,13 @@ internal class SignInActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_sign_in_page)
-        this.setUpViewPager()
+        setUpViewPager()
     }
 
     private fun setUpViewPager() {
 
         vpSignIn = findViewById(R.id.vpSignIn)
-        this.setUpAdapter()
+        setUpAdapter()
         vpSignIn?.setCurrentItem(1, false)
         vpSignIn?.offscreenPageLimit = 1
         vpSignIn?.isUserInputEnabled = false
@@ -68,10 +68,7 @@ internal class SignInActivity : AppCompatActivity() {
                             vpSignIn!!.setCurrentItem(EnumPage.WELCOME, true)
                         }
 
-                        override fun onConfirm(
-                            email : String,
-                            password : String
-                        ) {
+                        override fun onConfirm(email : String, password : String) {
                             callApiLogin(email, password)
                         }
                     })
@@ -117,10 +114,7 @@ internal class SignInActivity : AppCompatActivity() {
 
 
 
-    private fun callApiLogin(
-        email: String,
-        password: String
-    ) {
+    private fun callApiLogin(email: String, password: String) {
         val apiService: UsersApi = ApiUtilityClass.getApiClient(this).create(UsersApi::class.java)
 
         val call = apiService.userLogin(LoginDataModel(email, password))

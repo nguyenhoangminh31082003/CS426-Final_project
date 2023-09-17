@@ -127,7 +127,6 @@ class MainActivity : AppCompatActivity(), MainPageContract {
         ) { result ->
             if (result.resultCode == RESULT_OK) {
                 // do nothing
-                System.err.println("Sign in successfully");
             } else {
                 finish()
             }
