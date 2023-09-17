@@ -106,10 +106,10 @@ internal fun updateAppWidget(
     val remoteViews = RemoteViews(context.packageName, R.layout.app_widget_provider)
 
     val url = getCachedUrl(context)
-//    ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
-//        remoteViews.setImageViewBitmap(R.id.ivWidgetPicture, it)
-//        appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
-//    })
+    ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
+        remoteViews.setImageViewBitmap(R.id.ivWidgetPicture, it)
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+    })
 
 }
 

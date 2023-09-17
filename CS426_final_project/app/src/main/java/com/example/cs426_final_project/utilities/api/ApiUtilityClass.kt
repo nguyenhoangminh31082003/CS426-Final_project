@@ -22,7 +22,7 @@ class ApiUtilityClass {
             if(debug){
                 return "https://52ac-137-132-26-190.ngrok-free.app"
             }
-            return "http://13.229.250.243/"
+            return "http://13.229.250.243"
         }
 
 
