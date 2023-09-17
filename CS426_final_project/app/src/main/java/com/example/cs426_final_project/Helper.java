@@ -19,7 +19,9 @@ public class Helper {
 
     private Helper() {}
 
-    public static int getSizeOfJSONObject(JSONObject object) {
+    public static int getSizeOfJSONObject(
+            JSONObject object
+    ) {
         if (object == null)
             return 0;
         Iterator<String> iterator = object.keys();
@@ -33,7 +35,10 @@ public class Helper {
         return result;
     }
 
-    public static JSONObject loadJSONObjectFromJSONFile(Activity activity, final String fileName) {
+    public static JSONObject loadJSONObjectFromJSONFile(
+            Activity activity,
+            final String fileName
+    ) {
         FileInputStream fileInputStream = null;
         JSONObject result = new JSONObject();
 
@@ -74,7 +79,11 @@ public class Helper {
         return result;
     }
 
-    public static void writeJSONObjectToJSONFile(Activity activity, final String fileName, final JSONObject object) {
+    public static void writeJSONObjectToJSONFile(
+            Activity activity,
+            final String fileName,
+            final JSONObject object
+    ) {
         FileOutputStream fileOutputStream = null;
         final String text = object.toString();
 
@@ -96,12 +105,17 @@ public class Helper {
         System.out.println("File " + "'" + fileName + "'"  + "is successfully written!!! ");
     }
 
-    public static int getRandomIntegerInRange(final int l, final int r) {
+    public static int getRandomIntegerInRange(
+            final int l,
+            final int r
+    ) {
         SecureRandom randomness = new SecureRandom();
         return l + randomness.nextInt(r - l);
     }
 
-    public static String getRandomStringOfAlphabets(final int length) {
+    public static String getRandomStringOfAlphabets(
+            final int length
+    ) {
         final int lowerBound = 97, upperBound = 122;
         Random randomness = new Random();
         /*

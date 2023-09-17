@@ -22,7 +22,9 @@ import java.io.ByteArrayOutputStream
 class ImageUtilityClass {
 
     companion object {
-        fun cropRotateBitmap(bitmapData: ByteArray): Bitmap? {
+        fun cropRotateBitmap(
+            bitmapData: ByteArray
+        ): Bitmap? {
             var bitmap = BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.size)
             val width = bitmap.width
             val height = bitmap.height
@@ -37,12 +39,16 @@ class ImageUtilityClass {
             return bitmap
         }
 
-        fun cropCenter(imageView : ImageView) {
+        fun cropCenter(
+            imageView : ImageView
+        ) {
             imageView.adjustViewBounds = true
             imageView.scaleType = ImageView.ScaleType.CENTER_CROP
         }
 
-        fun cropCircleBitmap(originalBitmap: Bitmap?): Bitmap? {
+        fun cropCircleBitmap(
+            originalBitmap: Bitmap?
+        ): Bitmap? {
             val circularBitmap = Bitmap.createBitmap(
                 originalBitmap!!.width,
                 originalBitmap.height,
@@ -69,7 +75,10 @@ class ImageUtilityClass {
             return circularBitmap
         }
 
-        fun cropRadiusBorderBitmap(originalBitmap: Bitmap?, radius: Float): Bitmap? {
+        fun cropRadiusBorderBitmap(
+            originalBitmap: Bitmap?,
+            radius: Float
+        ): Bitmap? {
             val circularBitmap = Bitmap.createBitmap(
                 originalBitmap!!.width,
                 originalBitmap.height,
@@ -91,7 +100,10 @@ class ImageUtilityClass {
         }
 
 
-        fun cropSquareBitmap(originalBitmap: Bitmap?, destDim: Int = 400): Bitmap? {
+        fun cropSquareBitmap(
+            originalBitmap: Bitmap?,
+            destDim: Int = 400
+        ): Bitmap? {
 
             val size = originalBitmap?.width?.coerceAtMost(originalBitmap.height)
 
