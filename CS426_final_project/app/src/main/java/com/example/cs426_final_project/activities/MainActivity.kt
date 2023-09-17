@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity(), MainPageContract {
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
             if (result.resultCode == RESULT_OK) {
-                // do nothing
+                println("Sign in successfully");
             } else {
                 finish()
             }
