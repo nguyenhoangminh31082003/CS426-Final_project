@@ -170,12 +170,10 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         ImageView updateIcon = view.findViewById(R.id.update_icon);
         accountName.setText(accountRow.getUsername());
 
-        /*
         this.setUserProfilePicture(
                 accountProfilePicture,
                 accountRow.getUserID()
         );
-        */
 
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
@@ -280,7 +278,14 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                     final UserDataModel data = response.body();
                     final String link = data.avatar;
                     if (link.startsWith("http")) {
-                        ImageUtilityClass.Companion.loadImageViewFromUrl(view, link);
+                        ImageUtilityClass
+                                .Companion
+                                .loadSquareImageViewFromUrl(
+                                        view,
+                                        link,
+                                        60,
+                                        8
+                                );
                     } else {
                         Uri uri = Uri.parse(link);
                         view.setImageURI(uri);
@@ -291,7 +296,10 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             }
 
             @Override
-            public void onFailure(Call<UserDataModel> call, Throwable t) {
+            public void onFailure(
+                    Call<UserDataModel> call,
+                    Throwable t
+            ) {
                 System.err.println("Error in getting user data");
             }
         });
