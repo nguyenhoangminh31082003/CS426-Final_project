@@ -18,13 +18,12 @@ class ApiUtilityClass {
     companion object {
 
         // change default debug to false to use production server
-        private fun getBaseUrl(debug : Boolean = true): String {
+        private fun getBaseUrl(debug : Boolean = false): String {
             if(debug){
-                return "https://90ef-137-132-26-190.ngrok-free.app"
+                return "https://ba0b-137-132-26-93.ngrok-free.app"
             }
             return "http://13.229.250.243"
         }
-
 
         fun parseError(errorBody: ResponseBody?) : StatusResponse {
             val gson = Gson()
