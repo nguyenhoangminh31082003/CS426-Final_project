@@ -88,6 +88,22 @@ public class FoodCommentActivity extends AppCompatActivity {
                 R.drawable.unchosen_score_face_icon_level_5,
         };
 
+        for (int i = 0; i < 5; ++i) {
+            final int index = i;
+            icons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    rating = index + 1;
+                    for (int i = 0; i < 5; ++i)
+                        if (i == index)
+                            icons[i].setImageResource(chosenImages[i]);
+                        else
+                            icons[i].setImageResource(unchosenImages[i]);
+                }
+            });
+        }
+
+        /*
         icons[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +163,7 @@ public class FoodCommentActivity extends AppCompatActivity {
                 icons[4].setImageResource(chosenImages[4]);
             }
         });
+        */
     }
 
     private String getImageBase64() {
