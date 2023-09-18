@@ -5,6 +5,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.cs426_final_project.api.FeedApi
 import com.example.cs426_final_project.models.posts.FeedResponse
+import com.example.cs426_final_project.models.posts.TimelineFeedResponse
 import com.example.cs426_final_project.utilities.ImageUtilityClass
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import retrofit2.Call
@@ -40,17 +41,23 @@ class UpdateWorker(
 
         val feedApi = ApiUtilityClass.getApiClient(context).create(FeedApi::class.java)
         val call = feedApi.timelineWidget
-        call.enqueue(object : retrofit2.Callback<List<FeedResponse>> {
+        call.enqueue(object : retrofit2.Callback<List<TimelineFeedResponse> > {
             override fun onResponse(
-                call: Call<List<FeedResponse>>,
-                response: retrofit2.Response<List<FeedResponse>>
+                call: Call<List<TimelineFeedResponse> >,
+                response: retrofit2.Response<List<TimelineFeedResponse> >
             ) {
                 if (response.isSuccessful) {
                     val urls = getCurrentUrls()
                     val feeds = response.body()
                     if (feeds != null) {
                         for (feed in feeds) {
+                            /*
                             val url = feed.fields?.imageLink
+                            if (url != null) {
+                                urls.add(url)
+                            }
+                            */
+                            val url = feed?.imageLink
                             if (url != null) {
                                 urls.add(url)
                             }
@@ -70,7 +77,10 @@ class UpdateWorker(
                 }
             }
 
-            override fun onFailure(call: Call<List<FeedResponse>>, t: Throwable) {
+            override fun onFailure(
+                call: Call<List<TimelineFeedResponse> >,
+                t: Throwable
+            ) {
                 t.printStackTrace()
             }
         })

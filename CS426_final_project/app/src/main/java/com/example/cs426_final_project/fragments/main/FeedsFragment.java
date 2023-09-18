@@ -35,6 +35,7 @@ import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
+import com.example.cs426_final_project.models.posts.TimelineFeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
@@ -92,33 +93,28 @@ public class FeedsFragment extends Fragment {
                 .Companion
                 .getApiClient(requireContext())
                 .create(FeedApi.class);
-        Call<List<FeedResponse>> call = feedApi.getTimelineWidget();
-        call.enqueue(new Callback<List<FeedResponse>>() {
+        Call<List<TimelineFeedResponse> > call = feedApi.getTimelineWidget();
+        call.enqueue(new Callback<List<TimelineFeedResponse>>() {
             @Override
             public void onResponse(
-                    @NonNull Call<List<FeedResponse>> call,
-                    @NonNull Response<List<FeedResponse>> response
+                    @NonNull Call<List<TimelineFeedResponse> > call,
+                    @NonNull Response<List<TimelineFeedResponse> > response
             ) {
                 if (response.isSuccessful()) {
-                    List<FeedResponse> feedResponseList = response.body();
+                    List<TimelineFeedResponse> feedResponseList = response.body();
                     if (feedResponseList != null) {
 
                         System.out.println("Number of feeds: " + feedResponseList.size());
 
                         listOfFeeds.clear();
-                        for (FeedResponse feedResponse : feedResponseList) {
-                            FeedFields feedFields = feedResponse.fields;
+                        for (TimelineFeedResponse feedResponse : feedResponseList)
                             listOfFeeds.add(new FeedInfo(
                                     feedResponse.id,
-                                    feedFields.username,
-                                    feedFields.imageLink,
-                                    feedFields.body,
-                                    getDateWithDefaultFormat(feedFields.createAt)
+                                    feedResponse.fullName,
+                                    feedResponse.imageLink,
+                                    feedResponse.body,
+                                    getDateWithDefaultFormat(feedResponse.createAt)
                             ));
-
-                            //System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
-                            //System.out.println("Image link: " + listOfFeeds.get(i).getFeedImageUri());
-                        }
 
                         adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
                             Intent intent = new Intent(
@@ -142,7 +138,7 @@ public class FeedsFragment extends Fragment {
 
             @Override
             public void onFailure(
-                    @NonNull Call<List<FeedResponse>> call,
+                    @NonNull Call<List<TimelineFeedResponse> > call,
                     Throwable t
             ) {
                 t.printStackTrace();

@@ -2,6 +2,7 @@ package com.example.cs426_final_project.api;
 
 import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.posts.FeedResponse;
+import com.example.cs426_final_project.models.posts.TimelineFeedResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,6 @@ public interface FeedApi {
     Call<String> getTimelineFeeds();
 
     @GET("feed/timeline")
-    Call<List<FeedResponse> > getTimelineWidget();
+    Call<List<TimelineFeedResponse> > getTimelineWidget();
 
 }
