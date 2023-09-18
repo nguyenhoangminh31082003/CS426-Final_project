@@ -14,6 +14,6 @@ public interface FeedApi {
     Call<String> getTimelineFeeds();
 
     @GET("feed/timeline")
-    Call<List<FeedResponse>> getTimelineWidget();
+    Call<List<FeedResponse> > getTimelineWidget();
 
 }

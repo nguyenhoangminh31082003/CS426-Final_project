@@ -2,6 +2,7 @@ package com.example.cs426_final_project.api;
 
 import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.posts.CreatePostRequest;
+import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.posts.StatusResponse;
 
 import java.util.List;
@@ -20,9 +21,12 @@ public interface PostsApi {
     );
 
     @GET("posts/{food_id}")
-    Call<List<PostDataModel>> getFoodReviews(
+    Call<List<PostDataModel> > getFoodReviews(
         @Path("food_id") int foodId
     );
+
+    @GET("posts/")
+    Call<List<FeedResponse> > getFeedsPostedByUser();
 
 }
 

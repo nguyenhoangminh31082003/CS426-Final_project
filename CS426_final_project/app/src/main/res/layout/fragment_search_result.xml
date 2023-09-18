@@ -38,7 +38,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_foods_in_search_result"
         android:layout_width="0dp"
-        android:layout_height="637dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
