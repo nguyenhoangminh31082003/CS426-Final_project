@@ -20,7 +20,7 @@ public interface PostsApi {
         @Body CreatePostRequest request
     );
 
-    @GET("posts/{food_id}")
+    @GET("posts/food/{food_id}")
     Call<List<PostDataModel> > getFoodReviews(
         @Path("food_id") int foodId
     );
