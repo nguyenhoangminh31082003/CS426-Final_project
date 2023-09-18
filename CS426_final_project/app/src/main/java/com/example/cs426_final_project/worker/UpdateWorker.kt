@@ -5,8 +5,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.cs426_final_project.api.FeedApi
 import com.example.cs426_final_project.models.posts.FeedResponse
-import com.example.cs426_final_project.utilities.ImageUtilityClass
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass
+import com.example.cs426_final_project.utilities.ApiUtilityClass
 import retrofit2.Call
 
 

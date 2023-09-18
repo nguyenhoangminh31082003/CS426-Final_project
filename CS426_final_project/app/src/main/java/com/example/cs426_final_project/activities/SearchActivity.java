@@ -4,50 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import android.Manifest;
-
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.Singleton.UserLocation;
-import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
-import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.api.FoodApi;
 import com.example.cs426_final_project.api.SearchApi;
 import com.example.cs426_final_project.fragments.search.SearchResultFragment;
 import com.example.cs426_final_project.fragments.search.SearchSuggestionFragment;
 import com.example.cs426_final_project.fragments.search.TrendingFoodFragment;
-import com.example.cs426_final_project.models.FeedInfo;
 import com.example.cs426_final_project.models.data.FoodDataModel;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
-import com.example.cs426_final_project.models.posts.FeedFields;
-import com.example.cs426_final_project.models.posts.FeedResponse;
 import com.example.cs426_final_project.models.response.FoodResponse;
 import com.example.cs426_final_project.models.response.SearchCompleteResponse;
-import com.example.cs426_final_project.models.response.SearchQueryResponse;
-import com.example.cs426_final_project.models.response.SearchResultFields;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
-import com.google.gson.Gson;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

@@ -35,7 +35,7 @@ import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 import com.google.gson.Gson;
 
 import java.io.IOException;
