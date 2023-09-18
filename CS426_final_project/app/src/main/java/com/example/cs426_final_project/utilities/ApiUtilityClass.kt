@@ -1,4 +1,4 @@
-package com.example.cs426_final_project.utilities
+package com.example.cs426_final_project.utilities.api
 
 import android.annotation.SuppressLint
 import android.content.Context
