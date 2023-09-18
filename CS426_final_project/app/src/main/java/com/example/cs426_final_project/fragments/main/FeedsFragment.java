@@ -35,7 +35,6 @@ import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
-import com.example.cs426_final_project.models.posts.TimelineFeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
@@ -115,6 +114,10 @@ public class FeedsFragment extends Fragment {
                                     feedResponse.body,
                                     getDateWithDefaultFormat(feedResponse.createAt)
                             ));
+
+                            //System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
+                            //System.out.println("Image link: " + listOfFeeds.get(i).getFeedImageUri());
+                        }
 
                         adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
                             Intent intent = new Intent(
@@ -248,8 +251,10 @@ public class FeedsFragment extends Fragment {
         ibFeedViewAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 Intent intent = new Intent(getActivity(), UserAlbumActivity.class);
                 startActivity(intent);
+                */
             }
         });
 

@@ -32,7 +32,7 @@ import com.example.cs426_final_project.models.response.StatusResponse
 //import com.example.cs426_final_project.models.viewmodel.ProfileViewModelFactory
 import com.example.cs426_final_project.notifications.CustomDialog
 import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass
+import com.example.cs426_final_project.utilities.ApiUtilityClass
 import com.example.cs426_final_project.utilities.ImageUtilityClass
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
@@ -126,7 +126,6 @@ class ProfileFragment : MainPageFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        loadFromServer(context)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -209,9 +208,6 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun loadFromServer(context: Context) {
-
-
-
         val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)
         val call = usersApi.getLoggedProfile()
         call.enqueue(object : retrofit2.Callback<ProfileResponse> {
@@ -242,19 +238,24 @@ class ProfileFragment : MainPageFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun lockUserInput(b: Boolean) {
-        etUsername.isEnabled = !b
-        btnChangeEmail.isEnabled = !b
-        btnAddWidget.isEnabled = !b
-        btnLogout.isEnabled = !b
-        // set text color
-        if (b) {
-            etUsername.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-            etUsername.clearFocus()
-            etUsername.setText("Loading")
+        try {
+            etUsername.isEnabled = !b
+            btnChangeEmail.isEnabled = !b
+            btnAddWidget.isEnabled = !b
+            btnLogout.isEnabled = !b
+            // set text color
+            if (b) {
+                etUsername.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                etUsername.clearFocus()
+                etUsername.setText("")
 
-        } else {
-            etUsername.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            } else {
+                etUsername.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            }
+        } catch (e: Exception) {
+            print("lockUserInput: ${e.message}")
         }
+
 
     }
 
@@ -270,13 +271,18 @@ class ProfileFragment : MainPageFragment() {
         val match = regex.find(url)
         if (match != null) {
             profileDataModel.avatarFilename = match.value
-            ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
-                val bitmap = transformBitmapForAvatar(it)
-                if(bitmap != null) {
-                    profileDataModel.avatarBase64 = ImageUtilityClass.bitmapToBase64(bitmap)
-                    ibAvatar.setImageBitmap(bitmap)
-                }
-            })
+            try {
+                ImageUtilityClass.loadBitmapFromUrl(context, url, callback = {
+                    val bitmap = transformBitmapForAvatar(it)
+                    if(bitmap != null) {
+                        profileDataModel.avatarBase64 = ImageUtilityClass.bitmapToBase64(bitmap)
+                        ibAvatar.setImageBitmap(bitmap)
+                    }
+                })
+            } catch (e: Exception) {
+                print("cannot load bitmap from url: ${e.message}")
+            }
+
         }
         lockUserInput(false)
     }
@@ -296,7 +302,9 @@ class ProfileFragment : MainPageFragment() {
 
     private fun storeToServer() {
 
-        profileDataModel.name = etUsername.text.toString()
+        if(etUsername.text.toString() != ""){
+            profileDataModel.name = etUsername.text.toString()
+        }
         profileDataModel.avatarFilename = profileDataModel.name + ".png"
 
         val usersApi = ApiUtilityClass.getApiClient(requireContext()).create(UsersApi::class.java)

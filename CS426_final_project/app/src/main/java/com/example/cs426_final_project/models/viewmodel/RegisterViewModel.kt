@@ -10,10 +10,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.cs426_final_project.api.UsersApi
 import com.example.cs426_final_project.models.data.RegisterDataModel
-import com.example.cs426_final_project.models.response.RegisterResponse
 import com.example.cs426_final_project.models.response.StatusResponse
 //import com.example.cs426_final_project.storage.ProfilePreferences
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass
+import com.example.cs426_final_project.utilities.ApiUtilityClass
 
 //
 

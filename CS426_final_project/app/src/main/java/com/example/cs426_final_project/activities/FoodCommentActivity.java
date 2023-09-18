@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.fragment.app.FragmentContainerView;
 
 import android.util.Base64;
 import android.view.View;
@@ -23,14 +22,12 @@ import android.widget.Toast;
 
 import com.example.cs426_final_project.Helper;
 import com.example.cs426_final_project.R;
-import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.api.PostsApi;
 import com.example.cs426_final_project.fragments.SurveyDetailFragment;
-import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.posts.CreatePostRequest;
 import com.example.cs426_final_project.models.posts.StatusResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.ByteArrayOutputStream;

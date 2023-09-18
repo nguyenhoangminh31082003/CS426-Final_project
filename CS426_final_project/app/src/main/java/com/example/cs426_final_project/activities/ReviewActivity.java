@@ -21,7 +21,7 @@ import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.StoreDataModel;
 import com.example.cs426_final_project.models.response.StoreResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 
 import java.util.List;
 
@@ -89,10 +89,12 @@ public class ReviewActivity extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     StoreResponse storeResponse = response.body();
 
+
                     StoreDataModel storeDataModel = null;
                     if (storeResponse != null) {
                         storeDataModel = storeResponse.getResult();
                     }
+                    assert storeDataModel != null;
                     if(storeDataModel != null) {
                         tvFoodReviewStoreName.setText(storeDataModel.getName());
                         tvFoodReviewStoreAddress.setText(storeDataModel.getAddress());

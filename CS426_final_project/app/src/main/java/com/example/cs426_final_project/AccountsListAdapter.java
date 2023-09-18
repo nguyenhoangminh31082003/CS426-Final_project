@@ -3,12 +3,10 @@ package com.example.cs426_final_project;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,14 +14,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.cs426_final_project.api.UsersApi;
-import com.example.cs426_final_project.models.data.ProfileDataModel;
 import com.example.cs426_final_project.models.data.UserDataModel;
-import com.example.cs426_final_project.models.response.SuggestionResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
