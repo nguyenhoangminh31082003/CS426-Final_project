@@ -69,8 +69,6 @@ public class ReviewActivity extends AppCompatActivity {
         // show google map at a store location using google map api
 
 
-
-
     }
 
     private void loadPreviewImage(Intent intent) {
@@ -85,7 +83,7 @@ public class ReviewActivity extends AppCompatActivity {
 
     private void callGetStoreReviewsApi() {
         StoreApi storeApi = ApiUtilityClass.Companion.getApiClient(this).create(StoreApi.class);
-        storeApi.getStoreById(storeId).enqueue(new retrofit2.Callback<com.example.cs426_final_project.models.response.StoreResponse>() {
+        storeApi.getStoreById(storeId).enqueue(new retrofit2.Callback<StoreResponse>() {
             @Override
             public void onResponse(@NonNull retrofit2.Call<StoreResponse> call, @NonNull retrofit2.Response<StoreResponse> response) {
                 if(response.isSuccessful()) {

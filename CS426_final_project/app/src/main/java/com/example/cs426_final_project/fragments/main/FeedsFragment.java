@@ -77,6 +77,7 @@ public class FeedsFragment extends Fragment {
         if (this.getFeedRequestOnResume) {
             this.getFeedRequest();
         }
+        this.vpFeed.setCurrentItem(0);
         this.getFeedRequestOnResume = true;
     }
 
