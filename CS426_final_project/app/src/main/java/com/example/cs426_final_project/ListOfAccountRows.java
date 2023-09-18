@@ -30,7 +30,9 @@ public class ListOfAccountRows {
         return this.listOfUserIDs.size();
     }
 
-    public AccountRow getAccountRow(final int position) {
+    public AccountRow getAccountRow(
+            final int position
+    ) {
         try {
             return new AccountRow(this.records.getJSONObject(String.valueOf(this.listOfUserIDs.get(position))));
         } catch (JSONException e) {
@@ -38,7 +40,9 @@ public class ListOfAccountRows {
         }
     }
 
-    public boolean addAccountRow(AccountRow row) {
+    public boolean addAccountRow(
+            AccountRow row
+    ) {
         final String key = String.valueOf(row.getUserID());
         final boolean result = !this.records.has(key);
 
@@ -54,7 +58,9 @@ public class ListOfAccountRows {
         return result;
     }
 
-    public boolean removeAccountRowWithTheGivenID(final int id) {
+    public boolean removeAccountRowWithTheGivenID(
+            final int id
+    ) {
         final int size = this.listOfUserIDs.size();
         final Integer value = Integer.valueOf(id);
         for (int i = 0; i < size; ++i)

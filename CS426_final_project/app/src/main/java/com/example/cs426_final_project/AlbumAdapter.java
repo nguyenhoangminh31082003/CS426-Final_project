@@ -56,7 +56,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                             holder.image,
                             imageLink,
                             100,
-                            16
+                            72
                     );
         } else {
             Uri uri = Uri.parse(imageLink);
