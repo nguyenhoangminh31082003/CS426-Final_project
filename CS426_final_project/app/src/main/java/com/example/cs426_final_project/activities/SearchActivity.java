@@ -22,7 +22,7 @@ import com.example.cs426_final_project.models.data.FoodDataModel;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
 import com.example.cs426_final_project.models.response.FoodResponse;
 import com.example.cs426_final_project.models.response.SearchCompleteResponse;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 
 import java.util.List;
 import java.util.Objects;

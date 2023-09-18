@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 
 import java.util.HashMap;
 import java.util.Objects;
