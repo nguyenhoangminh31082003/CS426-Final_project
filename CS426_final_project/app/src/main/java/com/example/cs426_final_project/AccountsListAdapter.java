@@ -11,12 +11,19 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
 import com.example.cs426_final_project.utilities.ApiUtilityClass;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -35,6 +42,19 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     };
     private final Activity activity;
     private final HashMap<String, ListOfAccountRows> accounts;
+    private HashMap<String, List<Boolean>> initialized;
+
+    private List<Boolean> getListOfBoolean(final int length) {
+        List<Boolean> result = new ArrayList<>();
+        for (int i = 0; i < length; ++i)
+            result.add(false);
+        return result;
+    }
+    private void setUpInitializedHashMap() {
+        this.initialized = new HashMap<String, List<Boolean> >();
+        this.initialized.put(FRIENDS_HEADER, this.getListOfBoolean(this.accounts.get(FRIENDS_HEADER).getNumberOfRows()));
+        this.initialized.put(SUGGESTIONS_HEADER, this.getListOfBoolean(this.accounts.get(SUGGESTIONS_HEADER).getNumberOfRows()));
+    }
 
     public AccountsListAdapter(
             Activity activity
@@ -43,6 +63,8 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         this.accounts = new HashMap<>();
         this.accounts.put(SUGGESTIONS_HEADER, new ListOfAccountRows());
         this.accounts.put(FRIENDS_HEADER, new ListOfAccountRows());
+
+        this.setUpInitializedHashMap();
     }
 
     public AccountsListAdapter(
@@ -54,23 +76,25 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         this.accounts = new HashMap<String, ListOfAccountRows>();
         this.accounts.put(SUGGESTIONS_HEADER, suggestions);
         this.accounts.put(FRIENDS_HEADER, friends);
+        this.setUpInitializedHashMap();
     }
 
     public void setListOfSuggestions(
             ListOfAccountRows suggestions
     ) {
         this.accounts.put(SUGGESTIONS_HEADER, suggestions);
+        this.initialized.put(SUGGESTIONS_HEADER, this.getListOfBoolean(suggestions.getNumberOfRows()));
     }
 
     public void setListOfFriends(
-            ListOfAccountRows suggestions
+            ListOfAccountRows friends
     ) {
-        this.accounts.put(FRIENDS_HEADER, suggestions);
+        this.accounts.put(FRIENDS_HEADER, friends);
+        this.initialized.put(FRIENDS_HEADER, this.getListOfBoolean(friends.getNumberOfRows()));
     }
 
     @Override
     public int getGroupCount() {
-        System.out.println("The number of groups is " + headers.length);
         return headers.length;
     }
 
@@ -78,7 +102,6 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
     public int getChildrenCount(
             final int i
     ) {
-        System.out.println("The number of children of the " + i + "-th group is " + Objects.requireNonNull(this.accounts.get(headers[i])).getNumberOfRows());
         return Objects.requireNonNull(this
                         .accounts
                         .get(headers[i]))
@@ -167,10 +190,13 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         ImageView updateIcon = view.findViewById(R.id.update_icon);
         accountName.setText(accountRow.getUsername());
 
-        this.setUserProfilePicture(
-                accountProfilePicture,
-                accountRow.getUserID()
-        );
+        if (!Objects.requireNonNull(this.initialized.get(headers[x])).get(y)) {
+            Objects.requireNonNull(this.initialized.get(headers[x])).set(y, true);
+            this.setUserProfilePicture(
+                    accountProfilePicture,
+                    accountRow.getUserID()
+            );
+        }
 
         if (headers[x].equals(SUGGESTIONS_HEADER)) {
             updateIcon.setImageResource(R.drawable.my_friends_page_add_icon_image);
@@ -190,12 +216,11 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                                 @NonNull Call<String> call,
                                 @NonNull Response<String> response) {
                             if (response.isSuccessful()) {
-                                System.err.println("Remove!!!");
                                 Objects.requireNonNull(accounts.get(FRIENDS_HEADER)).addAccountRow(accountRow);
                                 Objects.requireNonNull(accounts.get(SUGGESTIONS_HEADER)).removeAccountRowWithTheGivenID(accountRow.getUserID());
-                                System.err.println("One!!!");
+                                Objects.requireNonNull(initialized.get(FRIENDS_HEADER)).add(true);
+                                Objects.requireNonNull(initialized.get(SUGGESTIONS_HEADER)).remove(y);
                                 notifyDataSetChanged();
-                                System.err.println("Two!!!");
                             } else {
                                 ApiUtilityClass.Companion.debug(response);
                             }
@@ -230,11 +255,9 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
                                 @NonNull Call<String> call,
                                 @NonNull Response<String> response) {
                             if (response.isSuccessful()) {
-                                System.err.println("Remove!!!");
                                 Objects.requireNonNull(accounts.get(FRIENDS_HEADER)).removeAccountRowWithTheGivenID(accountRow.getUserID());
-                                System.err.println("One!!!");
+                                Objects.requireNonNull(initialized.get(FRIENDS_HEADER)).remove(y);
                                 notifyDataSetChanged();
-                                System.err.println("Two!!!");
                             } else {
                                 ApiUtilityClass.Companion.debug(response);
                             }
