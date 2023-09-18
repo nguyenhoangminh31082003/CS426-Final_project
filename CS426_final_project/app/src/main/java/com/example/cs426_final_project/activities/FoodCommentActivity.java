@@ -27,7 +27,7 @@ import com.example.cs426_final_project.fragments.SurveyDetailFragment;
 import com.example.cs426_final_project.models.posts.CreatePostRequest;
 import com.example.cs426_final_project.models.posts.StatusResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.ApiUtilityClass;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.ByteArrayOutputStream;
