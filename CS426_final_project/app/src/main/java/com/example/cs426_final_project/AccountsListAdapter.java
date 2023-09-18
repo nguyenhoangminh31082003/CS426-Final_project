@@ -73,7 +73,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
             ListOfAccountRows friends
     ) {
         this.activity = activity;
-        this.accounts = new HashMap<String, ListOfAccountRows>();
+        this.accounts = new HashMap<>();
         this.accounts.put(SUGGESTIONS_HEADER, suggestions);
         this.accounts.put(FRIENDS_HEADER, friends);
         this.setUpInitializedHashMap();
@@ -160,6 +160,7 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
         ImageView icon = view.findViewById(R.id.icon_of_section_of_accounts);
 
         title.setText(headers[i]);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
 
         if (headers[i].equals(SUGGESTIONS_HEADER))
             icon.setImageResource(R.drawable.my_friends_page_light_bulb);
@@ -265,8 +266,8 @@ public class AccountsListAdapter extends BaseExpandableListAdapter {
 
                         @Override
                         public void onFailure(
-                                Call<String> call,
-                                Throwable t
+                                @NonNull Call<String> call,
+                                @NonNull Throwable t
                         ) {
                             System.err.println("Can not make friend");
                         }
