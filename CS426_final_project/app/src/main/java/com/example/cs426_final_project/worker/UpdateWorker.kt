@@ -7,7 +7,7 @@ import com.example.cs426_final_project.api.FeedApi
 import com.example.cs426_final_project.models.posts.FeedResponse
 import com.example.cs426_final_project.models.posts.TimelineFeedResponse
 import com.example.cs426_final_project.utilities.ImageUtilityClass
-import com.example.cs426_final_project.utilities.ApiUtilityClass
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import retrofit2.Call
 
 

@@ -14,7 +14,7 @@ import com.example.cs426_final_project.fragments.decoration.WaitingFragment;
 import com.example.cs426_final_project.models.data.LoginDataModel;
 import com.example.cs426_final_project.models.response.ProfileResponse;
 import com.example.cs426_final_project.models.response.StatusResponse;
-import com.example.cs426_final_project.utilities.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import retrofit2.Call;
 import retrofit2.Callback;

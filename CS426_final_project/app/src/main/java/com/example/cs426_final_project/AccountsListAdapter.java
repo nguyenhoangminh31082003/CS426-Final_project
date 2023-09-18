@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -26,7 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccountsListAdapter extends BaseExpandableListAdapter {
-
     final private static int LIMIT_NUMBER_OF_SUGGESTIONS = 5;
     final private static int LIMIT_NUMBER_OF_FRIENDS = 30;
 
