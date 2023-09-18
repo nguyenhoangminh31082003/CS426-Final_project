@@ -23,8 +23,7 @@ import com.example.cs426_final_project.fragments.access.newInstance
 import com.example.cs426_final_project.models.data.LoginDataModel
 import com.example.cs426_final_project.models.response.ProfileResponse
 import com.example.cs426_final_project.models.response.StatusResponse
-import com.example.cs426_final_project.utilities.ApiUtilityClass
-
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 
 internal class SignInActivity : AppCompatActivity() {
     object EnumPage {

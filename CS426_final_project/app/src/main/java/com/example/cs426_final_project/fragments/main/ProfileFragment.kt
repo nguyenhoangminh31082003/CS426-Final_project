@@ -35,7 +35,7 @@ import com.example.cs426_final_project.ui.theme.CS426_final_projectTheme
 import com.example.cs426_final_project.utilities.ImageUtilityClass
 import com.example.cs426_final_project.utilities.KeyboardUtilityClass
 import com.example.cs426_final_project.utilities.WidgetUtilityClass
-import com.example.cs426_final_project.utilities.ApiUtilityClass
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass
 import kotlin.math.abs
 
 class ProfileFragment : MainPageFragment() {
