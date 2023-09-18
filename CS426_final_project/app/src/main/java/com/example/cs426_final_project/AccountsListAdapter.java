@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
