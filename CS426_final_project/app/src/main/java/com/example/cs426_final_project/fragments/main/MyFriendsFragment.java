@@ -22,7 +22,7 @@ import com.example.cs426_final_project.api.UsersApi;
 import com.example.cs426_final_project.models.response.FriendsResponse;
 import com.example.cs426_final_project.models.response.SuggestionFields;
 import com.example.cs426_final_project.models.response.SuggestionResponse;
-import com.example.cs426_final_project.utilities.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.List;
 

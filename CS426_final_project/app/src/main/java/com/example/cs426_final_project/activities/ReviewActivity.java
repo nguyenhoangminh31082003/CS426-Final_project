@@ -21,7 +21,7 @@ import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.StoreDataModel;
 import com.example.cs426_final_project.models.response.StoreResponse;
 import com.example.cs426_final_project.utilities.ImageUtilityClass;
-import com.example.cs426_final_project.utilities.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.List;
 

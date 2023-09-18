@@ -35,6 +35,7 @@ import com.example.cs426_final_project.models.data.PostDataModel;
 import com.example.cs426_final_project.models.data.UserDataModel;
 import com.example.cs426_final_project.models.posts.FeedFields;
 import com.example.cs426_final_project.models.posts.FeedResponse;
+import com.example.cs426_final_project.models.posts.TimelineFeedResponse;
 import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 import com.google.gson.Gson;
 
@@ -133,16 +134,16 @@ public class FeedsFragment extends Fragment {
                         });
 
                         vpFeed.setAdapter(adapter);
+                    }else {
+                        ApiUtilityClass.Companion.debug(response);
                     }
-                } else {
-                    ApiUtilityClass.Companion.debug(response);
                 }
-            }
+
 
             @Override
             public void onFailure(
                     @NonNull Call<List<TimelineFeedResponse> > call,
-                    Throwable t
+                    @NonNull Throwable t
             ) {
                 t.printStackTrace();
                 System.err.println("Can not get feeds");

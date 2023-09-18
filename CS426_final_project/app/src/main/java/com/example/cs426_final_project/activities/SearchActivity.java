@@ -22,7 +22,7 @@ import com.example.cs426_final_project.models.data.FoodDataModel;
 import com.example.cs426_final_project.models.data.SearchQueryDataModel;
 import com.example.cs426_final_project.models.response.FoodResponse;
 import com.example.cs426_final_project.models.response.SearchCompleteResponse;
-import com.example.cs426_final_project.utilities.ApiUtilityClass;
+import com.example.cs426_final_project.utilities.api.ApiUtilityClass;
 
 import java.util.List;
 import java.util.Objects;
@@ -82,7 +82,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void queryFoodNameWithGivenID(final int id) {
-        FoodApi foodApi = ApiUtilityClass.Companion.getApiClient(this).create(FoodApi.class);;
+        FoodApi foodApi =
+                ApiUtilityClass.Companion.getApiClient(this).create(FoodApi.class);;
         Call<FoodResponse> call = foodApi.getFood(id);
 
         call.enqueue(new Callback<FoodResponse>() {
