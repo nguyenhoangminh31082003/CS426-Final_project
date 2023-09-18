@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import com.example.cs426_final_project.Helper;
 import com.example.cs426_final_project.R;
 import com.example.cs426_final_project.activities.SearchActivity;
+import com.example.cs426_final_project.activities.UserAlbumActivity;
 import com.example.cs426_final_project.adapters.RecyclerFeedViewPagerAdapter;
 import com.example.cs426_final_project.api.FeedApi;
 import com.example.cs426_final_project.api.UsersApi;
@@ -243,19 +244,31 @@ public class FeedsFragment extends Fragment {
             final String link = adapter.getImageLink(vpFeed.getCurrentItem());
 
             if (link.startsWith("http"))
-                new DownloadImageTask().execute(link);
+                (new DownloadImageTask()).execute(link);
+        });
+
+        ImageButton ibFeedViewAlbum = view.findViewById(R.id.ibFeedViewAlbum);
+
+        ibFeedViewAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*
+                Intent intent = new Intent(getActivity(), UserAlbumActivity.class);
+                startActivity(intent);
+                */
+            }
         });
 
         this.resetFeedsToDefault();
 
         this.getFeedRequest();
 
-        shareImageLauncher = registerForActivityResult( new ActivityResultContracts.StartActivityForResult(),
+        shareImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     getFeedRequestOnResume = false;
                 });
 
-        searchFoodLauncher = registerForActivityResult( new ActivityResultContracts.StartActivityForResult(),
+        searchFoodLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     getFeedRequestOnResume = false;
                 });

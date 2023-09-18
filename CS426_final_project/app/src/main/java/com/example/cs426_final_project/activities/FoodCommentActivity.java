@@ -88,65 +88,20 @@ public class FoodCommentActivity extends AppCompatActivity {
                 R.drawable.unchosen_score_face_icon_level_5,
         };
 
-        icons[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rating = 1;
-                icons[0].setImageResource(chosenImages[0]);
-                icons[1].setImageResource(unchosenImages[1]);
-                icons[2].setImageResource(unchosenImages[2]);
-                icons[3].setImageResource(unchosenImages[3]);
-                icons[4].setImageResource(unchosenImages[4]);
-            }
-        });
-
-        icons[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rating = 2;
-                icons[0].setImageResource(unchosenImages[0]);
-                icons[1].setImageResource(chosenImages[1]);
-                icons[2].setImageResource(unchosenImages[2]);
-                icons[3].setImageResource(unchosenImages[3]);
-                icons[4].setImageResource(unchosenImages[4]);
-            }
-        });
-
-        icons[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rating = 3;
-                icons[0].setImageResource(unchosenImages[0]);
-                icons[1].setImageResource(unchosenImages[1]);
-                icons[2].setImageResource(chosenImages[2]);
-                icons[3].setImageResource(unchosenImages[3]);
-                icons[4].setImageResource(unchosenImages[4]);
-            }
-        });
-
-        icons[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rating = 4;
-                icons[0].setImageResource(unchosenImages[0]);
-                icons[1].setImageResource(unchosenImages[1]);
-                icons[2].setImageResource(unchosenImages[2]);
-                icons[3].setImageResource(chosenImages[3]);
-                icons[4].setImageResource(unchosenImages[4]);
-            }
-        });
-
-        icons[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rating = 5;
-                icons[0].setImageResource(unchosenImages[0]);
-                icons[1].setImageResource(unchosenImages[1]);
-                icons[2].setImageResource(unchosenImages[2]);
-                icons[3].setImageResource(unchosenImages[3]);
-                icons[4].setImageResource(chosenImages[4]);
-            }
-        });
+        for (int i = 0; i < 5; ++i) {
+            final int index = i;
+            icons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    rating = index + 1;
+                    for (int i = 0; i < 5; ++i)
+                        if (i == index)
+                            icons[i].setImageResource(chosenImages[i]);
+                        else
+                            icons[i].setImageResource(unchosenImages[i]);
+                }
+            });
+        }
     }
 
     private String getImageBase64() {
