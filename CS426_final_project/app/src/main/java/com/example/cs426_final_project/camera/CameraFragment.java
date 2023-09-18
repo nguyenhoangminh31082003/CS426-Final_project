@@ -678,7 +678,7 @@ public class CameraFragment extends Fragment
 
 
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
-                mFlashSupported = available == null ? false : available;
+                mFlashSupported = available != null && available;
 
                 mCameraId = cameraId;
                 return;
