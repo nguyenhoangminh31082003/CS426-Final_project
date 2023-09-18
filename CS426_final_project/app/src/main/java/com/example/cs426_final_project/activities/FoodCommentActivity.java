@@ -45,7 +45,6 @@ public class FoodCommentActivity extends AppCompatActivity {
     private Button btnFoodCommentDone;
 
     private EditText foodNameText;
-    FragmentContainerView fcvSurvey;
     SurveyDetailFragment surveyDetailFragment;
     ImageView ivPreviewImage;
     ImageButton ibToScan;
@@ -169,8 +168,8 @@ public class FoodCommentActivity extends AppCompatActivity {
         )).enqueue(new Callback<StatusResponse>() {
             @Override
             public void onResponse(
-                    Call<StatusResponse> call,
-                    Response<StatusResponse> response) {
+                    @NonNull Call<StatusResponse> call,
+                    @NonNull Response<StatusResponse> response) {
                 if (response.isSuccessful()) {
                     System.out.println("Send successfully");
                 } else {
@@ -181,8 +180,8 @@ public class FoodCommentActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(
-                    Call<StatusResponse> call,
-                    Throwable t
+                    @NonNull Call<StatusResponse> call,
+                    @NonNull Throwable t
             ) {
                 System.err.println("OMG");
             }
@@ -224,7 +223,6 @@ public class FoodCommentActivity extends AppCompatActivity {
 
         this.showPreviewImage(getIntent());
 
-        this.fcvSurvey = this.findViewById(R.id.fcvSurvey);
         this.surveyLocation();
         testBitmap();
     }
@@ -249,6 +247,9 @@ public class FoodCommentActivity extends AppCompatActivity {
             public void onDone(@NonNull String answer) {
                 System.out.println("answer: " + answer);
                 enableComment(true);
+                getSupportFragmentManager().beginTransaction()
+                        .remove(surveyDetailFragment)
+                        .commit();
             }
         });
     }

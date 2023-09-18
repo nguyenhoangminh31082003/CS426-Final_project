@@ -250,7 +250,7 @@ fun RegisterLayout(
                             start.linkTo(parent.start, margin = 8.dp)
                             end.linkTo(parent.end, margin = 8.dp)
                         },
-                    title = "password",
+                    title = "Password",
                     onChangePassword = {
                         onChangePassword(it)
 //                        registerUiModel.value.password = it

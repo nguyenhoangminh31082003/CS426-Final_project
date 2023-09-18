@@ -289,7 +289,6 @@ public class FeedsFragment extends Fragment {
                 intent.setType("image/png");
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 shareImageLauncher.launch(Intent.createChooser(intent, "Share photo"));
-//                startActivity(Intent.createChooser(intent, "Share photo"));
             }
         }
     }

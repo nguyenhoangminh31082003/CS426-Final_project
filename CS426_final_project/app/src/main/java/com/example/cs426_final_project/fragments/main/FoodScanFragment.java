@@ -249,8 +249,4 @@ public class FoodScanFragment extends MainPageFragment {
         });
     }
 
-    private boolean checkCameraHardware(Context context) {
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
-    }
-
 }
