@@ -25,9 +25,7 @@ class RecyclerFeedViewPagerAdapter(
         fun onItemClick(position: Int)
     }
 
-    class RecyclerViewPagerViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
+    class RecyclerViewPagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtUsernameFeed = itemView.findViewById<TextView>(R.id.txtUsernameFeed)!!
         val txtCommentFeed = itemView.findViewById<TextView>(R.id.txtCommentFeed)!!
         val txtDateFeed = itemView.findViewById<TextView>(R.id.txtDateFeed)!!
@@ -35,10 +33,7 @@ class RecyclerFeedViewPagerAdapter(
         val ivPreviewImageFeed = itemView.findViewById<ImageView>(R.id.ivPreviewImageFeed)!!
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerViewPagerViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewPagerViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
         val ivPreviewImageFeed = view.findViewById<ImageView>(R.id.ivPreviewImageFeed)
         // ensure the image is a square
@@ -52,9 +47,7 @@ class RecyclerFeedViewPagerAdapter(
         return feedList.size
     }
 
-    public fun getFoodID(
-        position: Int
-    ): Int {
+    public fun getFoodID(position: Int): Int {
         if (position < 0 || position >= feedList.size)
             return -1;
         return feedList[position].feedId;
@@ -64,10 +57,7 @@ class RecyclerFeedViewPagerAdapter(
         return feedList[position].feedImageUri
     }
 
-    override fun onBindViewHolder(
-        holder: RecyclerViewPagerViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: RecyclerViewPagerViewHolder, position: Int) {
         val feedInfo = feedList[position]
 
         holder.ivPreviewImageFeed.setBackgroundResource(R.drawable.loading_image);
@@ -78,19 +68,13 @@ class RecyclerFeedViewPagerAdapter(
         holder.ibCheckFood.setOnClickListener {
             listener.onItemClick(position)
         }
-            // convert string to uri
+
         if (feedInfo.feedImageUri.startsWith("http")) {
-            ImageUtilityClass
-                .Companion
-                .loadImageViewFromUrl(
-                    holder.ivPreviewImageFeed,
-                    feedInfo.feedImageUri
-                )
+            ImageUtilityClass.Companion.loadImageViewFromUrl(holder.ivPreviewImageFeed, feedInfo.feedImageUri)
         } else {
             val uri: Uri = Uri.parse(feedInfo.feedImageUri)
             //println("This is URI: $uri")
             holder.ivPreviewImageFeed.setImageURI(uri)
-//        holder.ivPreviewImageFeed.layoutParams.height = holder.ivPreviewImageFeed.measuredWidth
         }
 
         // ensure ratio of image is 1:1

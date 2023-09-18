@@ -30,10 +30,7 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_waiting_request_authority);
 
         FragmentContainerView fcvWaitingScreenAuthority = findViewById(R.id.fcvWaitingScreenAuthority);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(fcvWaitingScreenAuthority.getId(), new WaitingFragment())
-                .commit();
+        getSupportFragmentManager().beginTransaction().add(fcvWaitingScreenAuthority.getId(), new WaitingFragment()).commit();
 
         Intent intent = getIntent();
         email = intent.getStringExtra("email");
@@ -42,10 +39,7 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
     }
 
     private void callLoginApi(){
-        UsersApi usersApi = ApiUtilityClass
-                .Companion
-                .getApiClient(this)
-                .create(UsersApi.class);
+        UsersApi usersApi = ApiUtilityClass.Companion.getApiClient(this).create(UsersApi.class);
 
         Call<StatusResponse> call = usersApi.userLogin(new LoginDataModel(email, password));
         call.enqueue( new Callback<StatusResponse>() {
@@ -67,7 +61,6 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
                     @NonNull Call<StatusResponse> call,
                     @NonNull Throwable t
             ) {
-//                call.enqueue(this);
                 Toast.makeText(WaitingRequestAuthorityActivity.this, "There is an error in the connection", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -76,10 +69,7 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
     }
 
     private void requestAuthority() {
-        UsersApi usersApi = ApiUtilityClass
-                .Companion
-                .getApiClient(this)
-                .create(UsersApi.class);
+        UsersApi usersApi = ApiUtilityClass.Companion.getApiClient(this).create(UsersApi.class);
 
         Call<ProfileResponse> call = usersApi.getLoggedProfile();
         call.enqueue( new Callback<ProfileResponse>() {
@@ -88,7 +78,6 @@ public class WaitingRequestAuthorityActivity extends AppCompatActivity {
                     @NonNull Call<ProfileResponse> call,
                     @NonNull Response<ProfileResponse> response) {
                 if (response.isSuccessful()) {
-                    // set result ok
                     setResult(RESULT_OK);
                     finish();
                 } else{

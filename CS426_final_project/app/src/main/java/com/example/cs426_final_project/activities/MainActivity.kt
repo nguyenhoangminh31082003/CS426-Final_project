@@ -1,7 +1,5 @@
 package com.example.cs426_final_project.activities
 
-// import view pager adapter
-
 import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences

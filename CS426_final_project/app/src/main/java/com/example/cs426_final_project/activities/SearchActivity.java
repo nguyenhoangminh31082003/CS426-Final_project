@@ -247,8 +247,6 @@ public class SearchActivity extends AppCompatActivity {
         EditText editText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         ImageView closeButton = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
         ImageView searchMagIcon = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
-        //ImageView openButton = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon);
-        //ImageView openButton = searchView.findViewById(androidx.appcompat.R.id.search_go_btn);
         ImageView openButton = searchView.findViewById(androidx.appcompat.R.id.search_button);
         openButton.setImageResource(R.drawable.search_page_search_icon);
         searchMagIcon.setImageResource(R.drawable.search_page_search_icon);

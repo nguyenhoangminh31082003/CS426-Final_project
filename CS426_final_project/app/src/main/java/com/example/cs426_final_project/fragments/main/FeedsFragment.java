@@ -75,24 +75,18 @@ public class FeedsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (this.getFeedRequestOnResume) {
+        if (this.getFeedRequestOnResume)
             this.getFeedRequest();
-        }
         this.vpFeed.setCurrentItem(0);
         this.getFeedRequestOnResume = true;
     }
 
-    private String getDateWithDefaultFormat(
-            final String dateFromServer
-    ) {
+    private String getDateWithDefaultFormat(final String dateFromServer) {
         return dateFromServer.substring(8, 10) + "/" + dateFromServer.substring(5, 7) + "/" + dateFromServer.substring(0, 4);
     }
 
     private void getFeedRequest() {
-        FeedApi feedApi = ApiUtilityClass
-                .Companion
-                .getApiClient(requireContext())
-                .create(FeedApi.class);
+        FeedApi feedApi = ApiUtilityClass.Companion.getApiClient(requireContext()).create(FeedApi.class);
         Call<List<TimelineFeedResponse> > call = feedApi.getTimelineWidget();
         call.enqueue(new Callback<List<TimelineFeedResponse>>() {
             @Override
@@ -116,8 +110,6 @@ public class FeedsFragment extends Fragment {
                                     getDateWithDefaultFormat(feedResponse.createAt)
                             ));
 
-                            //System.out.println("User name: " + listOfFeeds.get(i).getFeedUsername());
-                            //System.out.println("Image link: " + listOfFeeds.get(i).getFeedImageUri());
                         }
 
                         adapter = new RecyclerFeedViewPagerAdapter(listOfFeeds, position -> {
@@ -252,10 +244,8 @@ public class FeedsFragment extends Fragment {
         ibFeedViewAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
                 Intent intent = new Intent(getActivity(), UserAlbumActivity.class);
                 startActivity(intent);
-                */
             }
         });
 

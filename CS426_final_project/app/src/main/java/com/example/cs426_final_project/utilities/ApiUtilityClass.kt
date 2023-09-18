@@ -1,4 +1,4 @@
-package com.example.cs426_final_project.utilities.api
+package com.example.cs426_final_project.utilities
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,14 +18,16 @@ class ApiUtilityClass {
     companion object {
 
         // change default debug to false to use production server
-        private fun getBaseUrl(debug : Boolean = true): String {
+        private fun getBaseUrl(debug : Boolean = false): String {
             if(debug){
-                return "https://a054-137-132-26-183.ngrok-free.app"
+                return "https://2d8b-137-132-26-190.ngrok-free.app"
             }
             return "http://13.229.250.243"
         }
 
-        fun parseError(errorBody: ResponseBody?) : StatusResponse {
+        fun parseError(
+            errorBody: ResponseBody?
+        ) : StatusResponse {
             val gson = Gson()
             val type = object : TypeToken<StatusResponse>() {}.type
             var errorResponse: StatusResponse? = null
@@ -38,14 +40,19 @@ class ApiUtilityClass {
         }
 
         @JvmOverloads
-        fun getApiClient(context:Context, clearCookie : Boolean = false): Retrofit {
+        fun getApiClient(
+            context:Context,
+            clearCookie : Boolean = false
+        ): Retrofit {
             return Retrofit.Builder()
                 .baseUrl(getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(createOkHttpClient(context, clearCookie))
                 .build()
         }
-        fun <T> debug(response: retrofit2.Response<T>) {
+        fun <T> debug(
+            response: retrofit2.Response<T>
+        ) {
             println("Oh no, oh no, Error errorBody: ${response.errorBody()}")
             println("Oh no, oh no, Error message: ${response.message()}")
             println("Oh no, oh no, Error code: ${response.code()}")
@@ -61,7 +68,10 @@ class ApiUtilityClass {
         }
 
         @SuppressLint("ApplySharedPref")
-        private fun createOkHttpClient(context: Context, clearCookie: Boolean): OkHttpClient {
+        private fun createOkHttpClient(
+            context: Context,
+            clearCookie: Boolean
+        ): OkHttpClient {
             val clientBuilder = OkHttpClient.Builder()
 
             val cookiePrefs: SharedPreferences =

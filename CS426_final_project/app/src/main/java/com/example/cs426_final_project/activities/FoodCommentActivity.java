@@ -212,40 +212,26 @@ public class FoodCommentActivity extends AppCompatActivity {
         });
     }
 
-    private void doSurvey(
-            final String question,
-            SurveyDetailFragment.SurveyDetailFragmentListener listener
-    ) {
-
+    private void doSurvey(final String question, SurveyDetailFragment.SurveyDetailFragmentListener listener) {
         surveyDetailFragment = new SurveyDetailFragment();
-
         surveyDetailFragment.setQuestionTitle(question);
         surveyDetailFragment.setSurveyDetailFragmentListener(listener);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fcvSurvey, surveyDetailFragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fcvSurvey, surveyDetailFragment).commit();
     }
 
-    private void showPreviewImage(
-            Intent intent
-    ) {
+    private void showPreviewImage(Intent intent) {
         Uri previewImageUri = Uri.parse(intent.getStringExtra("imageUri"));
-//        Bitmap previewImageBitmap = BitmapFactory.decodeFile(previewImageUri.getPath());
-        // print width and height of bitmap
-//        System.out.println("width: " + previewImageBitmap.getWidth() + " height: " + previewImageBitmap.getHeight());
-
         ImageView ivPreviewImage = findViewById(R.id.ivPreviewImage);
         ivPreviewImage.setImageURI(previewImageUri);
-
-        // preserve ratio 1:1 of ivPreviewImage
         ImageUtilityClass.Companion.cropCenter(ivPreviewImage);
     }
 
     public void setLocation(String locationTag) {
-        // check if before the tag is @, if not, add @
+        /*
+            Check if before the tag is @, if not, add @
+        */
         if (!locationTag.startsWith("@"))
             locationTag = "@" + locationTag;
-
         txtFoodLocation.setText(locationTag);
     }
 }

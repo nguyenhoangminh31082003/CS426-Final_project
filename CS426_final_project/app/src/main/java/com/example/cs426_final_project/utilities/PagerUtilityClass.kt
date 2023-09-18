@@ -2,7 +2,9 @@ package com.example.cs426_final_project.utilities
 
 import android.view.View
 
-// create enum class for swiping state
+/*
+    Create enum class for swiping state
+*/
 enum class SwipingState {
     SWIPING_NA,
     SWIPING_FORWARD,
