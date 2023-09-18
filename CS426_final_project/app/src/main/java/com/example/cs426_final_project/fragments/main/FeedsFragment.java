@@ -60,6 +60,7 @@ public class FeedsFragment extends Fragment {
     private boolean getFeedRequestOnResume = true;
 
     private ActivityResultLauncher<Intent> shareImageLauncher;
+    private ActivityResultLauncher<Intent> searchFoodLauncher;
 
     public FeedsFragment() {
         this.listOfFeeds = null;
@@ -127,7 +128,7 @@ public class FeedsFragment extends Fragment {
                                     "food_id",
                                     adapter.getFoodID(position)
                             );
-                            startActivity(intent);
+                            searchFoodLauncher.launch(intent);
                         });
 
                         vpFeed.setAdapter(adapter);
@@ -249,6 +250,11 @@ public class FeedsFragment extends Fragment {
         this.getFeedRequest();
 
         shareImageLauncher = registerForActivityResult( new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    getFeedRequestOnResume = false;
+                });
+
+        searchFoodLauncher = registerForActivityResult( new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     getFeedRequestOnResume = false;
                 });

@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
@@ -47,6 +46,7 @@ class SurveyDetailFragment : Fragment() {
 
 
     var questionTitle : String = "Survey"
+    var answer : String = ""
 
     interface SurveyDetailFragmentListener {
         fun onDone(answer : String)
@@ -62,6 +62,7 @@ class SurveyDetailFragment : Fragment() {
             setContent {
                 SurveyLayout(
                     questionTitle = questionTitle,
+                    initAnswer = answer,
                     onDone = {
                         surveyDetailFragmentListener?.onDone(it)
                     },
@@ -83,12 +84,13 @@ class SurveyDetailFragment : Fragment() {
 @Preview(showBackground = true)
 @Composable
 fun SurveyLayout(
-    questionTitle : String = "Survey",
-    onDone : (String) -> Unit = { },
-    onClose : () -> Unit = { }
+    questionTitle: String = "Survey",
+    onDone: (String) -> Unit = { },
+    onClose: () -> Unit = { },
+    initAnswer: String = ""
 ) {
     var answer by remember {
-        mutableStateOf("")
+        mutableStateOf(initAnswer)
     }
     CS426_final_projectTheme(
         darkTheme = true,

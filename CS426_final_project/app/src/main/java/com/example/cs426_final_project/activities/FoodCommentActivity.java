@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cs426_final_project.Helper;
 import com.example.cs426_final_project.R;
@@ -43,7 +45,7 @@ public class FoodCommentActivity extends AppCompatActivity {
     private int rating;
     private EditText etFoodComment;
     private Button btnFoodCommentDone;
-
+    private TextView txtFoodLocation;
     private EditText foodNameText;
     SurveyDetailFragment surveyDetailFragment;
     ImageView ivPreviewImage;
@@ -193,6 +195,8 @@ public class FoodCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.fragment_food_comment);
 
+        txtFoodLocation = findViewById(R.id.txtFoodLocation);
+
         this.rating = 3;
         this.enableFiveRatingIcons();
 
@@ -217,6 +221,7 @@ public class FoodCommentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendPost();
+                Toast.makeText(FoodCommentActivity.this, "Done", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -245,7 +250,7 @@ public class FoodCommentActivity extends AppCompatActivity {
 
             @Override
             public void onDone(@NonNull String answer) {
-                System.out.println("answer: " + answer);
+                setLocation(answer);
                 enableComment(true);
                 getSupportFragmentManager().beginTransaction()
                         .remove(surveyDetailFragment)
@@ -283,4 +288,11 @@ public class FoodCommentActivity extends AppCompatActivity {
         ImageUtilityClass.Companion.cropCenter(ivPreviewImage);
     }
 
+    public void setLocation(String locationTag) {
+        // check if before the tag is @, if not, add @
+        if (!locationTag.startsWith("@"))
+            locationTag = "@" + locationTag;
+
+        txtFoodLocation.setText(locationTag);
+    }
 }

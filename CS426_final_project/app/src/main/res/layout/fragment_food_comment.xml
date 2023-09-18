@@ -25,6 +25,15 @@
                 android:orientation="horizontal"
                 android:paddingTop="16dp">
 
+                <TextView
+                    android:id="@+id/txtFoodLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ibToScan" />
+
                 <ImageButton
                     android:layout_marginStart="16dp"
                     android:id="@+id/ibToScan"
@@ -41,7 +50,7 @@
                     android:id="@+id/ivPreviewImage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:contentDescription="preview image"
                     android:foreground="@drawable/clipping_image_mask"
                     android:scaleType="fitXY"
@@ -49,7 +58,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ibToScan"
+                    app:layout_constraintTop_toBottomOf="@+id/txtFoodLocation"
                     tools:ignore="HardcodedText" />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="50dp"
