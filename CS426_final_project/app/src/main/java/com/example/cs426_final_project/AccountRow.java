@@ -8,7 +8,9 @@ public class AccountRow {
     private int userID;
     private String username;
 
-    public AccountRow(final JSONObject record) {
+    public AccountRow(
+            final JSONObject record
+    ) {
         try {
             this.userID = record.getInt("user_id");
         } catch (JSONException e) {
@@ -20,9 +22,12 @@ public class AccountRow {
             e.printStackTrace();
         }
     }
-    public AccountRow(final int userID, final String usename) {
+    public AccountRow(
+            final int userID,
+            final String username
+    ) {
         this.userID = userID;
-        this.username = usename;
+        this.username = username;
     }
 
     public int getUserID() {
