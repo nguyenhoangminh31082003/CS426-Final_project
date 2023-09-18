@@ -252,10 +252,8 @@ public class FeedsFragment extends Fragment {
         ibFeedViewAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
                 Intent intent = new Intent(getActivity(), UserAlbumActivity.class);
                 startActivity(intent);
-                */
             }
         });
 

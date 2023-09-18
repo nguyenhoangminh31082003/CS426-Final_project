@@ -1,6 +1,7 @@
 package com.example.cs426_final_project;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,22 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cs426_final_project.utilities.ImageUtilityClass;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> {
 
     private List<String> imageLinks;
 
+    public AlbumAdapter(final List<String> imageLinks) {
+        this.imageLinks = imageLinks;
+    }
 
+    public AlbumAdapter() {
+        this.imageLinks = new ArrayList<String>();
+    }
 
     @NonNull
     @Override
@@ -33,8 +43,25 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(
+            @NonNull ViewHolder holder,
+            final int position) {
 
+        final String imageLink = this.imageLinks.get(position);
+
+        if (imageLink.startsWith("http")) {
+            ImageUtilityClass
+                    .Companion
+                    .loadSquareImageViewFromUrl(
+                            holder.image,
+                            imageLink,
+                            100,
+                            8
+                    );
+        } else {
+            Uri uri = Uri.parse(imageLink);
+            holder.image.setImageURI(uri);
+        }
     }
 
     @Override
