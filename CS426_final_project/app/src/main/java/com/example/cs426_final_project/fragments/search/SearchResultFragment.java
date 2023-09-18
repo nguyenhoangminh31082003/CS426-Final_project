@@ -1,5 +1,6 @@
 package com.example.cs426_final_project.fragments.search;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,7 @@ public class SearchResultFragment extends Fragment {
     private SearchResultFoodsAdapter adapter;
     private SearchQueryDataModel searchQueryDataModel;
     private WaitingFragment waitingFragment;
+    private SearchQueryResponse foodDataModels;
 
     RecyclerView viewOfListOfFoods;
 
@@ -105,6 +107,7 @@ public class SearchResultFragment extends Fragment {
 
     private void showSearchResult() {
         this.callApiSearchResult(this.searchQueryDataModel);
+
     }
 
     @Override
@@ -146,8 +149,15 @@ public class SearchResultFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<SearchQueryResponse> call, @NonNull Response<SearchQueryResponse> response) {
                 if(response.isSuccessful()) {
-                    SearchQueryResponse foodDataModels = response.body();
+                    foodDataModels = response.body();
+
                     if (foodDataModels != null) {
+                        // debug food data model
+                        System.out.println("food data model in api call: " + foodDataModels.getResults().get(0).getFood().getName());
+                        System.out.println("food data model in api call: " + foodDataModels.getResults().get(0).getFood().getPrice());
+
+                        System.out.println("food data model in api call: " + foodDataModels.getResults().get(0).getFood().getStore());
+
                         showSuggestions(foodDataModels.getResults());
                     }
                     hideWaitingFragment();
@@ -171,6 +181,12 @@ public class SearchResultFragment extends Fragment {
 
                 FoodSearchResultResponse item = FoodSearchResultResponseList.get(position);
                 FoodDataModel foodDataModel = item.getFood();
+                // debug food data model
+                System.out.println("food data model: " + foodDataModel.getName());
+                System.out.println("food data model: " + foodDataModel.getId());
+                System.out.println("food data model: " + foodDataModel.getStore());
+                System.out.println("food data model: " + foodDataModel.getImageLink());
+
 
                 intent.putExtra("foodId", foodDataModel.getId());
                 intent.putExtra("storeId", foodDataModel.getStore());

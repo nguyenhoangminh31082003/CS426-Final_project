@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class FoodDataModel(
     val id: Int,
     val name: String,
-    @SerializedName("store_id")
+    @SerializedName("store")
     val store: Int,
     @SerializedName("image_link")
     val imageLink: String,

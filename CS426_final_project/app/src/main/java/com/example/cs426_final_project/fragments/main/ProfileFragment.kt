@@ -238,6 +238,7 @@ class ProfileFragment : MainPageFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun lockUserInput(b: Boolean) {
+
         try {
             etUsername.isEnabled = !b
             btnChangeEmail.isEnabled = !b
@@ -260,6 +261,7 @@ class ProfileFragment : MainPageFragment() {
     }
 
     private fun syncData(context: Context, profile: ProfileResponse) {
+
         etUsername.setText(profile.fullName)
         currentEmail.value = ""
         profileDataModel.name = profile.fullName

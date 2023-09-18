@@ -164,6 +164,8 @@
                                 android:id="@+id/ibFoodReviewShowMap"
                                 android:src = "@drawable/review_page_google_location_icon"
                                 android:layout_width="0dp"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
                                 android:layout_weight="1"
                                 android:paddingStart="10dp"
                                 android:background="?selectableItemBackgroundBorderless"
@@ -187,6 +189,32 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:visibility="invisible"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:src = "@drawable/review_page_book_icon"/>
+
+                    <TextView
+                        android:id = "@+id/txtRatings"
+                        android:layout_width="0dp"
+                        android:layout_weight="9"
+                        android:textSize="18sp"
+                        android:layout_height="wrap_content"
+                        android:text = "Ratings: 0.0"
+                        android:textColor="@color/white"
+                        tools:ignore="HardcodedText"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -204,7 +232,7 @@
                         android:layout_weight="9"
                         android:textSize="18sp"
                         android:layout_height="wrap_content"
-                        android:text = "No review yet"
+                        android:text = "No recent reviews yet"
                         android:textColor="@color/white"
                         tools:ignore="HardcodedText"
                         />

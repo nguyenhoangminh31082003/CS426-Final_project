@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,13 +35,15 @@ public class ReviewActivity extends AppCompatActivity {
     private TextView tvFoodReviewStoreName;
     private TextView tvFoodReviewStoreAddress;
     private TextView tvFoodReviewStoreDistance;
+    private TextView txtRatings;
     private TextView tvFoodReviewFoodName;
     private ImageView ivFoodReviewPreview;
-
+    private StoreDataModel storeDataModel;
     List<PostDataModel> reviewsList;
     private Integer foodId;
     private String foodName;
     private Integer storeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,7 @@ public class ReviewActivity extends AppCompatActivity {
         storeId = intent.getIntExtra("storeId", 0);
         foodName = intent.getStringExtra("foodName");
 
+
         tvFoodReviewFoodName.setText(foodName);
 
         loadPreviewImage(intent);
@@ -68,7 +72,16 @@ public class ReviewActivity extends AppCompatActivity {
         ImageButton ibFoodReviewShowMap = findViewById(R.id.ibFoodReviewShowMap);
         // show google map at a store location using google map api
 
+        ibFoodReviewShowMap.setOnClickListener(v -> {
 
+            if(storeDataModel == null) return;
+
+            Uri gmmIntentUri = Uri.parse("geo:" + storeDataModel.getLat() + "," + storeDataModel.getLong() + "?q=" + storeDataModel.getName());
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            this.startActivity(mapIntent);
+
+        });
     }
 
     private void loadPreviewImage(Intent intent) {
@@ -89,12 +102,10 @@ public class ReviewActivity extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     StoreResponse storeResponse = response.body();
 
-
-                    StoreDataModel storeDataModel = null;
+                    storeDataModel = null;
                     if (storeResponse != null) {
                         storeDataModel = storeResponse.getResult();
                     }
-                    assert storeDataModel != null;
                     if(storeDataModel != null) {
                         tvFoodReviewStoreName.setText(storeDataModel.getName());
                         tvFoodReviewStoreAddress.setText(storeDataModel.getAddress());
@@ -140,6 +151,7 @@ public class ReviewActivity extends AppCompatActivity {
 
     @SuppressLint("DefaultLocale")
     private String getFormattedUserStoreDistance(double lat, double aLong) {
+
         double deltaLat = lat - UserLocation.INSTANCE.getLatitude();
         double deltaLong = aLong - UserLocation.INSTANCE.getLongitude();
         double distance =  Math.sqrt(deltaLat * deltaLat + deltaLong * deltaLong);
